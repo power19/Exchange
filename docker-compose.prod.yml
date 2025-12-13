@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Nginx Proxy for subdomain routing and SSL
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+    restart: always
+    networks:
+      - usdt-network
+
+  # Let's Encrypt SSL Certificate Manager
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+    environment:
+      - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}
+    depends_on:
+      - nginx-proxy
+    restart: always
+    networks:
+      - usdt-network
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: usdt-exchange-db
+    environment:
+      POSTGRES_DB: usdt_exchange
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - usdt-network
+
+  # Backend API
+  backend:
+    image: ${DOCKER_USERNAME:-brianpower}/usdt-exchange-backend:${IMAGE_TAG:-latest}
+    container_name: usdt-exchange-backend
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@db:5432/usdt_exchange
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      CORS_ORIGINS: "https://${MAIN_DOMAIN},https://${PATTY_DOMAIN},https://${DAI_DOMAIN}"
+      # Nginx proxy environment variables
+      VIRTUAL_HOST: ${API_DOMAIN}
+      VIRTUAL_PORT: 3000
+      LETSENCRYPT_HOST: ${API_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    command: sh -c "sleep 5 && npm run migrate && npm start"
+    networks:
+      - usdt-network
+
+  # Frontend Web App (serves all three subdomains)
+  frontend:
+    image: ${DOCKER_USERNAME:-brianpower}/usdt-exchange-frontend:${IMAGE_TAG:-latest}
+    container_name: usdt-exchange-frontend
+    environment:
+      # Nginx proxy environment variables - all three subdomains
+      VIRTUAL_HOST: ${MAIN_DOMAIN},${PATTY_DOMAIN},${DAI_DOMAIN}
+      LETSENCRYPT_HOST: ${MAIN_DOMAIN},${PATTY_DOMAIN},${DAI_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - usdt-network
+
+networks:
+  usdt-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

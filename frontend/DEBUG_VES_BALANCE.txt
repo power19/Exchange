@@ -1,0 +1,81 @@
+========================================
+DEBUG: VES BALANCE SHOWING 0
+========================================
+
+I've added debug logging to figure out why VES is showing 0.
+
+The API returns: dai_ves: 83000 ✓
+But the app shows: 0 VES ✗
+
+========================================
+STEP 1: REBUILD APK
+========================================
+
+cd C:\Users\brian\Documents\Exchange\frontend\android
+gradlew.bat assembleDebug
+
+APK: app\build\outputs\apk\debug\app-debug.apk
+
+========================================
+STEP 2: INSTALL AND OPEN APP
+========================================
+
+1. Install the new APK
+2. Open the app
+3. You'll see debug info under the VES balance:
+   "Raw: [value] | Type: [type]"
+
+========================================
+STEP 3: TAKE SCREENSHOT AND SHARE
+========================================
+
+Take a screenshot showing:
+- The VES balance display
+- The debug line underneath it
+
+This will show us:
+- What value the app is actually receiving
+- What data type it is (should be "number")
+
+========================================
+WHAT TO LOOK FOR:
+========================================
+
+Under "My VES Balance", you'll see something like:
+
+  0 VES
+  Raw: 83000 | Type: number    ← This debug info
+
+OR it might show:
+
+  0 VES
+  Raw: undefined | Type: undefined
+
+OR:
+
+  0 VES
+  Raw: [object Object] | Type: object
+
+This will tell us exactly what's wrong!
+
+========================================
+ALTERNATIVE: CHECK CONSOLE LOGS
+========================================
+
+If you have Android Studio:
+
+1. Open Android Studio
+2. Open project: frontend/android
+3. Run the app on a connected device
+4. Open Logcat (bottom of screen)
+5. Filter by "Console"
+6. Look for these lines:
+   📊 API Response - Balances: {...}
+   📊 dai_ves value: 83000
+   📊 dai_ves type: number
+
+========================================
+
+Rebuild now and send me a screenshot of the debug info!
+
+========================================

@@ -1,0 +1,3473 @@
+Folder PATH listing
+Volume serial number is 5C95-D350
+C:.
++---.claude
++---backend
+¦   +---node_modules
+¦   ¦   +---.bin
+¦   ¦   +---@babel
+¦   ¦   ¦   +---code-frame
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---compat-data
+¦   ¦   ¦   ¦   +---data
+¦   ¦   ¦   +---core
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   ¦   +---config
+¦   ¦   ¦   ¦   ¦   ¦   +---files
+¦   ¦   ¦   ¦   ¦   ¦   +---helpers
+¦   ¦   ¦   ¦   ¦   ¦   +---validation
+¦   ¦   ¦   ¦   ¦   +---errors
+¦   ¦   ¦   ¦   ¦   +---gensync-utils
+¦   ¦   ¦   ¦   ¦   +---parser
+¦   ¦   ¦   ¦   ¦   ¦   +---util
+¦   ¦   ¦   ¦   ¦   +---tools
+¦   ¦   ¦   ¦   ¦   +---transformation
+¦   ¦   ¦   ¦   ¦   ¦   +---file
+¦   ¦   ¦   ¦   ¦   ¦   +---util
+¦   ¦   ¦   ¦   ¦   +---vendor
+¦   ¦   ¦   ¦   +---node_modules
+¦   ¦   ¦   ¦   ¦   +---.bin
+¦   ¦   ¦   ¦   ¦   +---debug
+¦   ¦   ¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   ¦   ¦   +---ms
+¦   ¦   ¦   ¦   ¦   +---semver
+¦   ¦   ¦   ¦   ¦       +---bin
+¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   ¦       +---config
+¦   ¦   ¦   ¦           +---files
+¦   ¦   ¦   +---generator
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦       +---generators
+¦   ¦   ¦   ¦       +---node
+¦   ¦   ¦   +---helper-compilation-targets
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   +---node_modules
+¦   ¦   ¦   ¦       +---.bin
+¦   ¦   ¦   ¦       +---semver
+¦   ¦   ¦   ¦           +---bin
+¦   ¦   ¦   +---helper-globals
+¦   ¦   ¦   ¦   +---data
+¦   ¦   ¦   +---helper-module-imports
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---helper-module-transforms
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---helper-plugin-utils
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---helper-string-parser
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---helper-validator-identifier
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---helper-validator-option
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---helpers
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦       +---helpers
+¦   ¦   ¦   +---parser
+¦   ¦   ¦   ¦   +---bin
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   +---typings
+¦   ¦   ¦   +---plugin-syntax-async-generators
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-bigint
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-class-properties
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-class-static-block
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-import-attributes
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-import-meta
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-json-strings
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-jsx
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-logical-assignment-operators
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-nullish-coalescing-operator
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-numeric-separator
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-object-rest-spread
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-optional-catch-binding
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-optional-chaining
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-private-property-in-object
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-top-level-await
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---plugin-syntax-typescript
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---template
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---traverse
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   ¦   +---path
+¦   ¦   ¦   ¦   ¦   ¦   +---inference
+¦   ¦   ¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   ¦   +---scope
+¦   ¦   ¦   ¦   ¦       +---lib
+¦   ¦   ¦   ¦   +---node_modules
+¦   ¦   ¦   ¦       +---debug
+¦   ¦   ¦   ¦       ¦   +---src
+¦   ¦   ¦   ¦       +---ms
+¦   ¦   ¦   +---types
+¦   ¦   ¦       +---lib
+¦   ¦   ¦           +---asserts
+¦   ¦   ¦           ¦   +---generated
+¦   ¦   ¦           +---ast-types
+¦   ¦   ¦           ¦   +---generated
+¦   ¦   ¦           +---builders
+¦   ¦   ¦           ¦   +---flow
+¦   ¦   ¦           ¦   +---generated
+¦   ¦   ¦           ¦   +---react
+¦   ¦   ¦           ¦   +---typescript
+¦   ¦   ¦           +---clone
+¦   ¦   ¦           +---comments
+¦   ¦   ¦           +---constants
+¦   ¦   ¦           ¦   +---generated
+¦   ¦   ¦           +---converters
+¦   ¦   ¦           +---definitions
+¦   ¦   ¦           +---modifications
+¦   ¦   ¦           ¦   +---flow
+¦   ¦   ¦           ¦   +---typescript
+¦   ¦   ¦           +---retrievers
+¦   ¦   ¦           +---traverse
+¦   ¦   ¦           +---utils
+¦   ¦   ¦           ¦   +---react
+¦   ¦   ¦           +---validators
+¦   ¦   ¦               +---generated
+¦   ¦   ¦               +---react
+¦   ¦   +---@bcoe
+¦   ¦   ¦   +---v8-coverage
+¦   ¦   ¦       +---dist
+¦   ¦   ¦       ¦   +---lib
+¦   ¦   ¦       ¦       +---_src
+¦   ¦   ¦       +---src
+¦   ¦   ¦           +---lib
+¦   ¦   ¦           +---test
+¦   ¦   +---@cspotcode
+¦   ¦   ¦   +---source-map-support
+¦   ¦   ¦       +---node_modules
+¦   ¦   ¦           +---@jridgewell
+¦   ¦   ¦               +---trace-mapping
+¦   ¦   ¦                   +---dist
+¦   ¦   ¦                       +---types
+¦   ¦   +---@istanbuljs
+¦   ¦   ¦   +---load-nyc-config
+¦   ¦   ¦   +---schema
+¦   ¦   +---@jest
+¦   ¦   ¦   +---console
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---core
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   ¦       +---cli
+¦   ¦   ¦   ¦       +---lib
+¦   ¦   ¦   ¦       +---plugins
+¦   ¦   ¦   +---environment
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---expect
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---expect-utils
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---fake-timers
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---globals
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---reporters
+¦   ¦   ¦   ¦   +---assets
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---schemas
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---source-map
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---test-result
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---test-sequencer
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---transform
+¦   ¦   ¦   ¦   +---build
+¦   ¦   ¦   +---types
+¦   ¦   ¦       +---build
+¦   ¦   +---@jridgewell
+¦   ¦   ¦   +---gen-mapping
+¦   ¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   ¦   +---types
+¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   ¦   +---types
+¦   ¦   ¦   +---remapping
+¦   ¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   ¦   +---types
+¦   ¦   ¦   +---resolve-uri
+¦   ¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦       +---types
+¦   ¦   ¦   +---sourcemap-codec
+¦   ¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   ¦   +---types
+¦   ¦   ¦   +---trace-mapping
+¦   ¦   ¦       +---dist
+¦   ¦   ¦       +---src
+¦   ¦   ¦       +---types
+¦   ¦   +---@mapbox
+¦   ¦   ¦   +---node-pre-gyp
+¦   ¦   ¦       +---.github
+¦   ¦   ¦       ¦   +---workflows
+¦   ¦   ¦       +---bin
+¦   ¦   ¦       +---lib
+¦   ¦   ¦           +---util
+¦   ¦   ¦               +---nw-pre-gyp
+¦   ¦   +---@sinclair
+¦   ¦   ¦   +---typebox
+¦   ¦   ¦       +---compiler
+¦   ¦   ¦       +---errors
+¦   ¦   ¦       +---system
+¦   ¦   ¦       +---value
+¦   ¦   +---@sinonjs
+¦   ¦   ¦   +---commons
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   ¦   +---prototypes
+¦   ¦   ¦   ¦   +---types
+¦   ¦   ¦   ¦       +---prototypes
+¦   ¦   ¦   +---fake-timers
+¦   ¦   ¦       +---src
+¦   ¦   +---@tsconfig
+¦   ¦   ¦   +---node10
+¦   ¦   ¦   +---node12
+¦   ¦   ¦   +---node14
+¦   ¦   ¦   +---node16
+¦   ¦   +---@types
+¦   ¦   ¦   +---babel__core
+¦   ¦   ¦   +---babel__generator
+¦   ¦   ¦   +---babel__template
+¦   ¦   ¦   +---babel__traverse
+¦   ¦   ¦   +---bcrypt
+¦   ¦   ¦   +---body-parser
+¦   ¦   ¦   +---connect
+¦   ¦   ¦   +---cors
+¦   ¦   ¦   +---express
+¦   ¦   ¦   +---express-serve-static-core
+¦   ¦   ¦   +---graceful-fs
+¦   ¦   ¦   +---http-errors
+¦   ¦   ¦   +---istanbul-lib-coverage
+¦   ¦   ¦   +---istanbul-lib-report
+¦   ¦   ¦   +---istanbul-reports
+¦   ¦   ¦   +---jest
+¦   ¦   ¦   +---jsonwebtoken
+¦   ¦   ¦   +---mime
+¦   ¦   ¦   +---ms
+¦   ¦   ¦   +---node
+¦   ¦   ¦   ¦   +---assert
+¦   ¦   ¦   ¦   +---compatibility
+¦   ¦   ¦   ¦   +---dns
+¦   ¦   ¦   ¦   +---fs
+¦   ¦   ¦   ¦   +---readline
+¦   ¦   ¦   ¦   +---stream
+¦   ¦   ¦   ¦   +---timers
+¦   ¦   ¦   ¦   +---ts5.6
+¦   ¦   ¦   ¦   +---web-globals
+¦   ¦   ¦   +---pg
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---qs
+¦   ¦   ¦   +---range-parser
+¦   ¦   ¦   +---send
+¦   ¦   ¦   +---serve-static
+¦   ¦   ¦   ¦   +---node_modules
+¦   ¦   ¦   ¦       +---@types
+¦   ¦   ¦   ¦           +---send
+¦   ¦   ¦   +---stack-utils
+¦   ¦   ¦   +---yargs
+¦   ¦   ¦   +---yargs-parser
+¦   ¦   +---abbrev
+¦   ¦   +---accepts
+¦   ¦   +---acorn
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---dist
+¦   ¦   +---acorn-walk
+¦   ¦   ¦   +---dist
+¦   ¦   +---agent-base
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦   ¦   +---debug
+¦   ¦   ¦   ¦   ¦   +---src
+¦   ¦   ¦   ¦   +---ms
+¦   ¦   ¦   +---src
+¦   ¦   +---ansi-escapes
+¦   ¦   +---ansi-regex
+¦   ¦   +---ansi-styles
+¦   ¦   +---anymatch
+¦   ¦   +---aproba
+¦   ¦   +---are-we-there-yet
+¦   ¦   ¦   +---lib
+¦   ¦   +---arg
+¦   ¦   +---argparse
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---action
+¦   ¦   ¦       ¦   +---append
+¦   ¦   ¦       ¦   +---store
+¦   ¦   ¦       +---argument
+¦   ¦   ¦       +---help
+¦   ¦   +---array-flatten
+¦   ¦   +---babel-jest
+¦   ¦   ¦   +---build
+¦   ¦   +---babel-plugin-istanbul
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---.bin
+¦   ¦   ¦       +---istanbul-lib-instrument
+¦   ¦   ¦       ¦   +---src
+¦   ¦   ¦       +---semver
+¦   ¦   ¦           +---bin
+¦   ¦   +---babel-plugin-jest-hoist
+¦   ¦   ¦   +---build
+¦   ¦   +---babel-preset-current-node-syntax
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   ¦   +---workflows
+¦   ¦   ¦   +---src
+¦   ¦   +---babel-preset-jest
+¦   ¦   +---balanced-match
+¦   ¦   ¦   +---.github
+¦   ¦   +---baseline-browser-mapping
+¦   ¦   ¦   +---dist
+¦   ¦   +---bcrypt
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   ¦   +---workflows
+¦   ¦   ¦   +---examples
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   +---binding
+¦   ¦   ¦   ¦       +---napi-v3
+¦   ¦   ¦   +---src
+¦   ¦   ¦   +---test
+¦   ¦   +---binary-extensions
+¦   ¦   +---body-parser
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---types
+¦   ¦   +---brace-expansion
+¦   ¦   +---braces
+¦   ¦   ¦   +---lib
+¦   ¦   +---browserslist
+¦   ¦   +---bs-logger
+¦   ¦   ¦   +---dist
+¦   ¦   ¦       +---logger
+¦   ¦   ¦       +---testing
+¦   ¦   ¦       +---utils
+¦   ¦   +---bser
+¦   ¦   +---buffer-equal-constant-time
+¦   ¦   +---buffer-from
+¦   ¦   +---bytes
+¦   ¦   +---call-bind-apply-helpers
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---call-bound
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---callsites
+¦   ¦   +---camelcase
+¦   ¦   +---caniuse-lite
+¦   ¦   ¦   +---data
+¦   ¦   ¦   ¦   +---features
+¦   ¦   ¦   ¦   +---regions
+¦   ¦   ¦   +---dist
+¦   ¦   ¦       +---lib
+¦   ¦   ¦       +---unpacker
+¦   ¦   +---chalk
+¦   ¦   ¦   +---source
+¦   ¦   +---char-regex
+¦   ¦   +---chokidar
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---types
+¦   ¦   +---chownr
+¦   ¦   +---ci-info
+¦   ¦   +---cjs-module-lexer
+¦   ¦   ¦   +---dist
+¦   ¦   +---cliui
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---lib
+¦   ¦   +---co
+¦   ¦   +---collect-v8-coverage
+¦   ¦   +---color-convert
+¦   ¦   +---color-name
+¦   ¦   +---color-support
+¦   ¦   +---concat-map
+¦   ¦   ¦   +---example
+¦   ¦   ¦   +---test
+¦   ¦   +---console-control-strings
+¦   ¦   +---content-disposition
+¦   ¦   +---content-type
+¦   ¦   +---convert-source-map
+¦   ¦   +---cookie
+¦   ¦   +---cookie-signature
+¦   ¦   +---cors
+¦   ¦   ¦   +---lib
+¦   ¦   +---create-jest
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---build
+¦   ¦   +---create-require
+¦   ¦   +---cross-spawn
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---util
+¦   ¦   +---debug
+¦   ¦   ¦   +---src
+¦   ¦   +---dedent
+¦   ¦   ¦   +---dist
+¦   ¦   +---deepmerge
+¦   ¦   ¦   +---dist
+¦   ¦   +---delegates
+¦   ¦   ¦   +---test
+¦   ¦   +---depd
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---browser
+¦   ¦   +---destroy
+¦   ¦   +---detect-libc
+¦   ¦   ¦   +---lib
+¦   ¦   +---detect-newline
+¦   ¦   +---diff
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---convert
+¦   ¦   ¦       +---diff
+¦   ¦   ¦       +---patch
+¦   ¦   ¦       +---util
+¦   ¦   +---diff-sequences
+¦   ¦   ¦   +---build
+¦   ¦   +---dotenv
+¦   ¦   ¦   +---lib
+¦   ¦   +---dunder-proto
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---ecdsa-sig-formatter
+¦   ¦   ¦   +---src
+¦   ¦   +---ee-first
+¦   ¦   +---electron-to-chromium
+¦   ¦   +---emittery
+¦   ¦   +---emoji-regex
+¦   ¦   ¦   +---es2015
+¦   ¦   +---encodeurl
+¦   ¦   +---error-ex
+¦   ¦   +---es-define-property
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---es-errors
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---es-object-atoms
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---escalade
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---sync
+¦   ¦   +---escape-html
+¦   ¦   +---escape-string-regexp
+¦   ¦   +---esprima
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---dist
+¦   ¦   +---etag
+¦   ¦   +---execa
+¦   ¦   ¦   +---lib
+¦   ¦   +---exit
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---test
+¦   ¦   ¦       +---fixtures
+¦   ¦   +---expect
+¦   ¦   ¦   +---build
+¦   ¦   +---express
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---middleware
+¦   ¦   ¦       +---router
+¦   ¦   +---express-rate-limit
+¦   ¦   ¦   +---dist
+¦   ¦   +---fast-json-stable-stringify
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---benchmark
+¦   ¦   ¦   +---example
+¦   ¦   ¦   +---test
+¦   ¦   +---fb-watchman
+¦   ¦   +---fill-range
+¦   ¦   +---finalhandler
+¦   ¦   +---find-up
+¦   ¦   +---forwarded
+¦   ¦   +---fresh
+¦   ¦   +---fs-minipass
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---minipass
+¦   ¦   ¦       +---yallist
+¦   ¦   +---fs.realpath
+¦   ¦   +---function-bind
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---gauge
+¦   ¦   +---gensync
+¦   ¦   ¦   +---test
+¦   ¦   +---get-caller-file
+¦   ¦   +---get-intrinsic
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---get-package-type
+¦   ¦   +---get-proto
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---get-stream
+¦   ¦   +---glob
+¦   ¦   +---glob-parent
+¦   ¦   +---gopd
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---graceful-fs
+¦   ¦   +---handlebars
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---amd
+¦   ¦   ¦   ¦   ¦   +---handlebars
+¦   ¦   ¦   ¦   ¦       +---compiler
+¦   ¦   ¦   ¦   ¦       +---decorators
+¦   ¦   ¦   ¦   ¦       +---helpers
+¦   ¦   ¦   ¦   ¦       +---internal
+¦   ¦   ¦   ¦   +---cjs
+¦   ¦   ¦   ¦       +---handlebars
+¦   ¦   ¦   ¦           +---compiler
+¦   ¦   ¦   ¦           +---decorators
+¦   ¦   ¦   ¦           +---helpers
+¦   ¦   ¦   ¦           +---internal
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   +---handlebars
+¦   ¦   ¦   ¦       +---compiler
+¦   ¦   ¦   ¦       +---decorators
+¦   ¦   ¦   ¦       +---helpers
+¦   ¦   ¦   ¦       +---internal
+¦   ¦   ¦   +---types
+¦   ¦   +---has-flag
+¦   ¦   +---has-symbols
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   ¦       +---shams
+¦   ¦   +---has-unicode
+¦   ¦   +---hasown
+¦   ¦   ¦   +---.github
+¦   ¦   +---helmet
+¦   ¦   +---html-escaper
+¦   ¦   ¦   +---cjs
+¦   ¦   ¦   +---esm
+¦   ¦   ¦   +---test
+¦   ¦   +---http-errors
+¦   ¦   +---https-proxy-agent
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---debug
+¦   ¦   ¦       ¦   +---src
+¦   ¦   ¦       +---ms
+¦   ¦   +---human-signals
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---src
+¦   ¦   +---iconv-lite
+¦   ¦   ¦   +---encodings
+¦   ¦   ¦   ¦   +---tables
+¦   ¦   ¦   +---lib
+¦   ¦   +---ignore-by-default
+¦   ¦   +---import-local
+¦   ¦   ¦   +---fixtures
+¦   ¦   +---imurmurhash
+¦   ¦   +---inflight
+¦   ¦   +---inherits
+¦   ¦   +---ipaddr.js
+¦   ¦   ¦   +---lib
+¦   ¦   +---is-arrayish
+¦   ¦   +---is-binary-path
+¦   ¦   +---is-core-module
+¦   ¦   ¦   +---test
+¦   ¦   +---is-extglob
+¦   ¦   +---is-fullwidth-code-point
+¦   ¦   +---is-generator-fn
+¦   ¦   +---is-glob
+¦   ¦   +---is-number
+¦   ¦   +---is-stream
+¦   ¦   +---isexe
+¦   ¦   ¦   +---test
+¦   ¦   +---istanbul-lib-coverage
+¦   ¦   ¦   +---lib
+¦   ¦   +---istanbul-lib-instrument
+¦   ¦   ¦   +---src
+¦   ¦   +---istanbul-lib-report
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---make-dir
+¦   ¦   +---istanbul-lib-source-maps
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---debug
+¦   ¦   ¦       ¦   +---src
+¦   ¦   ¦       +---ms
+¦   ¦   +---istanbul-reports
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---clover
+¦   ¦   ¦       +---cobertura
+¦   ¦   ¦       +---html
+¦   ¦   ¦       ¦   +---assets
+¦   ¦   ¦       ¦       +---vendor
+¦   ¦   ¦       +---html-spa
+¦   ¦   ¦       ¦   +---assets
+¦   ¦   ¦       ¦   +---src
+¦   ¦   ¦       +---json
+¦   ¦   ¦       +---json-summary
+¦   ¦   ¦       +---lcov
+¦   ¦   ¦       +---lcovonly
+¦   ¦   ¦       +---none
+¦   ¦   ¦       +---teamcity
+¦   ¦   ¦       +---text
+¦   ¦   ¦       +---text-lcov
+¦   ¦   ¦       +---text-summary
+¦   ¦   +---jest
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-changed-files
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-circus
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---legacy-code-todo-rewrite
+¦   ¦   +---jest-cli
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-config
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-diff
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-docblock
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-each
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---table
+¦   ¦   +---jest-environment-node
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-get-type
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-haste-map
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---crawlers
+¦   ¦   ¦       +---lib
+¦   ¦   ¦       +---watchers
+¦   ¦   +---jest-leak-detector
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-matcher-utils
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-message-util
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-mock
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-pnp-resolver
+¦   ¦   +---jest-regex-util
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-resolve
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-resolve-dependencies
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-runner
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-runtime
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-snapshot
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-util
+¦   ¦   ¦   +---build
+¦   ¦   +---jest-validate
+¦   ¦   ¦   +---build
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---camelcase
+¦   ¦   +---jest-watcher
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---lib
+¦   ¦   +---jest-worker
+¦   ¦   ¦   +---build
+¦   ¦   ¦   ¦   +---base
+¦   ¦   ¦   ¦   +---workers
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---supports-color
+¦   ¦   +---js-tokens
+¦   ¦   +---js-yaml
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---js-yaml
+¦   ¦   ¦           +---schema
+¦   ¦   ¦           +---type
+¦   ¦   ¦               +---js
+¦   ¦   +---jsesc
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---man
+¦   ¦   +---json-parse-even-better-errors
+¦   ¦   +---json5
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---lib
+¦   ¦   +---jsonwebtoken
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---ms
+¦   ¦   +---jwa
+¦   ¦   +---jws
+¦   ¦   ¦   +---lib
+¦   ¦   +---kleur
+¦   ¦   +---leven
+¦   ¦   +---lines-and-columns
+¦   ¦   ¦   +---build
+¦   ¦   +---locate-path
+¦   ¦   +---lodash.includes
+¦   ¦   +---lodash.isboolean
+¦   ¦   +---lodash.isinteger
+¦   ¦   +---lodash.isnumber
+¦   ¦   +---lodash.isplainobject
+¦   ¦   +---lodash.isstring
+¦   ¦   +---lodash.memoize
+¦   ¦   +---lodash.once
+¦   ¦   +---lru-cache
+¦   ¦   +---make-dir
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---.bin
+¦   ¦   ¦       +---semver
+¦   ¦   ¦           +---bin
+¦   ¦   +---make-error
+¦   ¦   ¦   +---dist
+¦   ¦   +---makeerror
+¦   ¦   ¦   +---lib
+¦   ¦   +---math-intrinsics
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---constants
+¦   ¦   ¦   +---test
+¦   ¦   +---media-typer
+¦   ¦   +---merge-descriptors
+¦   ¦   +---merge-stream
+¦   ¦   +---methods
+¦   ¦   +---micromatch
+¦   ¦   +---mime
+¦   ¦   ¦   +---src
+¦   ¦   +---mime-db
+¦   ¦   +---mime-types
+¦   ¦   +---mimic-fn
+¦   ¦   +---minimatch
+¦   ¦   +---minimist
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---example
+¦   ¦   ¦   +---test
+¦   ¦   +---minipass
+¦   ¦   +---minizlib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---minipass
+¦   ¦   ¦       +---yallist
+¦   ¦   +---mkdirp
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---lib
+¦   ¦   +---ms
+¦   ¦   +---natural-compare
+¦   ¦   +---negotiator
+¦   ¦   ¦   +---lib
+¦   ¦   +---neo-async
+¦   ¦   +---node-addon-api
+¦   ¦   ¦   +---tools
+¦   ¦   +---node-fetch
+¦   ¦   ¦   +---lib
+¦   ¦   +---node-int64
+¦   ¦   +---node-releases
+¦   ¦   ¦   +---data
+¦   ¦   ¦       +---processed
+¦   ¦   ¦       +---release-schedule
+¦   ¦   +---nodemon
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---doc
+¦   ¦   ¦   ¦   +---cli
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   +---cli
+¦   ¦   ¦   ¦   +---config
+¦   ¦   ¦   ¦   +---help
+¦   ¦   ¦   ¦   +---monitor
+¦   ¦   ¦   ¦   +---rules
+¦   ¦   ¦   ¦   +---utils
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---debug
+¦   ¦   ¦       ¦   +---src
+¦   ¦   ¦       +---has-flag
+¦   ¦   ¦       +---ms
+¦   ¦   ¦       +---supports-color
+¦   ¦   +---nopt
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---lib
+¦   ¦   +---normalize-path
+¦   ¦   +---npm-run-path
+¦   ¦   +---npmlog
+¦   ¦   +---object-assign
+¦   ¦   +---object-inspect
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---example
+¦   ¦   ¦   +---test
+¦   ¦   ¦       +---browser
+¦   ¦   +---on-finished
+¦   ¦   +---once
+¦   ¦   +---onetime
+¦   ¦   +---p-limit
+¦   ¦   +---p-locate
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---p-limit
+¦   ¦   +---p-try
+¦   ¦   +---parse-json
+¦   ¦   +---parseurl
+¦   ¦   +---path-exists
+¦   ¦   +---path-is-absolute
+¦   ¦   +---path-key
+¦   ¦   +---path-parse
+¦   ¦   +---path-to-regexp
+¦   ¦   +---pg
+¦   ¦   ¦   +---esm
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---crypto
+¦   ¦   ¦       +---native
+¦   ¦   +---pg-cloudflare
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---esm
+¦   ¦   ¦   +---src
+¦   ¦   +---pg-connection-string
+¦   ¦   ¦   +---esm
+¦   ¦   +---pg-int8
+¦   ¦   +---pg-pool
+¦   ¦   ¦   +---esm
+¦   ¦   +---pg-protocol
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---esm
+¦   ¦   ¦   +---src
+¦   ¦   ¦       +---testing
+¦   ¦   ¦       +---types
+¦   ¦   +---pg-types
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---test
+¦   ¦   +---pgpass
+¦   ¦   ¦   +---lib
+¦   ¦   +---picocolors
+¦   ¦   +---picomatch
+¦   ¦   ¦   +---lib
+¦   ¦   +---pirates
+¦   ¦   ¦   +---lib
+¦   ¦   +---pkg-dir
+¦   ¦   +---postgres-array
+¦   ¦   +---postgres-bytea
+¦   ¦   +---postgres-date
+¦   ¦   +---postgres-interval
+¦   ¦   +---pretty-format
+¦   ¦   ¦   +---build
+¦   ¦   ¦   ¦   +---plugins
+¦   ¦   ¦   ¦       +---lib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---ansi-styles
+¦   ¦   +---prompts
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---dateparts
+¦   ¦   ¦   ¦   +---elements
+¦   ¦   ¦   ¦   +---util
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---dateparts
+¦   ¦   ¦       +---elements
+¦   ¦   ¦       +---util
+¦   ¦   +---proxy-addr
+¦   ¦   +---pstree.remy
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---tests
+¦   ¦   ¦       +---fixtures
+¦   ¦   +---pure-rand
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---distribution
+¦   ¦   ¦       ¦   +---internals
+¦   ¦   ¦       +---esm
+¦   ¦   ¦       ¦   +---distribution
+¦   ¦   ¦       ¦   ¦   +---internals
+¦   ¦   ¦       ¦   +---generator
+¦   ¦   ¦       ¦   +---types
+¦   ¦   ¦       ¦       +---distribution
+¦   ¦   ¦       ¦       ¦   +---internals
+¦   ¦   ¦       ¦       +---generator
+¦   ¦   ¦       +---generator
+¦   ¦   ¦       +---types
+¦   ¦   ¦           +---distribution
+¦   ¦   ¦           ¦   +---internals
+¦   ¦   ¦           +---generator
+¦   ¦   +---qs
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---test
+¦   ¦   +---range-parser
+¦   ¦   +---raw-body
+¦   ¦   +---react-is
+¦   ¦   ¦   +---cjs
+¦   ¦   ¦   +---umd
+¦   ¦   +---readable-stream
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---internal
+¦   ¦   ¦           +---streams
+¦   ¦   +---readdirp
+¦   ¦   +---require-directory
+¦   ¦   +---resolve
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---example
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---test
+¦   ¦   ¦       +---dotdot
+¦   ¦   ¦       ¦   +---abc
+¦   ¦   ¦       +---module_dir
+¦   ¦   ¦       ¦   +---xmodules
+¦   ¦   ¦       ¦   ¦   +---aaa
+¦   ¦   ¦       ¦   +---ymodules
+¦   ¦   ¦       ¦   ¦   +---aaa
+¦   ¦   ¦       ¦   +---zmodules
+¦   ¦   ¦       ¦       +---bbb
+¦   ¦   ¦       +---node_path
+¦   ¦   ¦       ¦   +---x
+¦   ¦   ¦       ¦   ¦   +---aaa
+¦   ¦   ¦       ¦   ¦   +---ccc
+¦   ¦   ¦       ¦   +---y
+¦   ¦   ¦       ¦       +---bbb
+¦   ¦   ¦       ¦       +---ccc
+¦   ¦   ¦       +---pathfilter
+¦   ¦   ¦       ¦   +---deep_ref
+¦   ¦   ¦       +---precedence
+¦   ¦   ¦       ¦   +---aaa
+¦   ¦   ¦       ¦   +---bbb
+¦   ¦   ¦       +---resolver
+¦   ¦   ¦       ¦   +---baz
+¦   ¦   ¦       ¦   +---browser_field
+¦   ¦   ¦       ¦   +---dot_main
+¦   ¦   ¦       ¦   +---dot_slash_main
+¦   ¦   ¦       ¦   +---false_main
+¦   ¦   ¦       ¦   +---incorrect_main
+¦   ¦   ¦       ¦   +---invalid_main
+¦   ¦   ¦       ¦   +---multirepo
+¦   ¦   ¦       ¦   ¦   +---packages
+¦   ¦   ¦       ¦   ¦       +---package-a
+¦   ¦   ¦       ¦   ¦       +---package-b
+¦   ¦   ¦       ¦   +---nested_symlinks
+¦   ¦   ¦       ¦   ¦   +---mylib
+¦   ¦   ¦       ¦   +---other_path
+¦   ¦   ¦       ¦   ¦   +---lib
+¦   ¦   ¦       ¦   +---quux
+¦   ¦   ¦       ¦   ¦   +---foo
+¦   ¦   ¦       ¦   +---same_names
+¦   ¦   ¦       ¦   ¦   +---foo
+¦   ¦   ¦       ¦   +---symlinked
+¦   ¦   ¦       ¦   ¦   +---package
+¦   ¦   ¦       ¦   ¦   +---_
+¦   ¦   ¦       ¦   ¦       +---node_modules
+¦   ¦   ¦       ¦   ¦       +---symlink_target
+¦   ¦   ¦       ¦   +---without_basedir
+¦   ¦   ¦       +---shadowed_core
+¦   ¦   ¦           +---node_modules
+¦   ¦   ¦               +---util
+¦   ¦   +---resolve-cwd
+¦   ¦   +---resolve-from
+¦   ¦   +---resolve.exports
+¦   ¦   ¦   +---dist
+¦   ¦   +---rimraf
+¦   ¦   +---safe-buffer
+¦   ¦   +---safer-buffer
+¦   ¦   +---semver
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---classes
+¦   ¦   ¦   +---functions
+¦   ¦   ¦   +---internal
+¦   ¦   ¦   +---ranges
+¦   ¦   +---send
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---http-errors
+¦   ¦   ¦       +---ms
+¦   ¦   ¦       +---statuses
+¦   ¦   +---serve-static
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---http-errors
+¦   ¦   ¦       +---ms
+¦   ¦   ¦       +---send
+¦   ¦   ¦       ¦   +---node_modules
+¦   ¦   ¦       ¦       +---encodeurl
+¦   ¦   ¦       +---statuses
+¦   ¦   +---set-blocking
+¦   ¦   +---setprototypeof
+¦   ¦   ¦   +---test
+¦   ¦   +---shebang-command
+¦   ¦   +---shebang-regex
+¦   ¦   +---side-channel
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---side-channel-list
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---side-channel-map
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---side-channel-weakmap
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---signal-exit
+¦   ¦   +---simple-update-notifier
+¦   ¦   ¦   +---build
+¦   ¦   ¦   +---src
+¦   ¦   +---sisteransi
+¦   ¦   ¦   +---src
+¦   ¦   +---slash
+¦   ¦   +---source-map
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---lib
+¦   ¦   +---source-map-support
+¦   ¦   +---split2
+¦   ¦   +---sprintf-js
+¦   ¦   ¦   +---demo
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   +---src
+¦   ¦   ¦   +---test
+¦   ¦   +---stack-utils
+¦   ¦   +---statuses
+¦   ¦   +---string-length
+¦   ¦   +---string-width
+¦   ¦   +---string_decoder
+¦   ¦   ¦   +---lib
+¦   ¦   +---strip-ansi
+¦   ¦   +---strip-bom
+¦   ¦   +---strip-final-newline
+¦   ¦   +---strip-json-comments
+¦   ¦   +---supports-color
+¦   ¦   +---supports-preserve-symlinks-flag
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   +---test
+¦   ¦   +---tar
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦       +---yallist
+¦   ¦   +---test-exclude
+¦   ¦   +---tmpl
+¦   ¦   ¦   +---lib
+¦   ¦   +---to-regex-range
+¦   ¦   +---toidentifier
+¦   ¦   +---touch
+¦   ¦   ¦   +---bin
+¦   ¦   +---tr46
+¦   ¦   ¦   +---lib
+¦   ¦   +---ts-jest
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---cli
+¦   ¦   ¦   ¦   ¦   +---config
+¦   ¦   ¦   ¦   ¦   +---helpers
+¦   ¦   ¦   ¦   +---config
+¦   ¦   ¦   ¦   +---legacy
+¦   ¦   ¦   ¦   ¦   +---compiler
+¦   ¦   ¦   ¦   ¦   +---config
+¦   ¦   ¦   ¦   +---presets
+¦   ¦   ¦   ¦   +---transformers
+¦   ¦   ¦   ¦   +---transpilers
+¦   ¦   ¦   ¦   ¦   +---typescript
+¦   ¦   ¦   ¦   +---utils
+¦   ¦   ¦   +---node_modules
+¦   ¦   ¦   ¦   +---type-fest
+¦   ¦   ¦   ¦       +---source
+¦   ¦   ¦   ¦           +---internal
+¦   ¦   ¦   +---presets
+¦   ¦   ¦       +---default
+¦   ¦   ¦       +---default-esm
+¦   ¦   ¦       +---default-esm-legacy
+¦   ¦   ¦       +---default-legacy
+¦   ¦   ¦       +---js-with-babel
+¦   ¦   ¦       +---js-with-babel-esm
+¦   ¦   ¦       +---js-with-babel-esm-legacy
+¦   ¦   ¦       +---js-with-babel-legacy
+¦   ¦   ¦       +---js-with-ts
+¦   ¦   ¦       +---js-with-ts-esm
+¦   ¦   ¦       +---js-with-ts-esm-legacy
+¦   ¦   ¦       +---js-with-ts-legacy
+¦   ¦   +---ts-node
+¦   ¦   ¦   +---dist
+¦   ¦   ¦   ¦   +---child
+¦   ¦   ¦   ¦   +---transpilers
+¦   ¦   ¦   +---dist-raw
+¦   ¦   ¦   +---esm
+¦   ¦   ¦   +---node10
+¦   ¦   ¦   +---node12
+¦   ¦   ¦   +---node14
+¦   ¦   ¦   +---node16
+¦   ¦   ¦   +---register
+¦   ¦   ¦   +---transpilers
+¦   ¦   +---type-detect
+¦   ¦   +---type-fest
+¦   ¦   ¦   +---source
+¦   ¦   ¦   +---ts41
+¦   ¦   +---type-is
+¦   ¦   +---typescript
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---lib
+¦   ¦   ¦       +---cs
+¦   ¦   ¦       +---de
+¦   ¦   ¦       +---es
+¦   ¦   ¦       +---fr
+¦   ¦   ¦       +---it
+¦   ¦   ¦       +---ja
+¦   ¦   ¦       +---ko
+¦   ¦   ¦       +---pl
+¦   ¦   ¦       +---pt-br
+¦   ¦   ¦       +---ru
+¦   ¦   ¦       +---tr
+¦   ¦   ¦       +---zh-cn
+¦   ¦   ¦       +---zh-tw
+¦   ¦   +---uglify-js
+¦   ¦   ¦   +---bin
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   +---tools
+¦   ¦   +---undefsafe
+¦   ¦   ¦   +---.github
+¦   ¦   ¦   ¦   +---workflows
+¦   ¦   ¦   +---lib
+¦   ¦   +---undici-types
+¦   ¦   +---unpipe
+¦   ¦   +---update-browserslist-db
+¦   ¦   +---util-deprecate
+¦   ¦   +---utils-merge
+¦   ¦   +---v8-compile-cache-lib
+¦   ¦   +---v8-to-istanbul
+¦   ¦   ¦   +---lib
+¦   ¦   +---vary
+¦   ¦   +---walker
+¦   ¦   ¦   +---lib
+¦   ¦   +---webidl-conversions
+¦   ¦   ¦   +---lib
+¦   ¦   +---whatwg-url
+¦   ¦   ¦   +---lib
+¦   ¦   +---which
+¦   ¦   ¦   +---bin
+¦   ¦   +---wide-align
+¦   ¦   +---wordwrap
+¦   ¦   ¦   +---example
+¦   ¦   ¦   +---test
+¦   ¦   +---wrap-ansi
+¦   ¦   +---wrappy
+¦   ¦   +---write-file-atomic
+¦   ¦   ¦   +---lib
+¦   ¦   +---xtend
+¦   ¦   +---y18n
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---lib
+¦   ¦   ¦           +---platform-shims
+¦   ¦   +---yallist
+¦   ¦   +---yargs
+¦   ¦   ¦   +---build
+¦   ¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦       +---typings
+¦   ¦   ¦   ¦       +---utils
+¦   ¦   ¦   +---helpers
+¦   ¦   ¦   +---lib
+¦   ¦   ¦   ¦   +---platform-shims
+¦   ¦   ¦   +---locales
+¦   ¦   +---yargs-parser
+¦   ¦   ¦   +---build
+¦   ¦   ¦       +---lib
+¦   ¦   +---yn
+¦   ¦   +---yocto-queue
+¦   +---src
+¦       +---controllers
+¦       +---database
+¦       +---middleware
+¦       +---routes
+¦       +---scripts
+¦       +---services
+¦       +---types
+¦       +---utils
++---frontend
+    +---android
+    ¦   +---.gradle
+    ¦   ¦   +---8.11.1
+    ¦   ¦   ¦   +---checksums
+    ¦   ¦   ¦   +---executionHistory
+    ¦   ¦   ¦   +---expanded
+    ¦   ¦   ¦   +---fileChanges
+    ¦   ¦   ¦   +---fileHashes
+    ¦   ¦   ¦   +---vcsMetadata
+    ¦   ¦   +---8.13
+    ¦   ¦   ¦   +---checksums
+    ¦   ¦   ¦   +---executionHistory
+    ¦   ¦   ¦   +---expanded
+    ¦   ¦   ¦   +---fileChanges
+    ¦   ¦   ¦   +---fileHashes
+    ¦   ¦   ¦   +---vcsMetadata
+    ¦   ¦   +---buildOutputCleanup
+    ¦   ¦   +---vcs-1
+    ¦   +---.idea
+    ¦   ¦   +---caches
+    ¦   +---app
+    ¦   ¦   +---build
+    ¦   ¦   ¦   +---generated
+    ¦   ¦   ¦   ¦   +---ap_generated_sources
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦   ¦   +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugUnitTest
+    ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   +---res
+    ¦   ¦   ¦   ¦   ¦   +---pngs
+    ¦   ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---drawable-anydpi-v24
+    ¦   ¦   ¦   ¦   ¦   +---resValues
+    ¦   ¦   ¦   ¦   ¦       +---androidTest
+    ¦   ¦   ¦   ¦   ¦       ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   ¦   +---updated_navigation_xml
+    ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   +---intermediates
+    ¦   ¦   ¦   ¦   +---aar_metadata_check
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---checkDebugAarMetadata
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---checkDebugAndroidTestAarMetadata
+    ¦   ¦   ¦   ¦   +---annotation_processor_list
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---javaPreCompileDebug
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦   ¦   +---javaPreCompileDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦   +---debugUnitTest
+    ¦   ¦   ¦   ¦   ¦       +---javaPreCompileDebugUnitTest
+    ¦   ¦   ¦   ¦   +---apk
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   +---apk_ide_redirect_file
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---createDebugApkListingFileRedirect
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---createDebugAndroidTestApkListingFileRedirect
+    ¦   ¦   ¦   ¦   +---app_metadata
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---writeDebugAppMetadata
+    ¦   ¦   ¦   ¦   +---assets
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugAssets
+    ¦   ¦   ¦   ¦   ¦   ¦       +---public
+    ¦   ¦   ¦   ¦   ¦   ¦           +---assets
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestAssets
+    ¦   ¦   ¦   ¦   +---compatible_screen_manifest
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---createDebugCompatibleScreenManifests
+    ¦   ¦   ¦   ¦   +---compiled_navigation_res
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---compileDebugNavigationResources
+    ¦   ¦   ¦   ¦   +---compile_and_runtime_not_namespaced_r_class_jar
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---compile_app_classes_jar
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---bundleDebugClassesToCompileJar
+    ¦   ¦   ¦   ¦   +---compressed_assets
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---compressDebugAssets
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   ¦           +---assets
+    ¦   ¦   ¦   ¦   ¦   ¦               +---public
+    ¦   ¦   ¦   ¦   ¦   ¦                   +---assets
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---compressDebugAndroidTestAssets
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---data_binding_layout_info_type_merge
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugResources
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---data_binding_layout_info_type_package
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---desugar_graph
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   ¦           +---currentProject
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---dirs_bucket_0
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---dirs_bucket_1
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---dirs_bucket_2
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---dirs_bucket_3
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---dirs_bucket_4
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---dirs_bucket_5
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---jar_1ea233a9ffb87c6f0c36350eefd4bfae685ec645f42d9af0e19a5f4c1a71af57_bucket_0
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---jar_1ea233a9ffb87c6f0c36350eefd4bfae685ec645f42d9af0e19a5f4c1a71af57_bucket_1
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---jar_1ea233a9ffb87c6f0c36350eefd4bfae685ec645f42d9af0e19a5f4c1a71af57_bucket_2
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---jar_1ea233a9ffb87c6f0c36350eefd4bfae685ec645f42d9af0e19a5f4c1a71af57_bucket_3
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---jar_1ea233a9ffb87c6f0c36350eefd4bfae685ec645f42d9af0e19a5f4c1a71af57_bucket_4
+    ¦   ¦   ¦   ¦   ¦   ¦           ¦   +---jar_1ea233a9ffb87c6f0c36350eefd4bfae685ec645f42d9af0e19a5f4c1a71af57_bucket_5
+    ¦   ¦   ¦   ¦   ¦   ¦           +---externalLibs
+    ¦   ¦   ¦   ¦   ¦   ¦           +---mixedScopes
+    ¦   ¦   ¦   ¦   ¦   ¦           +---otherProjects
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   ¦               +---currentProject
+    ¦   ¦   ¦   ¦   ¦               ¦   +---dirs_bucket_0
+    ¦   ¦   ¦   ¦   ¦               ¦   +---dirs_bucket_1
+    ¦   ¦   ¦   ¦   ¦               ¦   +---dirs_bucket_2
+    ¦   ¦   ¦   ¦   ¦               ¦   +---dirs_bucket_3
+    ¦   ¦   ¦   ¦   ¦               ¦   +---dirs_bucket_4
+    ¦   ¦   ¦   ¦   ¦               ¦   +---dirs_bucket_5
+    ¦   ¦   ¦   ¦   ¦               ¦   +---jar_644957be4289803956903c8426220a7f8fcd774d19cd0ea1debf950e8d3be5b2_bucket_0
+    ¦   ¦   ¦   ¦   ¦               ¦   +---jar_644957be4289803956903c8426220a7f8fcd774d19cd0ea1debf950e8d3be5b2_bucket_1
+    ¦   ¦   ¦   ¦   ¦               ¦   +---jar_644957be4289803956903c8426220a7f8fcd774d19cd0ea1debf950e8d3be5b2_bucket_2
+    ¦   ¦   ¦   ¦   ¦               ¦   +---jar_644957be4289803956903c8426220a7f8fcd774d19cd0ea1debf950e8d3be5b2_bucket_3
+    ¦   ¦   ¦   ¦   ¦               ¦   +---jar_644957be4289803956903c8426220a7f8fcd774d19cd0ea1debf950e8d3be5b2_bucket_4
+    ¦   ¦   ¦   ¦   ¦               ¦   +---jar_644957be4289803956903c8426220a7f8fcd774d19cd0ea1debf950e8d3be5b2_bucket_5
+    ¦   ¦   ¦   ¦   ¦               +---externalLibs
+    ¦   ¦   ¦   ¦   ¦               +---mixedScopes
+    ¦   ¦   ¦   ¦   ¦               +---otherProjects
+    ¦   ¦   ¦   ¦   +---dex
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeExtDexDebug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeLibDexDebug
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---0
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---1
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---10
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---11
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---12
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---13
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---14
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---15
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---2
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---3
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---4
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---5
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---6
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---7
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---8
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---9
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeProjectDexDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---0
+    ¦   ¦   ¦   ¦   ¦   ¦       +---1
+    ¦   ¦   ¦   ¦   ¦   ¦       +---10
+    ¦   ¦   ¦   ¦   ¦   ¦       +---11
+    ¦   ¦   ¦   ¦   ¦   ¦       +---12
+    ¦   ¦   ¦   ¦   ¦   ¦       +---13
+    ¦   ¦   ¦   ¦   ¦   ¦       +---14
+    ¦   ¦   ¦   ¦   ¦   ¦       +---15
+    ¦   ¦   ¦   ¦   ¦   ¦       +---2
+    ¦   ¦   ¦   ¦   ¦   ¦       +---3
+    ¦   ¦   ¦   ¦   ¦   ¦       +---4
+    ¦   ¦   ¦   ¦   ¦   ¦       +---5
+    ¦   ¦   ¦   ¦   ¦   ¦       +---6
+    ¦   ¦   ¦   ¦   ¦   ¦       +---7
+    ¦   ¦   ¦   ¦   ¦   ¦       +---8
+    ¦   ¦   ¦   ¦   ¦   ¦       +---9
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeExtDexDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeLibDexDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       ¦   +---0
+    ¦   ¦   ¦   ¦   ¦       ¦   +---1
+    ¦   ¦   ¦   ¦   ¦       ¦   +---10
+    ¦   ¦   ¦   ¦   ¦       ¦   +---11
+    ¦   ¦   ¦   ¦   ¦       ¦   +---12
+    ¦   ¦   ¦   ¦   ¦       ¦   +---13
+    ¦   ¦   ¦   ¦   ¦       ¦   +---14
+    ¦   ¦   ¦   ¦   ¦       ¦   +---15
+    ¦   ¦   ¦   ¦   ¦       ¦   +---2
+    ¦   ¦   ¦   ¦   ¦       ¦   +---3
+    ¦   ¦   ¦   ¦   ¦       ¦   +---4
+    ¦   ¦   ¦   ¦   ¦       ¦   +---5
+    ¦   ¦   ¦   ¦   ¦       ¦   +---6
+    ¦   ¦   ¦   ¦   ¦       ¦   +---7
+    ¦   ¦   ¦   ¦   ¦       ¦   +---8
+    ¦   ¦   ¦   ¦   ¦       ¦   +---9
+    ¦   ¦   ¦   ¦   ¦       +---mergeProjectDexDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---0
+    ¦   ¦   ¦   ¦   ¦           +---1
+    ¦   ¦   ¦   ¦   ¦           +---10
+    ¦   ¦   ¦   ¦   ¦           +---11
+    ¦   ¦   ¦   ¦   ¦           +---12
+    ¦   ¦   ¦   ¦   ¦           +---13
+    ¦   ¦   ¦   ¦   ¦           +---14
+    ¦   ¦   ¦   ¦   ¦           +---15
+    ¦   ¦   ¦   ¦   ¦           +---2
+    ¦   ¦   ¦   ¦   ¦           +---3
+    ¦   ¦   ¦   ¦   ¦           +---4
+    ¦   ¦   ¦   ¦   ¦           +---5
+    ¦   ¦   ¦   ¦   ¦           +---6
+    ¦   ¦   ¦   ¦   ¦           +---7
+    ¦   ¦   ¦   ¦   ¦           +---8
+    ¦   ¦   ¦   ¦   ¦           +---9
+    ¦   ¦   ¦   ¦   +---dex_archive_input_jar_hashes
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   +---dex_number_of_buckets_file
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   +---duplicate_classes_check
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---checkDebugDuplicateClasses
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---checkDebugAndroidTestDuplicateClasses
+    ¦   ¦   ¦   ¦   +---external_file_lib_dex_archives
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---desugarDebugFileDependencies
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---desugarDebugAndroidTestFileDependencies
+    ¦   ¦   ¦   ¦   +---external_libs_dex_archive
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---external_libs_dex_archive_with_artifact_transforms
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---global_synthetics_dex
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugGlobalSynthetics
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestGlobalSynthetics
+    ¦   ¦   ¦   ¦   +---global_synthetics_external_lib
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---global_synthetics_external_libs_artifact_transform
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---global_synthetics_file_lib
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---desugarDebugFileDependencies
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---desugarDebugAndroidTestFileDependencies
+    ¦   ¦   ¦   ¦   +---global_synthetics_mixed_scope
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---global_synthetics_project
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---global_synthetics_subproject
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---incremental
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugResources
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---merged.dir
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-af
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-am
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ar
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-as
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-az
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-b+sr+Latn
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-be
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-bg
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-bn
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-bs
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ca
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-cs
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-da
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-de
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-el
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-en-rAU
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-en-rCA
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-en-rGB
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-en-rIN
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-en-rXC
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-es
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-es-rUS
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-et
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-eu
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-fa
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-fi
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-fr
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-fr-rCA
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-gl
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-gu
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-h720dp-v13
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-hdpi-v4
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-hi
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-hr
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-hu
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-hy
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-in
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-is
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-it
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-iw
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ja
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ka
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-kk
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-km
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-kn
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ko
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ky
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-land
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-large-v4
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ldltr-v21
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-lo
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-lt
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-lv
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-mk
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ml
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-mn
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-mr
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ms
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-my
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-nb
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ne
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-night-v8
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-nl
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-or
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-pa
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-pl
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-port
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-pt
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-pt-rBR
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-pt-rPT
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ro
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ru
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-si
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sk
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sl
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sq
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sr
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sv
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sw
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-sw600dp-v13
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ta
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-te
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-th
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-tl
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-tr
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-uk
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-ur
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-uz
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v16
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v17
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v18
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v21
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v22
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v23
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v24
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v25
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v26
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v27
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v28
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v29
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-v31
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-vi
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-watch-v20
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-watch-v21
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-xlarge-v4
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-zh-rCN
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-zh-rHK
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-zh-rTW
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---values-zu
+    ¦   ¦   ¦   ¦   ¦   ¦   ¦   +---stripped.dir
+    ¦   ¦   ¦   ¦   ¦   ¦   +---packageDebugResources
+    ¦   ¦   ¦   ¦   ¦   ¦       +---merged.dir
+    ¦   ¦   ¦   ¦   ¦   ¦       ¦   +---values
+    ¦   ¦   ¦   ¦   ¦   ¦       +---stripped.dir
+    ¦   ¦   ¦   ¦   ¦   +---debug-mergeJavaRes
+    ¦   ¦   ¦   ¦   ¦   ¦   +---zip-cache
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   ¦   ¦       +---merged.dir
+    ¦   ¦   ¦   ¦   ¦   ¦       ¦   +---values
+    ¦   ¦   ¦   ¦   ¦   ¦       ¦   +---values-v18
+    ¦   ¦   ¦   ¦   ¦   ¦       ¦   +---values-v21
+    ¦   ¦   ¦   ¦   ¦   ¦       ¦   +---values-v28
+    ¦   ¦   ¦   ¦   ¦   ¦       +---stripped.dir
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest-mergeJavaRes
+    ¦   ¦   ¦   ¦   ¦   ¦   +---zip-cache
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugAndroidTestAssets
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugAndroidTestJniLibFolders
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugAndroidTestShaders
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugAssets
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugJniLibFolders
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugShaders
+    ¦   ¦   ¦   ¦   ¦   +---packageDebug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---tmp
+    ¦   ¦   ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦           +---zip-cache
+    ¦   ¦   ¦   ¦   ¦   +---packageDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---tmp
+    ¦   ¦   ¦   ¦   ¦           +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦               +---zip-cache
+    ¦   ¦   ¦   ¦   +---javac
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---compileDebugJavaWithJavac
+    ¦   ¦   ¦   ¦   ¦   ¦       +---classes
+    ¦   ¦   ¦   ¦   ¦   ¦           +---com
+    ¦   ¦   ¦   ¦   ¦   ¦               +---usdt
+    ¦   ¦   ¦   ¦   ¦   ¦                   +---dairimar
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦   ¦   +---compileDebugAndroidTestJavaWithJavac
+    ¦   ¦   ¦   ¦   ¦   ¦       +---classes
+    ¦   ¦   ¦   ¦   ¦   ¦           +---com
+    ¦   ¦   ¦   ¦   ¦   ¦               +---getcapacitor
+    ¦   ¦   ¦   ¦   ¦   ¦                   +---myapp
+    ¦   ¦   ¦   ¦   ¦   +---debugUnitTest
+    ¦   ¦   ¦   ¦   ¦       +---compileDebugUnitTestJavaWithJavac
+    ¦   ¦   ¦   ¦   ¦           +---classes
+    ¦   ¦   ¦   ¦   ¦               +---com
+    ¦   ¦   ¦   ¦   ¦                   +---getcapacitor
+    ¦   ¦   ¦   ¦   ¦                       +---myapp
+    ¦   ¦   ¦   ¦   +---linked_resources_binary_format
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---local_only_symbol_list
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---parseDebugLocalResources
+    ¦   ¦   ¦   ¦   +---manifest_merge_blame_file
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugMainManifest
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestManifest
+    ¦   ¦   ¦   ¦   +---merged_java_res
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugJavaResource
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestJavaResource
+    ¦   ¦   ¦   ¦   +---merged_jni_libs
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugJniLibFolders
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestJniLibFolders
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---merged_manifest
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---processDebugMainManifest
+    ¦   ¦   ¦   ¦   +---merged_manifests
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦   ¦   +---merged_res
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---merged_res_blame_folder
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugResources
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   ¦           +---multi-v2
+    ¦   ¦   ¦   ¦   ¦   ¦           +---single
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   ¦               +---multi-v2
+    ¦   ¦   ¦   ¦   +---merged_shaders
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mergeDebugShaders
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAndroidTestShaders
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---mixed_scope_dex_archive
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---navigation_json
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---extractDeepLinksDebug
+    ¦   ¦   ¦   ¦   +---nested_resources_validation_report
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---generateDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---generateDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---packaged_manifests
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugManifestForPackage
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestManifest
+    ¦   ¦   ¦   ¦   +---packaged_res
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦   ¦   ¦           +---drawable
+    ¦   ¦   ¦   ¦   ¦           +---drawable-land-hdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-land-mdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-land-xhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-land-xxhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-land-xxxhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-port-hdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-port-mdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-port-xhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-port-xxhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-port-xxxhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---drawable-v24
+    ¦   ¦   ¦   ¦   ¦           +---layout
+    ¦   ¦   ¦   ¦   ¦           +---mipmap-anydpi-v26
+    ¦   ¦   ¦   ¦   ¦           +---mipmap-hdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---mipmap-mdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---mipmap-xhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---mipmap-xxhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---mipmap-xxxhdpi-v4
+    ¦   ¦   ¦   ¦   ¦           +---values
+    ¦   ¦   ¦   ¦   ¦           +---xml
+    ¦   ¦   ¦   ¦   +---project_dex_archive
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   ¦           +---com
+    ¦   ¦   ¦   ¦   ¦   ¦               +---usdt
+    ¦   ¦   ¦   ¦   ¦   ¦                   +---dairimar
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   ¦               +---com
+    ¦   ¦   ¦   ¦   ¦                   +---getcapacitor
+    ¦   ¦   ¦   ¦   ¦                       +---myapp
+    ¦   ¦   ¦   ¦   +---runtime_symbol_list
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---signing_config_versions
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---writeDebugSigningConfigVersions
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---writeDebugAndroidTestSigningConfigVersions
+    ¦   ¦   ¦   ¦   +---source_set_path_map
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---mapDebugSourceSetPaths
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---mapDebugAndroidTestSourceSetPaths
+    ¦   ¦   ¦   ¦   +---stable_resource_ids_file
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---sub_project_dex_archive
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---dexBuilderDebug
+    ¦   ¦   ¦   ¦   ¦   ¦       +---out
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---dexBuilderDebugAndroidTest
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---symbol_list_with_package_name
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---processDebugResources
+    ¦   ¦   ¦   ¦   ¦   +---debugAndroidTest
+    ¦   ¦   ¦   ¦   ¦       +---processDebugAndroidTestResources
+    ¦   ¦   ¦   ¦   +---tmp
+    ¦   ¦   ¦   ¦   ¦   +---manifest
+    ¦   ¦   ¦   ¦   ¦       +---androidTest
+    ¦   ¦   ¦   ¦   ¦           +---debug
+    ¦   ¦   ¦   ¦   +---validate_signing_config
+    ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   ¦       ¦   +---validateSigningDebug
+    ¦   ¦   ¦   ¦       +---debugAndroidTest
+    ¦   ¦   ¦   ¦           +---validateSigningDebugAndroidTest
+    ¦   ¦   ¦   +---outputs
+    ¦   ¦   ¦   ¦   +---apk
+    ¦   ¦   ¦   ¦   ¦   +---androidTest
+    ¦   ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   +---logs
+    ¦   ¦   ¦   +---tmp
+    ¦   ¦   ¦       +---compileDebugAndroidTestJavaWithJavac
+    ¦   ¦   ¦       +---compileDebugJavaWithJavac
+    ¦   ¦   ¦       ¦   +---compileTransaction
+    ¦   ¦   ¦       ¦       +---backup-dir
+    ¦   ¦   ¦       ¦       +---stash-dir
+    ¦   ¦   ¦       +---compileDebugUnitTestJavaWithJavac
+    ¦   ¦   +---src
+    ¦   ¦       +---androidTest
+    ¦   ¦       ¦   +---java
+    ¦   ¦       ¦       +---com
+    ¦   ¦       ¦           +---getcapacitor
+    ¦   ¦       ¦               +---myapp
+    ¦   ¦       +---main
+    ¦   ¦       ¦   +---assets
+    ¦   ¦       ¦   ¦   +---public
+    ¦   ¦       ¦   ¦       +---assets
+    ¦   ¦       ¦   +---java
+    ¦   ¦       ¦   ¦   +---com
+    ¦   ¦       ¦   ¦       +---usdt
+    ¦   ¦       ¦   ¦           +---dairimar
+    ¦   ¦       ¦   +---res
+    ¦   ¦       ¦       +---drawable
+    ¦   ¦       ¦       +---drawable-land-hdpi
+    ¦   ¦       ¦       +---drawable-land-mdpi
+    ¦   ¦       ¦       +---drawable-land-xhdpi
+    ¦   ¦       ¦       +---drawable-land-xxhdpi
+    ¦   ¦       ¦       +---drawable-land-xxxhdpi
+    ¦   ¦       ¦       +---drawable-port-hdpi
+    ¦   ¦       ¦       +---drawable-port-mdpi
+    ¦   ¦       ¦       +---drawable-port-xhdpi
+    ¦   ¦       ¦       +---drawable-port-xxhdpi
+    ¦   ¦       ¦       +---drawable-port-xxxhdpi
+    ¦   ¦       ¦       +---drawable-v24
+    ¦   ¦       ¦       +---layout
+    ¦   ¦       ¦       +---mipmap-anydpi-v26
+    ¦   ¦       ¦       +---mipmap-hdpi
+    ¦   ¦       ¦       +---mipmap-mdpi
+    ¦   ¦       ¦       +---mipmap-xhdpi
+    ¦   ¦       ¦       +---mipmap-xxhdpi
+    ¦   ¦       ¦       +---mipmap-xxxhdpi
+    ¦   ¦       ¦       +---values
+    ¦   ¦       ¦       +---xml
+    ¦   ¦       +---test
+    ¦   ¦           +---java
+    ¦   ¦               +---com
+    ¦   ¦                   +---getcapacitor
+    ¦   ¦                       +---myapp
+    ¦   +---build
+    ¦   ¦   +---reports
+    ¦   ¦       +---problems
+    ¦   +---capacitor-cordova-android-plugins
+    ¦   ¦   +---build
+    ¦   ¦   ¦   +---.transforms
+    ¦   ¦   ¦   ¦   +---48863d37d86e7cb9448c71fd64df7d6b
+    ¦   ¦   ¦   ¦   ¦   +---transformed
+    ¦   ¦   ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦   ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_dex
+    ¦   ¦   ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_global-synthetics
+    ¦   ¦   ¦   ¦   +---642e236aca5d8ef6d5ab9e051f7a0e34
+    ¦   ¦   ¦   ¦       +---transformed
+    ¦   ¦   ¦   ¦           +---classes
+    ¦   ¦   ¦   ¦               +---classes_dex
+    ¦   ¦   ¦   ¦               +---classes_global-synthetics
+    ¦   ¦   ¦   +---generated
+    ¦   ¦   ¦   ¦   +---res
+    ¦   ¦   ¦   ¦   ¦   +---pngs
+    ¦   ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   +---resValues
+    ¦   ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   ¦   +---updated_navigation_xml
+    ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   +---intermediates
+    ¦   ¦   ¦   ¦   +---aapt_friendly_merged_manifests
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦   ¦   ¦           +---aapt
+    ¦   ¦   ¦   ¦   +---aar_metadata
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---writeDebugAarMetadata
+    ¦   ¦   ¦   ¦   +---annotation_processor_list
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---javaPreCompileDebug
+    ¦   ¦   ¦   ¦   +---assets
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugAssets
+    ¦   ¦   ¦   ¦   +---compiled_local_resources
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---compileDebugLibraryResources
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---compile_library_classes_jar
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---bundleLibCompileToJarDebug
+    ¦   ¦   ¦   ¦   +---compile_r_class_jar
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---generateDebugRFile
+    ¦   ¦   ¦   ¦   +---compile_symbol_list
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---generateDebugRFile
+    ¦   ¦   ¦   ¦   +---data_binding_layout_info_type_package
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---incremental
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦   ¦   +---packageDebugResources
+    ¦   ¦   ¦   ¦   ¦   ¦       +---merged.dir
+    ¦   ¦   ¦   ¦   ¦   ¦       +---stripped.dir
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugAssets
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugJniLibFolders
+    ¦   ¦   ¦   ¦   ¦   +---mergeDebugShaders
+    ¦   ¦   ¦   ¦   +---library_jni
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---copyDebugJniLibsProjectOnly
+    ¦   ¦   ¦   ¦   ¦           +---jni
+    ¦   ¦   ¦   ¦   +---local_only_symbol_list
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---parseDebugLocalResources
+    ¦   ¦   ¦   ¦   +---manifest_merge_blame_file
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦   ¦   +---merged_jni_libs
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugJniLibFolders
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---merged_manifest
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦   ¦   +---merged_shaders
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---mergeDebugShaders
+    ¦   ¦   ¦   ¦   ¦           +---out
+    ¦   ¦   ¦   ¦   +---navigation_json
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---extractDeepLinksDebug
+    ¦   ¦   ¦   ¦   +---nested_resources_validation_report
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---generateDebugResources
+    ¦   ¦   ¦   ¦   +---packaged_res
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦   ¦   +---public_res
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦   ¦   +---runtime_library_classes_dir
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦   ¦   ¦   +---runtime_library_classes_jar
+    ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦   ¦   ¦       +---bundleLibRuntimeToJarDebug
+    ¦   ¦   ¦   ¦   +---symbol_list_with_package_name
+    ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦   ¦           +---generateDebugRFile
+    ¦   ¦   ¦   +---outputs
+    ¦   ¦   ¦       +---logs
+    ¦   ¦   +---src
+    ¦   ¦       +---main
+    ¦   ¦           +---java
+    ¦   ¦           +---res
+    ¦   +---gradle
+    ¦       +---wrapper
+    +---dist
+    ¦   +---assets
+    +---node_modules
+    ¦   +---.bin
+    ¦   +---@alloc
+    ¦   ¦   +---quick-lru
+    ¦   +---@babel
+    ¦   ¦   +---code-frame
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---compat-data
+    ¦   ¦   ¦   +---data
+    ¦   ¦   +---core
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦   ¦   +---config
+    ¦   ¦   ¦   ¦   ¦   +---files
+    ¦   ¦   ¦   ¦   ¦   +---helpers
+    ¦   ¦   ¦   ¦   ¦   +---validation
+    ¦   ¦   ¦   ¦   +---errors
+    ¦   ¦   ¦   ¦   +---gensync-utils
+    ¦   ¦   ¦   ¦   +---parser
+    ¦   ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   ¦   +---tools
+    ¦   ¦   ¦   ¦   +---transformation
+    ¦   ¦   ¦   ¦   ¦   +---file
+    ¦   ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   ¦   +---vendor
+    ¦   ¦   ¦   +---node_modules
+    ¦   ¦   ¦   ¦   +---.bin
+    ¦   ¦   ¦   ¦   +---semver
+    ¦   ¦   ¦   ¦       +---bin
+    ¦   ¦   ¦   +---src
+    ¦   ¦   ¦       +---config
+    ¦   ¦   ¦           +---files
+    ¦   ¦   +---generator
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦       +---generators
+    ¦   ¦   ¦       +---node
+    ¦   ¦   +---helper-compilation-targets
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦   +---node_modules
+    ¦   ¦   ¦       +---.bin
+    ¦   ¦   ¦       +---semver
+    ¦   ¦   ¦           +---bin
+    ¦   ¦   +---helper-globals
+    ¦   ¦   ¦   +---data
+    ¦   ¦   +---helper-module-imports
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---helper-module-transforms
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---helper-plugin-utils
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---helper-string-parser
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---helper-validator-identifier
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---helper-validator-option
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---helpers
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦       +---helpers
+    ¦   ¦   +---parser
+    ¦   ¦   ¦   +---bin
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦   +---typings
+    ¦   ¦   +---plugin-transform-react-jsx-self
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---plugin-transform-react-jsx-source
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---template
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   +---traverse
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦       +---path
+    ¦   ¦   ¦       ¦   +---inference
+    ¦   ¦   ¦       ¦   +---lib
+    ¦   ¦   ¦       +---scope
+    ¦   ¦   ¦           +---lib
+    ¦   ¦   +---types
+    ¦   ¦       +---lib
+    ¦   ¦           +---asserts
+    ¦   ¦           ¦   +---generated
+    ¦   ¦           +---ast-types
+    ¦   ¦           ¦   +---generated
+    ¦   ¦           +---builders
+    ¦   ¦           ¦   +---flow
+    ¦   ¦           ¦   +---generated
+    ¦   ¦           ¦   +---react
+    ¦   ¦           ¦   +---typescript
+    ¦   ¦           +---clone
+    ¦   ¦           +---comments
+    ¦   ¦           +---constants
+    ¦   ¦           ¦   +---generated
+    ¦   ¦           +---converters
+    ¦   ¦           +---definitions
+    ¦   ¦           +---modifications
+    ¦   ¦           ¦   +---flow
+    ¦   ¦           ¦   +---typescript
+    ¦   ¦           +---retrievers
+    ¦   ¦           +---traverse
+    ¦   ¦           +---utils
+    ¦   ¦           ¦   +---react
+    ¦   ¦           +---validators
+    ¦   ¦               +---generated
+    ¦   ¦               +---react
+    ¦   +---@capacitor
+    ¦   ¦   +---android
+    ¦   ¦   ¦   +---capacitor
+    ¦   ¦   ¦       +---build
+    ¦   ¦   ¦       ¦   +---.transforms
+    ¦   ¦   ¦       ¦   ¦   +---3a199c6ca7d28e32ce98e2a7a576ad93
+    ¦   ¦   ¦       ¦   ¦   ¦   +---transformed
+    ¦   ¦   ¦       ¦   ¦   ¦       +---classes
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes_dex
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦   ¦       ¦   ¦   +---4e4e60875ed2e9603478614df029613b
+    ¦   ¦   ¦       ¦   ¦   ¦   +---transformed
+    ¦   ¦   ¦       ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦   ¦       ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_dex
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦   +---com
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦       +---getcapacitor
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---annotation
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---cordova
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---plugin
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           ¦   +---util
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---util
+    ¦   ¦   ¦       ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_global-synthetics
+    ¦   ¦   ¦       ¦   ¦   +---8b09ce79d955607b351bff407bda01db
+    ¦   ¦   ¦       ¦   ¦   ¦   +---transformed
+    ¦   ¦   ¦       ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦   ¦       ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_dex
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦   +---com
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦       +---getcapacitor
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---annotation
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---cordova
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---plugin
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           ¦   +---util
+    ¦   ¦   ¦       ¦   ¦   ¦           ¦           +---util
+    ¦   ¦   ¦       ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_global-synthetics
+    ¦   ¦   ¦       ¦   ¦   +---bfe49ddff6597830004dabec6c90dcd0
+    ¦   ¦   ¦       ¦   ¦   ¦   +---transformed
+    ¦   ¦   ¦       ¦   ¦   ¦       +---classes
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes_dex
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦   ¦       ¦   ¦   +---cad306b318d968dc7f5cf66fd17cf650
+    ¦   ¦   ¦       ¦   ¦   ¦   +---transformed
+    ¦   ¦   ¦       ¦   ¦   ¦       +---classes
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes_dex
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦   ¦       ¦   ¦   +---ebbef111e6c2dac0c96d2a90d3c26386
+    ¦   ¦   ¦       ¦   ¦       +---transformed
+    ¦   ¦   ¦       ¦   ¦           +---classes
+    ¦   ¦   ¦       ¦   ¦               +---classes_dex
+    ¦   ¦   ¦       ¦   ¦               +---classes_global-synthetics
+    ¦   ¦   ¦       ¦   +---generated
+    ¦   ¦   ¦       ¦   ¦   +---ap_generated_sources
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---out
+    ¦   ¦   ¦       ¦   ¦   +---res
+    ¦   ¦   ¦       ¦   ¦   ¦   +---pngs
+    ¦   ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦   +---resValues
+    ¦   ¦   ¦       ¦   ¦   ¦       +---debug
+    ¦   ¦   ¦       ¦   ¦   +---updated_navigation_xml
+    ¦   ¦   ¦       ¦   ¦       +---debug
+    ¦   ¦   ¦       ¦   +---intermediates
+    ¦   ¦   ¦       ¦   ¦   +---aapt_friendly_merged_manifests
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦       ¦   ¦   ¦           +---aapt
+    ¦   ¦   ¦       ¦   ¦   +---aar_libs_directory
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---syncDebugLibJars
+    ¦   ¦   ¦       ¦   ¦   ¦           +---libs
+    ¦   ¦   ¦       ¦   ¦   +---aar_main_jar
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---syncDebugLibJars
+    ¦   ¦   ¦       ¦   ¦   +---aar_metadata
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---writeDebugAarMetadata
+    ¦   ¦   ¦       ¦   ¦   +---aar_metadata_check
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---checkDebugAarMetadata
+    ¦   ¦   ¦       ¦   ¦   +---annotations_typedef_file
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---extractDebugAnnotations
+    ¦   ¦   ¦       ¦   ¦   +---annotations_zip
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---extractDebugAnnotations
+    ¦   ¦   ¦       ¦   ¦   +---annotation_processor_list
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---javaPreCompileDebug
+    ¦   ¦   ¦       ¦   ¦   +---assets
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---mergeDebugAssets
+    ¦   ¦   ¦       ¦   ¦   +---compiled_local_resources
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---compileDebugLibraryResources
+    ¦   ¦   ¦       ¦   ¦   ¦           +---out
+    ¦   ¦   ¦       ¦   ¦   +---compile_library_classes_jar
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---bundleLibCompileToJarDebug
+    ¦   ¦   ¦       ¦   ¦   +---compile_r_class_jar
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---generateDebugRFile
+    ¦   ¦   ¦       ¦   ¦   +---compile_symbol_list
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---generateDebugRFile
+    ¦   ¦   ¦       ¦   ¦   +---data_binding_layout_info_type_package
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦       ¦   ¦   ¦           +---out
+    ¦   ¦   ¦       ¦   ¦   +---generated_proguard_file
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---mergeDebugGeneratedProguardFiles
+    ¦   ¦   ¦       ¦   ¦   +---incremental
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦   ¦   +---packageDebugResources
+    ¦   ¦   ¦       ¦   ¦   ¦   ¦       +---merged.dir
+    ¦   ¦   ¦       ¦   ¦   ¦   ¦       ¦   +---values
+    ¦   ¦   ¦       ¦   ¦   ¦   ¦       +---stripped.dir
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug-mergeJavaRes
+    ¦   ¦   ¦       ¦   ¦   ¦   ¦   +---zip-cache
+    ¦   ¦   ¦       ¦   ¦   ¦   +---mergeDebugAssets
+    ¦   ¦   ¦       ¦   ¦   ¦   +---mergeDebugJniLibFolders
+    ¦   ¦   ¦       ¦   ¦   ¦   +---mergeDebugShaders
+    ¦   ¦   ¦       ¦   ¦   ¦   +---packageDebugAssets
+    ¦   ¦   ¦       ¦   ¦   +---javac
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---compileDebugJavaWithJavac
+    ¦   ¦   ¦       ¦   ¦   ¦           +---classes
+    ¦   ¦   ¦       ¦   ¦   ¦               +---com
+    ¦   ¦   ¦       ¦   ¦   ¦                   +---getcapacitor
+    ¦   ¦   ¦       ¦   ¦   ¦                       +---annotation
+    ¦   ¦   ¦       ¦   ¦   ¦                       +---cordova
+    ¦   ¦   ¦       ¦   ¦   ¦                       +---plugin
+    ¦   ¦   ¦       ¦   ¦   ¦                       ¦   +---util
+    ¦   ¦   ¦       ¦   ¦   ¦                       +---util
+    ¦   ¦   ¦       ¦   ¦   +---library_and_local_jars_jni
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---copyDebugJniLibsProjectAndLocalJars
+    ¦   ¦   ¦       ¦   ¦   ¦           +---jni
+    ¦   ¦   ¦       ¦   ¦   +---library_art_profile
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---prepareDebugArtProfile
+    ¦   ¦   ¦       ¦   ¦   +---library_assets
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---packageDebugAssets
+    ¦   ¦   ¦       ¦   ¦   ¦           +---out
+    ¦   ¦   ¦       ¦   ¦   +---library_jni
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---copyDebugJniLibsProjectOnly
+    ¦   ¦   ¦       ¦   ¦   ¦           +---jni
+    ¦   ¦   ¦       ¦   ¦   +---lint_publish_jar
+    ¦   ¦   ¦       ¦   ¦   ¦   +---global
+    ¦   ¦   ¦       ¦   ¦   ¦       +---prepareLintJarForPublish
+    ¦   ¦   ¦       ¦   ¦   +---local_only_symbol_list
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---parseDebugLocalResources
+    ¦   ¦   ¦       ¦   ¦   +---manifest_merge_blame_file
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦       ¦   ¦   +---merged_consumer_proguard_file
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---mergeDebugConsumerProguardFiles
+    ¦   ¦   ¦       ¦   ¦   +---merged_java_res
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---mergeDebugJavaResource
+    ¦   ¦   ¦       ¦   ¦   +---merged_jni_libs
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---mergeDebugJniLibFolders
+    ¦   ¦   ¦       ¦   ¦   ¦           +---out
+    ¦   ¦   ¦       ¦   ¦   +---merged_manifest
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦   ¦       ¦   ¦   +---merged_shaders
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---mergeDebugShaders
+    ¦   ¦   ¦       ¦   ¦   ¦           +---out
+    ¦   ¦   ¦       ¦   ¦   +---navigation_json
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---extractDeepLinksDebug
+    ¦   ¦   ¦       ¦   ¦   +---navigation_json_for_aar
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---extractDeepLinksForAarDebug
+    ¦   ¦   ¦       ¦   ¦   +---nested_resources_validation_report
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---generateDebugResources
+    ¦   ¦   ¦       ¦   ¦   +---packaged_res
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦       ¦   ¦   ¦           +---layout
+    ¦   ¦   ¦       ¦   ¦   ¦           +---values
+    ¦   ¦   ¦       ¦   ¦   +---public_res
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦   ¦       ¦   ¦   +---runtime_library_classes_dir
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦   ¦       ¦   ¦   ¦           +---com
+    ¦   ¦   ¦       ¦   ¦   ¦               +---getcapacitor
+    ¦   ¦   ¦       ¦   ¦   ¦                   +---annotation
+    ¦   ¦   ¦       ¦   ¦   ¦                   +---cordova
+    ¦   ¦   ¦       ¦   ¦   ¦                   +---plugin
+    ¦   ¦   ¦       ¦   ¦   ¦                   ¦   +---util
+    ¦   ¦   ¦       ¦   ¦   ¦                   +---util
+    ¦   ¦   ¦       ¦   ¦   +---runtime_library_classes_jar
+    ¦   ¦   ¦       ¦   ¦   ¦   +---debug
+    ¦   ¦   ¦       ¦   ¦   ¦       +---bundleLibRuntimeToJarDebug
+    ¦   ¦   ¦       ¦   ¦   +---symbol_list_with_package_name
+    ¦   ¦   ¦       ¦   ¦       +---debug
+    ¦   ¦   ¦       ¦   ¦           +---generateDebugRFile
+    ¦   ¦   ¦       ¦   +---outputs
+    ¦   ¦   ¦       ¦   ¦   +---aar
+    ¦   ¦   ¦       ¦   ¦   +---logs
+    ¦   ¦   ¦       ¦   +---tmp
+    ¦   ¦   ¦       ¦       +---compileDebugJavaWithJavac
+    ¦   ¦   ¦       +---src
+    ¦   ¦   ¦           +---main
+    ¦   ¦   ¦               +---assets
+    ¦   ¦   ¦               +---java
+    ¦   ¦   ¦               ¦   +---com
+    ¦   ¦   ¦               ¦       +---getcapacitor
+    ¦   ¦   ¦               ¦           +---annotation
+    ¦   ¦   ¦               ¦           +---cordova
+    ¦   ¦   ¦               ¦           +---plugin
+    ¦   ¦   ¦               ¦           ¦   +---util
+    ¦   ¦   ¦               ¦           +---util
+    ¦   ¦   ¦               +---res
+    ¦   ¦   ¦                   +---layout
+    ¦   ¦   ¦                   +---values
+    ¦   ¦   +---cli
+    ¦   ¦   ¦   +---assets
+    ¦   ¦   ¦   +---bin
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   ¦   +---android
+    ¦   ¦   ¦   ¦   +---ios
+    ¦   ¦   ¦   ¦   +---tasks
+    ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---node_modules
+    ¦   ¦   ¦       +---.bin
+    ¦   ¦   ¦       +---commander
+    ¦   ¦   ¦       ¦   +---lib
+    ¦   ¦   ¦       ¦   +---typings
+    ¦   ¦   ¦       +---glob
+    ¦   ¦   ¦       ¦   +---dist
+    ¦   ¦   ¦       ¦       +---commonjs
+    ¦   ¦   ¦       ¦       +---esm
+    ¦   ¦   ¦       +---minimatch
+    ¦   ¦   ¦       ¦   +---dist
+    ¦   ¦   ¦       ¦       +---commonjs
+    ¦   ¦   ¦       ¦       +---esm
+    ¦   ¦   ¦       +---minipass
+    ¦   ¦   ¦       ¦   +---dist
+    ¦   ¦   ¦       ¦       +---commonjs
+    ¦   ¦   ¦       ¦       +---esm
+    ¦   ¦   ¦       +---rimraf
+    ¦   ¦   ¦           +---dist
+    ¦   ¦   ¦               +---commonjs
+    ¦   ¦   ¦               +---esm
+    ¦   ¦   +---core
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   +---types
+    ¦   ¦   +---local-notifications
+    ¦   ¦       +---android
+    ¦   ¦       ¦   +---build
+    ¦   ¦       ¦   ¦   +---.transforms
+    ¦   ¦       ¦   ¦   ¦   +---00fab8d977371471c2830b97aa62ec5f
+    ¦   ¦       ¦   ¦   ¦   ¦   +---transformed
+    ¦   ¦       ¦   ¦   ¦   ¦       +---classes
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_dex
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦       ¦   ¦   ¦   +---5db6b9a3bd13bde629b7b4f8f26de0e7
+    ¦   ¦       ¦   ¦   ¦   ¦   +---transformed
+    ¦   ¦       ¦   ¦   ¦   ¦       +---classes
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_dex
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦       ¦   ¦   ¦   +---7e7263d7c93d993725036b80329f314d
+    ¦   ¦       ¦   ¦   ¦   ¦   +---transformed
+    ¦   ¦       ¦   ¦   ¦   ¦       +---classes
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_dex
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦       ¦   ¦   ¦   +---d9ca510cc37fc0739d22b8cbd7a3b81b
+    ¦   ¦       ¦   ¦   ¦   ¦   +---transformed
+    ¦   ¦       ¦   ¦   ¦   ¦       +---classes
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_dex
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes_global-synthetics
+    ¦   ¦       ¦   ¦   ¦   +---ded0f8c5d918dba70ebe168f958d3cc0
+    ¦   ¦       ¦   ¦   ¦   ¦   +---transformed
+    ¦   ¦       ¦   ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦       ¦   ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_dex
+    ¦   ¦       ¦   ¦   ¦   ¦           ¦   +---com
+    ¦   ¦       ¦   ¦   ¦   ¦           ¦       +---capacitorjs
+    ¦   ¦       ¦   ¦   ¦   ¦           ¦           +---plugins
+    ¦   ¦       ¦   ¦   ¦   ¦           ¦               +---localnotifications
+    ¦   ¦       ¦   ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug_global-synthetics
+    ¦   ¦       ¦   ¦   ¦   +---ebc9405617e8d086187fabd148f10fc0
+    ¦   ¦       ¦   ¦   ¦       +---transformed
+    ¦   ¦       ¦   ¦   ¦           +---bundleLibRuntimeToDirDebug
+    ¦   ¦       ¦   ¦   ¦               +---bundleLibRuntimeToDirDebug_dex
+    ¦   ¦       ¦   ¦   ¦               ¦   +---com
+    ¦   ¦       ¦   ¦   ¦               ¦       +---capacitorjs
+    ¦   ¦       ¦   ¦   ¦               ¦           +---plugins
+    ¦   ¦       ¦   ¦   ¦               ¦               +---localnotifications
+    ¦   ¦       ¦   ¦   ¦               +---bundleLibRuntimeToDirDebug_global-synthetics
+    ¦   ¦       ¦   ¦   +---generated
+    ¦   ¦       ¦   ¦   ¦   +---ap_generated_sources
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---out
+    ¦   ¦       ¦   ¦   ¦   +---res
+    ¦   ¦       ¦   ¦   ¦   ¦   +---pngs
+    ¦   ¦       ¦   ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦   +---resValues
+    ¦   ¦       ¦   ¦   ¦   ¦       +---debug
+    ¦   ¦       ¦   ¦   ¦   +---updated_navigation_xml
+    ¦   ¦       ¦   ¦   ¦       +---debug
+    ¦   ¦       ¦   ¦   +---intermediates
+    ¦   ¦       ¦   ¦   ¦   +---aapt_friendly_merged_manifests
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦       ¦   ¦   ¦   ¦           +---aapt
+    ¦   ¦       ¦   ¦   ¦   +---aar_libs_directory
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---syncDebugLibJars
+    ¦   ¦       ¦   ¦   ¦   ¦           +---libs
+    ¦   ¦       ¦   ¦   ¦   +---aar_main_jar
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---syncDebugLibJars
+    ¦   ¦       ¦   ¦   ¦   +---aar_metadata
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---writeDebugAarMetadata
+    ¦   ¦       ¦   ¦   ¦   +---aar_metadata_check
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---checkDebugAarMetadata
+    ¦   ¦       ¦   ¦   ¦   +---annotations_typedef_file
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---extractDebugAnnotations
+    ¦   ¦       ¦   ¦   ¦   +---annotations_zip
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---extractDebugAnnotations
+    ¦   ¦       ¦   ¦   ¦   +---annotation_processor_list
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---javaPreCompileDebug
+    ¦   ¦       ¦   ¦   ¦   +---assets
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---mergeDebugAssets
+    ¦   ¦       ¦   ¦   ¦   +---compiled_local_resources
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---compileDebugLibraryResources
+    ¦   ¦       ¦   ¦   ¦   ¦           +---out
+    ¦   ¦       ¦   ¦   ¦   +---compile_library_classes_jar
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---bundleLibCompileToJarDebug
+    ¦   ¦       ¦   ¦   ¦   +---compile_r_class_jar
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---generateDebugRFile
+    ¦   ¦       ¦   ¦   ¦   +---compile_symbol_list
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---generateDebugRFile
+    ¦   ¦       ¦   ¦   ¦   +---data_binding_layout_info_type_package
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦       ¦   ¦   ¦   ¦           +---out
+    ¦   ¦       ¦   ¦   ¦   +---generated_proguard_file
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---mergeDebugGeneratedProguardFiles
+    ¦   ¦       ¦   ¦   ¦   +---incremental
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦   ¦   +---packageDebugResources
+    ¦   ¦       ¦   ¦   ¦   ¦   ¦       +---merged.dir
+    ¦   ¦       ¦   ¦   ¦   ¦   ¦       +---stripped.dir
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug-mergeJavaRes
+    ¦   ¦       ¦   ¦   ¦   ¦   ¦   +---zip-cache
+    ¦   ¦       ¦   ¦   ¦   ¦   +---mergeDebugAssets
+    ¦   ¦       ¦   ¦   ¦   ¦   +---mergeDebugJniLibFolders
+    ¦   ¦       ¦   ¦   ¦   ¦   +---mergeDebugShaders
+    ¦   ¦       ¦   ¦   ¦   ¦   +---packageDebugAssets
+    ¦   ¦       ¦   ¦   ¦   +---javac
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---compileDebugJavaWithJavac
+    ¦   ¦       ¦   ¦   ¦   ¦           +---classes
+    ¦   ¦       ¦   ¦   ¦   ¦               +---com
+    ¦   ¦       ¦   ¦   ¦   ¦                   +---capacitorjs
+    ¦   ¦       ¦   ¦   ¦   ¦                       +---plugins
+    ¦   ¦       ¦   ¦   ¦   ¦                           +---localnotifications
+    ¦   ¦       ¦   ¦   ¦   +---library_and_local_jars_jni
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---copyDebugJniLibsProjectAndLocalJars
+    ¦   ¦       ¦   ¦   ¦   ¦           +---jni
+    ¦   ¦       ¦   ¦   ¦   +---library_art_profile
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---prepareDebugArtProfile
+    ¦   ¦       ¦   ¦   ¦   +---library_assets
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---packageDebugAssets
+    ¦   ¦       ¦   ¦   ¦   ¦           +---out
+    ¦   ¦       ¦   ¦   ¦   +---library_jni
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---copyDebugJniLibsProjectOnly
+    ¦   ¦       ¦   ¦   ¦   ¦           +---jni
+    ¦   ¦       ¦   ¦   ¦   +---lint_publish_jar
+    ¦   ¦       ¦   ¦   ¦   ¦   +---global
+    ¦   ¦       ¦   ¦   ¦   ¦       +---prepareLintJarForPublish
+    ¦   ¦       ¦   ¦   ¦   +---local_only_symbol_list
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---parseDebugLocalResources
+    ¦   ¦       ¦   ¦   ¦   +---manifest_merge_blame_file
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦       ¦   ¦   ¦   +---merged_consumer_proguard_file
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---mergeDebugConsumerProguardFiles
+    ¦   ¦       ¦   ¦   ¦   +---merged_java_res
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---mergeDebugJavaResource
+    ¦   ¦       ¦   ¦   ¦   +---merged_jni_libs
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---mergeDebugJniLibFolders
+    ¦   ¦       ¦   ¦   ¦   ¦           +---out
+    ¦   ¦       ¦   ¦   ¦   +---merged_manifest
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---processDebugManifest
+    ¦   ¦       ¦   ¦   ¦   +---merged_shaders
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---mergeDebugShaders
+    ¦   ¦       ¦   ¦   ¦   ¦           +---out
+    ¦   ¦       ¦   ¦   ¦   +---navigation_json
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---extractDeepLinksDebug
+    ¦   ¦       ¦   ¦   ¦   +---navigation_json_for_aar
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---extractDeepLinksForAarDebug
+    ¦   ¦       ¦   ¦   ¦   +---nested_resources_validation_report
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---generateDebugResources
+    ¦   ¦       ¦   ¦   ¦   +---packaged_res
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦       ¦   ¦   ¦   ¦           +---drawable
+    ¦   ¦       ¦   ¦   ¦   +---public_res
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---packageDebugResources
+    ¦   ¦       ¦   ¦   ¦   +---runtime_library_classes_dir
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---bundleLibRuntimeToDirDebug
+    ¦   ¦       ¦   ¦   ¦   ¦           +---com
+    ¦   ¦       ¦   ¦   ¦   ¦               +---capacitorjs
+    ¦   ¦       ¦   ¦   ¦   ¦                   +---plugins
+    ¦   ¦       ¦   ¦   ¦   ¦                       +---localnotifications
+    ¦   ¦       ¦   ¦   ¦   +---runtime_library_classes_jar
+    ¦   ¦       ¦   ¦   ¦   ¦   +---debug
+    ¦   ¦       ¦   ¦   ¦   ¦       +---bundleLibRuntimeToJarDebug
+    ¦   ¦       ¦   ¦   ¦   +---symbol_list_with_package_name
+    ¦   ¦       ¦   ¦   ¦       +---debug
+    ¦   ¦       ¦   ¦   ¦           +---generateDebugRFile
+    ¦   ¦       ¦   ¦   +---outputs
+    ¦   ¦       ¦   ¦   ¦   +---aar
+    ¦   ¦       ¦   ¦   ¦   +---logs
+    ¦   ¦       ¦   ¦   +---tmp
+    ¦   ¦       ¦   ¦       +---compileDebugJavaWithJavac
+    ¦   ¦       ¦   +---src
+    ¦   ¦       ¦       +---main
+    ¦   ¦       ¦           +---java
+    ¦   ¦       ¦           ¦   +---com
+    ¦   ¦       ¦           ¦       +---capacitorjs
+    ¦   ¦       ¦           ¦           +---plugins
+    ¦   ¦       ¦           ¦               +---localnotifications
+    ¦   ¦       ¦           +---res
+    ¦   ¦       ¦               +---drawable
+    ¦   ¦       +---dist
+    ¦   ¦       ¦   +---esm
+    ¦   ¦       +---ios
+    ¦   ¦           +---Sources
+    ¦   ¦           ¦   +---LocalNotificationsPlugin
+    ¦   ¦           +---Tests
+    ¦   ¦               +---LocalNotificationsPluginTests
+    ¦   +---@esbuild
+    ¦   ¦   +---win32-x64
+    ¦   +---@eslint
+    ¦   ¦   +---eslintrc
+    ¦   ¦   ¦   +---conf
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦   ¦   +---config-array
+    ¦   ¦   ¦   ¦   +---shared
+    ¦   ¦   ¦   +---node_modules
+    ¦   ¦   ¦       +---brace-expansion
+    ¦   ¦   ¦       +---minimatch
+    ¦   ¦   +---js
+    ¦   ¦       +---src
+    ¦   ¦           +---configs
+    ¦   +---@eslint-community
+    ¦   ¦   +---eslint-utils
+    ¦   ¦   +---regexpp
+    ¦   +---@humanwhocodes
+    ¦   ¦   +---config-array
+    ¦   ¦   ¦   +---node_modules
+    ¦   ¦   ¦       +---brace-expansion
+    ¦   ¦   ¦       +---minimatch
+    ¦   ¦   +---module-importer
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   +---src
+    ¦   ¦   +---object-schema
+    ¦   ¦       +---src
+    ¦   +---@ionic
+    ¦   ¦   +---cli-framework-output
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---utils-array
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---utils-fs
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   +---node_modules
+    ¦   ¦   ¦       +---fs-extra
+    ¦   ¦   ¦           +---lib
+    ¦   ¦   ¦               +---copy
+    ¦   ¦   ¦               +---copy-sync
+    ¦   ¦   ¦               +---empty
+    ¦   ¦   ¦               +---ensure
+    ¦   ¦   ¦               +---fs
+    ¦   ¦   ¦               +---json
+    ¦   ¦   ¦               +---mkdirs
+    ¦   ¦   ¦               +---move
+    ¦   ¦   ¦               +---move-sync
+    ¦   ¦   ¦               +---output
+    ¦   ¦   ¦               +---path-exists
+    ¦   ¦   ¦               +---remove
+    ¦   ¦   ¦               +---util
+    ¦   ¦   +---utils-object
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---utils-process
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---utils-stream
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---utils-subprocess
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---utils-terminal
+    ¦   ¦       +---dist
+    ¦   +---@isaacs
+    ¦   ¦   +---balanced-match
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦       +---commonjs
+    ¦   ¦   ¦       +---esm
+    ¦   ¦   +---brace-expansion
+    ¦   ¦       +---dist
+    ¦   ¦           +---commonjs
+    ¦   ¦           +---esm
+    ¦   +---@jridgewell
+    ¦   ¦   +---gen-mapping
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   ¦   +---types
+    ¦   ¦   ¦   +---src
+    ¦   ¦   ¦   +---types
+    ¦   ¦   +---remapping
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   +---src
+    ¦   ¦   ¦   +---types
+    ¦   ¦   +---resolve-uri
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦       +---types
+    ¦   ¦   +---sourcemap-codec
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   +---src
+    ¦   ¦   ¦   +---types
+    ¦   ¦   +---trace-mapping
+    ¦   ¦       +---dist
+    ¦   ¦       +---src
+    ¦   ¦       +---types
+    ¦   +---@nodelib
+    ¦   ¦   +---fs.scandir
+    ¦   ¦   ¦   +---out
+    ¦   ¦   ¦       +---adapters
+    ¦   ¦   ¦       +---providers
+    ¦   ¦   ¦       +---types
+    ¦   ¦   ¦       +---utils
+    ¦   ¦   +---fs.stat
+    ¦   ¦   ¦   +---out
+    ¦   ¦   ¦       +---adapters
+    ¦   ¦   ¦       +---providers
+    ¦   ¦   ¦       +---types
+    ¦   ¦   +---fs.walk
+    ¦   ¦       +---out
+    ¦   ¦           +---providers
+    ¦   ¦           +---readers
+    ¦   ¦           +---types
+    ¦   +---@remix-run
+    ¦   ¦   +---router
+    ¦   ¦       +---dist
+    ¦   +---@rolldown
+    ¦   ¦   +---pluginutils
+    ¦   ¦       +---dist
+    ¦   +---@rollup
+    ¦   ¦   +---rollup-win32-x64-gnu
+    ¦   ¦   +---rollup-win32-x64-msvc
+    ¦   +---@types
+    ¦   ¦   +---babel__core
+    ¦   ¦   +---babel__generator
+    ¦   ¦   +---babel__template
+    ¦   ¦   +---babel__traverse
+    ¦   ¦   +---estree
+    ¦   ¦   +---fs-extra
+    ¦   ¦   +---json-schema
+    ¦   ¦   +---node
+    ¦   ¦   ¦   +---assert
+    ¦   ¦   ¦   +---compatibility
+    ¦   ¦   ¦   +---dns
+    ¦   ¦   ¦   +---fs
+    ¦   ¦   ¦   +---readline
+    ¦   ¦   ¦   +---stream
+    ¦   ¦   ¦   +---timers
+    ¦   ¦   ¦   +---ts5.6
+    ¦   ¦   ¦   ¦   +---compatibility
+    ¦   ¦   ¦   +---ts5.7
+    ¦   ¦   ¦   ¦   +---compatibility
+    ¦   ¦   ¦   +---web-globals
+    ¦   ¦   +---prop-types
+    ¦   ¦   +---react
+    ¦   ¦   ¦   +---ts5.0
+    ¦   ¦   +---react-dom
+    ¦   ¦   ¦   +---test-utils
+    ¦   ¦   +---semver
+    ¦   ¦   ¦   +---classes
+    ¦   ¦   ¦   +---functions
+    ¦   ¦   ¦   +---internals
+    ¦   ¦   ¦   +---ranges
+    ¦   ¦   +---slice-ansi
+    ¦   +---@typescript-eslint
+    ¦   ¦   +---eslint-plugin
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦   ¦   +---configs
+    ¦   ¦   ¦   ¦   +---rules
+    ¦   ¦   ¦   ¦   ¦   +---enum-utils
+    ¦   ¦   ¦   ¦   ¦   +---naming-convention-utils
+    ¦   ¦   ¦   ¦   ¦   +---prefer-optional-chain-utils
+    ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---docs
+    ¦   ¦   ¦       +---rules
+    ¦   ¦   +---parser
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---scope-manager
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦       +---definition
+    ¦   ¦   ¦       +---lib
+    ¦   ¦   ¦       +---referencer
+    ¦   ¦   ¦       +---scope
+    ¦   ¦   ¦       +---variable
+    ¦   ¦   +---type-utils
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   +---types
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦       +---generated
+    ¦   ¦   +---typescript-estree
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦       +---create-program
+    ¦   ¦   ¦       +---jsx
+    ¦   ¦   ¦       +---parseSettings
+    ¦   ¦   ¦       +---ts-estree
+    ¦   ¦   +---utils
+    ¦   ¦   ¦   +---dist
+    ¦   ¦   ¦       +---ast-utils
+    ¦   ¦   ¦       ¦   +---eslint-utils
+    ¦   ¦   ¦       +---eslint-utils
+    ¦   ¦   ¦       +---ts-eslint
+    ¦   ¦   ¦       +---ts-utils
+    ¦   ¦   +---visitor-keys
+    ¦   ¦       +---dist
+    ¦   +---@ungap
+    ¦   ¦   +---structured-clone
+    ¦   ¦       +---.github
+    ¦   ¦       ¦   +---workflows
+    ¦   ¦       +---cjs
+    ¦   ¦       +---esm
+    ¦   +---@vitejs
+    ¦   ¦   +---plugin-react
+    ¦   ¦       +---dist
+    ¦   +---@xmldom
+    ¦   ¦   +---xmldom
+    ¦   ¦       +---lib
+    ¦   +---acorn
+    ¦   ¦   +---bin
+    ¦   ¦   +---dist
+    ¦   +---acorn-jsx
+    ¦   +---ajv
+    ¦   ¦   +---dist
+    ¦   ¦   +---lib
+    ¦   ¦   ¦   +---compile
+    ¦   ¦   ¦   +---dot
+    ¦   ¦   ¦   +---dotjs
+    ¦   ¦   ¦   +---refs
+    ¦   ¦   +---scripts
+    ¦   +---ansi-regex
+    ¦   +---ansi-styles
+    ¦   +---any-promise
+    ¦   ¦   +---register
+    ¦   +---anymatch
+    ¦   +---arg
+    ¦   +---argparse
+    ¦   ¦   +---lib
+    ¦   +---array-union
+    ¦   +---astral-regex
+    ¦   +---asynckit
+    ¦   ¦   +---lib
+    ¦   +---at-least-node
+    ¦   +---autoprefixer
+    ¦   ¦   +---bin
+    ¦   ¦   +---data
+    ¦   ¦   +---lib
+    ¦   ¦       +---hacks
+    ¦   +---axios
+    ¦   ¦   +---dist
+    ¦   ¦   ¦   +---browser
+    ¦   ¦   ¦   +---esm
+    ¦   ¦   ¦   +---node
+    ¦   ¦   +---lib
+    ¦   ¦       +---adapters
+    ¦   ¦       +---cancel
+    ¦   ¦       +---core
+    ¦   ¦       +---defaults
+    ¦   ¦       +---env
+    ¦   ¦       ¦   +---classes
+    ¦   ¦       +---helpers
+    ¦   ¦       +---platform
+    ¦   ¦           +---browser
+    ¦   ¦           ¦   +---classes
+    ¦   ¦           +---common
+    ¦   ¦           +---node
+    ¦   ¦               +---classes
+    ¦   +---balanced-match
+    ¦   ¦   +---.github
+    ¦   +---base64-js
+    ¦   +---baseline-browser-mapping
+    ¦   ¦   +---dist
+    ¦   +---big-integer
+    ¦   +---binary-extensions
+    ¦   +---bplist-parser
+    ¦   +---brace-expansion
+    ¦   ¦   +---.github
+    ¦   +---braces
+    ¦   ¦   +---lib
+    ¦   +---browserslist
+    ¦   +---buffer-crc32
+    ¦   +---call-bind-apply-helpers
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---callsites
+    ¦   +---camelcase-css
+    ¦   +---caniuse-lite
+    ¦   ¦   +---data
+    ¦   ¦   ¦   +---features
+    ¦   ¦   ¦   +---regions
+    ¦   ¦   +---dist
+    ¦   ¦       +---lib
+    ¦   ¦       +---unpacker
+    ¦   +---chalk
+    ¦   ¦   +---source
+    ¦   +---chokidar
+    ¦   ¦   +---lib
+    ¦   ¦   +---node_modules
+    ¦   ¦   ¦   +---glob-parent
+    ¦   ¦   +---types
+    ¦   +---chownr
+    ¦   +---color-convert
+    ¦   +---color-name
+    ¦   +---combined-stream
+    ¦   ¦   +---lib
+    ¦   +---commander
+    ¦   ¦   +---typings
+    ¦   +---concat-map
+    ¦   ¦   +---example
+    ¦   ¦   +---test
+    ¦   +---convert-source-map
+    ¦   +---cross-spawn
+    ¦   ¦   +---lib
+    ¦   ¦       +---util
+    ¦   +---cssesc
+    ¦   ¦   +---bin
+    ¦   ¦   +---man
+    ¦   +---csstype
+    ¦   +---debug
+    ¦   ¦   +---src
+    ¦   +---deep-is
+    ¦   ¦   +---example
+    ¦   ¦   +---test
+    ¦   +---define-lazy-prop
+    ¦   +---delayed-stream
+    ¦   ¦   +---lib
+    ¦   +---didyoumean
+    ¦   +---dir-glob
+    ¦   +---dlv
+    ¦   ¦   +---dist
+    ¦   +---doctrine
+    ¦   ¦   +---lib
+    ¦   +---dunder-proto
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---electron-to-chromium
+    ¦   +---elementtree
+    ¦   ¦   +---lib
+    ¦   ¦   ¦   +---parsers
+    ¦   ¦   +---tests
+    ¦   ¦       +---data
+    ¦   +---emoji-regex
+    ¦   ¦   +---es2015
+    ¦   +---env-paths
+    ¦   +---es-define-property
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---es-errors
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---es-object-atoms
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---es-set-tostringtag
+    ¦   ¦   +---test
+    ¦   +---esbuild
+    ¦   ¦   +---bin
+    ¦   ¦   +---lib
+    ¦   +---escalade
+    ¦   ¦   +---dist
+    ¦   ¦   +---sync
+    ¦   +---escape-string-regexp
+    ¦   +---eslint
+    ¦   ¦   +---bin
+    ¦   ¦   +---conf
+    ¦   ¦   +---lib
+    ¦   ¦   ¦   +---cli-engine
+    ¦   ¦   ¦   ¦   +---formatters
+    ¦   ¦   ¦   +---config
+    ¦   ¦   ¦   +---eslint
+    ¦   ¦   ¦   +---linter
+    ¦   ¦   ¦   ¦   +---code-path-analysis
+    ¦   ¦   ¦   +---rule-tester
+    ¦   ¦   ¦   +---rules
+    ¦   ¦   ¦   ¦   +---utils
+    ¦   ¦   ¦   ¦       +---patterns
+    ¦   ¦   ¦   ¦       +---unicode
+    ¦   ¦   ¦   +---shared
+    ¦   ¦   ¦   +---source-code
+    ¦   ¦   ¦       +---token-store
+    ¦   ¦   +---messages
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---brace-expansion
+    ¦   ¦       +---minimatch
+    ¦   +---eslint-plugin-react-hooks
+    ¦   ¦   +---cjs
+    ¦   +---eslint-plugin-react-refresh
+    ¦   +---eslint-scope
+    ¦   ¦   +---dist
+    ¦   ¦   +---lib
+    ¦   +---eslint-visitor-keys
+    ¦   ¦   +---dist
+    ¦   ¦   +---lib
+    ¦   +---espree
+    ¦   ¦   +---dist
+    ¦   ¦   +---lib
+    ¦   +---esquery
+    ¦   ¦   +---dist
+    ¦   +---esrecurse
+    ¦   +---estraverse
+    ¦   +---esutils
+    ¦   ¦   +---lib
+    ¦   +---fast-deep-equal
+    ¦   ¦   +---es6
+    ¦   +---fast-glob
+    ¦   ¦   +---node_modules
+    ¦   ¦   ¦   +---glob-parent
+    ¦   ¦   +---out
+    ¦   ¦       +---managers
+    ¦   ¦       +---providers
+    ¦   ¦       ¦   +---filters
+    ¦   ¦       ¦   +---matchers
+    ¦   ¦       ¦   +---transformers
+    ¦   ¦       +---readers
+    ¦   ¦       +---types
+    ¦   ¦       +---utils
+    ¦   +---fast-json-stable-stringify
+    ¦   ¦   +---.github
+    ¦   ¦   +---benchmark
+    ¦   ¦   +---example
+    ¦   ¦   +---test
+    ¦   +---fast-levenshtein
+    ¦   +---fastq
+    ¦   ¦   +---.github
+    ¦   ¦   ¦   +---workflows
+    ¦   ¦   +---test
+    ¦   +---fd-slicer
+    ¦   ¦   +---test
+    ¦   +---file-entry-cache
+    ¦   +---fill-range
+    ¦   +---find-up
+    ¦   +---flat-cache
+    ¦   ¦   +---src
+    ¦   +---flatted
+    ¦   ¦   +---cjs
+    ¦   ¦   +---esm
+    ¦   ¦   +---php
+    ¦   ¦   +---python
+    ¦   ¦   +---types
+    ¦   +---follow-redirects
+    ¦   +---form-data
+    ¦   ¦   +---lib
+    ¦   +---fraction.js
+    ¦   ¦   +---dist
+    ¦   ¦   +---examples
+    ¦   ¦   +---src
+    ¦   ¦   +---tests
+    ¦   +---fs-extra
+    ¦   ¦   +---lib
+    ¦   ¦       +---copy
+    ¦   ¦       +---empty
+    ¦   ¦       +---ensure
+    ¦   ¦       +---fs
+    ¦   ¦       +---json
+    ¦   ¦       +---mkdirs
+    ¦   ¦       +---move
+    ¦   ¦       +---output-file
+    ¦   ¦       +---path-exists
+    ¦   ¦       +---remove
+    ¦   ¦       +---util
+    ¦   +---fs-minipass
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---minipass
+    ¦   ¦       +---yallist
+    ¦   +---fs.realpath
+    ¦   +---function-bind
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---gensync
+    ¦   ¦   +---test
+    ¦   +---get-intrinsic
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---get-proto
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---glob
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---brace-expansion
+    ¦   ¦       +---minimatch
+    ¦   +---glob-parent
+    ¦   +---globals
+    ¦   +---globby
+    ¦   +---gopd
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---graceful-fs
+    ¦   +---graphemer
+    ¦   ¦   +---lib
+    ¦   +---has-flag
+    ¦   +---has-symbols
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   ¦       +---shams
+    ¦   +---has-tostringtag
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   ¦       +---shams
+    ¦   +---hasown
+    ¦   ¦   +---.github
+    ¦   +---ignore
+    ¦   +---import-fresh
+    ¦   +---imurmurhash
+    ¦   +---inflight
+    ¦   +---inherits
+    ¦   +---ini
+    ¦   ¦   +---lib
+    ¦   +---is-binary-path
+    ¦   +---is-core-module
+    ¦   ¦   +---test
+    ¦   +---is-docker
+    ¦   +---is-extglob
+    ¦   +---is-fullwidth-code-point
+    ¦   +---is-glob
+    ¦   +---is-number
+    ¦   +---is-path-inside
+    ¦   +---is-wsl
+    ¦   +---isexe
+    ¦   ¦   +---test
+    ¦   +---jiti
+    ¦   ¦   +---bin
+    ¦   ¦   +---dist
+    ¦   ¦   ¦   +---plugins
+    ¦   ¦   +---lib
+    ¦   +---js-tokens
+    ¦   +---js-yaml
+    ¦   ¦   +---bin
+    ¦   ¦   +---dist
+    ¦   ¦   +---lib
+    ¦   ¦       +---schema
+    ¦   ¦       +---type
+    ¦   +---jsesc
+    ¦   ¦   +---bin
+    ¦   ¦   +---man
+    ¦   +---json-buffer
+    ¦   ¦   +---test
+    ¦   +---json-schema-traverse
+    ¦   ¦   +---spec
+    ¦   ¦       +---fixtures
+    ¦   +---json-stable-stringify-without-jsonify
+    ¦   ¦   +---example
+    ¦   ¦   +---test
+    ¦   +---json5
+    ¦   ¦   +---dist
+    ¦   ¦   +---lib
+    ¦   +---jsonfile
+    ¦   +---keyv
+    ¦   ¦   +---src
+    ¦   +---kleur
+    ¦   +---levn
+    ¦   ¦   +---lib
+    ¦   +---lilconfig
+    ¦   ¦   +---src
+    ¦   +---lines-and-columns
+    ¦   ¦   +---build
+    ¦   +---locate-path
+    ¦   +---lodash.merge
+    ¦   +---loose-envify
+    ¦   +---lru-cache
+    ¦   +---math-intrinsics
+    ¦   ¦   +---.github
+    ¦   ¦   +---constants
+    ¦   ¦   +---test
+    ¦   +---merge2
+    ¦   +---micromatch
+    ¦   +---mime-db
+    ¦   +---mime-types
+    ¦   +---minimatch
+    ¦   ¦   +---dist
+    ¦   ¦       +---cjs
+    ¦   ¦       +---mjs
+    ¦   +---minipass
+    ¦   +---minizlib
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---minipass
+    ¦   ¦       +---yallist
+    ¦   +---mkdirp
+    ¦   ¦   +---bin
+    ¦   ¦   +---lib
+    ¦   +---ms
+    ¦   +---mz
+    ¦   +---nanoid
+    ¦   ¦   +---async
+    ¦   ¦   +---bin
+    ¦   ¦   +---non-secure
+    ¦   ¦   +---url-alphabet
+    ¦   +---native-run
+    ¦   ¦   +---assets
+    ¦   ¦   ¦   +---android
+    ¦   ¦   ¦       +---skins
+    ¦   ¦   ¦           +---nexus_5x
+    ¦   ¦   ¦           +---pixel
+    ¦   ¦   ¦           +---pixel_2
+    ¦   ¦   ¦           +---pixel_3
+    ¦   ¦   +---bin
+    ¦   ¦   +---dist
+    ¦   ¦       +---android
+    ¦   ¦       ¦   +---utils
+    ¦   ¦       ¦       +---sdk
+    ¦   ¦       +---ios
+    ¦   ¦       ¦   +---lib
+    ¦   ¦       ¦   ¦   +---client
+    ¦   ¦       ¦   ¦   +---protocol
+    ¦   ¦       ¦   +---utils
+    ¦   ¦       +---utils
+    ¦   +---natural-compare
+    ¦   +---node-releases
+    ¦   ¦   +---data
+    ¦   ¦       +---processed
+    ¦   ¦       +---release-schedule
+    ¦   +---normalize-path
+    ¦   +---normalize-range
+    ¦   +---object-assign
+    ¦   +---object-hash
+    ¦   ¦   +---dist
+    ¦   +---once
+    ¦   +---open
+    ¦   +---optionator
+    ¦   ¦   +---lib
+    ¦   +---p-limit
+    ¦   +---p-locate
+    ¦   +---package-json-from-dist
+    ¦   ¦   +---dist
+    ¦   ¦       +---commonjs
+    ¦   ¦       +---esm
+    ¦   +---parent-module
+    ¦   +---path-exists
+    ¦   +---path-is-absolute
+    ¦   +---path-key
+    ¦   +---path-parse
+    ¦   +---path-scurry
+    ¦   ¦   +---dist
+    ¦   ¦   ¦   +---commonjs
+    ¦   ¦   ¦   +---esm
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---lru-cache
+    ¦   ¦       ¦   +---dist
+    ¦   ¦       ¦       +---commonjs
+    ¦   ¦       ¦       +---esm
+    ¦   ¦       +---minipass
+    ¦   ¦           +---dist
+    ¦   ¦               +---commonjs
+    ¦   ¦               +---esm
+    ¦   +---path-type
+    ¦   +---pend
+    ¦   +---picocolors
+    ¦   +---picomatch
+    ¦   ¦   +---lib
+    ¦   +---pify
+    ¦   +---pirates
+    ¦   ¦   +---lib
+    ¦   +---plist
+    ¦   ¦   +---.github
+    ¦   ¦   ¦   +---workflows
+    ¦   ¦   +---dist
+    ¦   ¦   +---examples
+    ¦   ¦   ¦   +---browser
+    ¦   ¦   +---lib
+    ¦   +---postcss
+    ¦   ¦   +---lib
+    ¦   +---postcss-import
+    ¦   ¦   +---lib
+    ¦   +---postcss-js
+    ¦   +---postcss-load-config
+    ¦   ¦   +---src
+    ¦   +---postcss-nested
+    ¦   +---postcss-selector-parser
+    ¦   ¦   +---dist
+    ¦   ¦       +---selectors
+    ¦   ¦       +---util
+    ¦   +---postcss-value-parser
+    ¦   ¦   +---lib
+    ¦   +---prelude-ls
+    ¦   ¦   +---lib
+    ¦   +---prompts
+    ¦   ¦   +---dist
+    ¦   ¦   ¦   +---dateparts
+    ¦   ¦   ¦   +---elements
+    ¦   ¦   ¦   +---util
+    ¦   ¦   +---lib
+    ¦   ¦   ¦   +---dateparts
+    ¦   ¦   ¦   +---elements
+    ¦   ¦   ¦   +---util
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---kleur
+    ¦   +---proxy-from-env
+    ¦   +---punycode
+    ¦   +---queue-microtask
+    ¦   +---react
+    ¦   ¦   +---cjs
+    ¦   ¦   +---umd
+    ¦   +---react-dom
+    ¦   ¦   +---cjs
+    ¦   ¦   +---umd
+    ¦   +---react-refresh
+    ¦   ¦   +---cjs
+    ¦   +---react-router
+    ¦   ¦   +---dist
+    ¦   ¦       +---lib
+    ¦   ¦       +---umd
+    ¦   +---react-router-dom
+    ¦   ¦   +---dist
+    ¦   ¦       +---umd
+    ¦   +---read-cache
+    ¦   +---readable-stream
+    ¦   ¦   +---lib
+    ¦   ¦       +---internal
+    ¦   ¦           +---streams
+    ¦   +---readdirp
+    ¦   +---resolve
+    ¦   ¦   +---.github
+    ¦   ¦   +---bin
+    ¦   ¦   +---example
+    ¦   ¦   +---lib
+    ¦   ¦   +---test
+    ¦   ¦       +---dotdot
+    ¦   ¦       ¦   +---abc
+    ¦   ¦       +---module_dir
+    ¦   ¦       ¦   +---xmodules
+    ¦   ¦       ¦   ¦   +---aaa
+    ¦   ¦       ¦   +---ymodules
+    ¦   ¦       ¦   ¦   +---aaa
+    ¦   ¦       ¦   +---zmodules
+    ¦   ¦       ¦       +---bbb
+    ¦   ¦       +---node_path
+    ¦   ¦       ¦   +---x
+    ¦   ¦       ¦   ¦   +---aaa
+    ¦   ¦       ¦   ¦   +---ccc
+    ¦   ¦       ¦   +---y
+    ¦   ¦       ¦       +---bbb
+    ¦   ¦       ¦       +---ccc
+    ¦   ¦       +---pathfilter
+    ¦   ¦       ¦   +---deep_ref
+    ¦   ¦       +---precedence
+    ¦   ¦       ¦   +---aaa
+    ¦   ¦       ¦   +---bbb
+    ¦   ¦       +---resolver
+    ¦   ¦       ¦   +---baz
+    ¦   ¦       ¦   +---browser_field
+    ¦   ¦       ¦   +---dot_main
+    ¦   ¦       ¦   +---dot_slash_main
+    ¦   ¦       ¦   +---false_main
+    ¦   ¦       ¦   +---incorrect_main
+    ¦   ¦       ¦   +---invalid_main
+    ¦   ¦       ¦   +---multirepo
+    ¦   ¦       ¦   ¦   +---packages
+    ¦   ¦       ¦   ¦       +---package-a
+    ¦   ¦       ¦   ¦       +---package-b
+    ¦   ¦       ¦   +---nested_symlinks
+    ¦   ¦       ¦   ¦   +---mylib
+    ¦   ¦       ¦   +---other_path
+    ¦   ¦       ¦   ¦   +---lib
+    ¦   ¦       ¦   +---quux
+    ¦   ¦       ¦   ¦   +---foo
+    ¦   ¦       ¦   +---same_names
+    ¦   ¦       ¦   ¦   +---foo
+    ¦   ¦       ¦   +---symlinked
+    ¦   ¦       ¦   ¦   +---package
+    ¦   ¦       ¦   ¦   +---_
+    ¦   ¦       ¦   ¦       +---node_modules
+    ¦   ¦       ¦   ¦       +---symlink_target
+    ¦   ¦       ¦   +---without_basedir
+    ¦   ¦       +---shadowed_core
+    ¦   ¦           +---node_modules
+    ¦   ¦               +---util
+    ¦   +---resolve-from
+    ¦   +---reusify
+    ¦   ¦   +---.github
+    ¦   ¦   ¦   +---workflows
+    ¦   ¦   +---benchmarks
+    ¦   +---rimraf
+    ¦   +---rollup
+    ¦   ¦   +---dist
+    ¦   ¦       +---bin
+    ¦   ¦       +---es
+    ¦   ¦       ¦   +---shared
+    ¦   ¦       +---shared
+    ¦   +---run-parallel
+    ¦   +---safe-buffer
+    ¦   +---sax
+    ¦   ¦   +---lib
+    ¦   +---scheduler
+    ¦   ¦   +---cjs
+    ¦   ¦   +---umd
+    ¦   +---semver
+    ¦   ¦   +---bin
+    ¦   ¦   +---classes
+    ¦   ¦   +---functions
+    ¦   ¦   +---internal
+    ¦   ¦   +---ranges
+    ¦   +---shebang-command
+    ¦   +---shebang-regex
+    ¦   +---signal-exit
+    ¦   +---sisteransi
+    ¦   ¦   +---src
+    ¦   +---slash
+    ¦   +---slice-ansi
+    ¦   +---source-map-js
+    ¦   ¦   +---lib
+    ¦   +---split2
+    ¦   +---string-width
+    ¦   +---string_decoder
+    ¦   ¦   +---lib
+    ¦   +---strip-ansi
+    ¦   +---strip-json-comments
+    ¦   +---sucrase
+    ¦   ¦   +---bin
+    ¦   ¦   +---dist
+    ¦   ¦   ¦   +---esm
+    ¦   ¦   ¦   ¦   +---parser
+    ¦   ¦   ¦   ¦   ¦   +---plugins
+    ¦   ¦   ¦   ¦   ¦   ¦   +---jsx
+    ¦   ¦   ¦   ¦   ¦   +---tokenizer
+    ¦   ¦   ¦   ¦   ¦   +---traverser
+    ¦   ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   ¦   +---transformers
+    ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---parser
+    ¦   ¦   ¦   ¦   +---plugins
+    ¦   ¦   ¦   ¦   ¦   +---jsx
+    ¦   ¦   ¦   ¦   +---tokenizer
+    ¦   ¦   ¦   ¦   +---traverser
+    ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---transformers
+    ¦   ¦   ¦   +---types
+    ¦   ¦   ¦   ¦   +---parser
+    ¦   ¦   ¦   ¦   ¦   +---plugins
+    ¦   ¦   ¦   ¦   ¦   ¦   +---jsx
+    ¦   ¦   ¦   ¦   ¦   +---tokenizer
+    ¦   ¦   ¦   ¦   ¦   +---traverser
+    ¦   ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   ¦   +---transformers
+    ¦   ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---util
+    ¦   ¦   +---register
+    ¦   ¦   +---ts-node-plugin
+    ¦   +---supports-color
+    ¦   +---supports-preserve-symlinks-flag
+    ¦   ¦   +---.github
+    ¦   ¦   +---test
+    ¦   +---tailwindcss
+    ¦   ¦   +---lib
+    ¦   ¦   ¦   +---cli
+    ¦   ¦   ¦   ¦   +---build
+    ¦   ¦   ¦   ¦   +---help
+    ¦   ¦   ¦   ¦   +---init
+    ¦   ¦   ¦   +---css
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦   +---postcss-plugins
+    ¦   ¦   ¦   ¦   +---nesting
+    ¦   ¦   ¦   +---public
+    ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---value-parser
+    ¦   ¦   +---nesting
+    ¦   ¦   +---peers
+    ¦   ¦   +---scripts
+    ¦   ¦   +---src
+    ¦   ¦   ¦   +---cli
+    ¦   ¦   ¦   ¦   +---build
+    ¦   ¦   ¦   ¦   +---help
+    ¦   ¦   ¦   ¦   +---init
+    ¦   ¦   ¦   +---css
+    ¦   ¦   ¦   +---lib
+    ¦   ¦   ¦   +---postcss-plugins
+    ¦   ¦   ¦   ¦   +---nesting
+    ¦   ¦   ¦   +---public
+    ¦   ¦   ¦   +---util
+    ¦   ¦   ¦   +---value-parser
+    ¦   ¦   +---stubs
+    ¦   ¦   +---types
+    ¦   ¦       +---generated
+    ¦   +---tar
+    ¦   ¦   +---lib
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---yallist
+    ¦   +---text-table
+    ¦   ¦   +---example
+    ¦   ¦   +---test
+    ¦   +---thenify
+    ¦   +---thenify-all
+    ¦   +---through2
+    ¦   +---tinyglobby
+    ¦   ¦   +---dist
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---fdir
+    ¦   ¦       ¦   +---dist
+    ¦   ¦       +---picomatch
+    ¦   ¦           +---lib
+    ¦   +---to-regex-range
+    ¦   +---tree-kill
+    ¦   +---ts-api-utils
+    ¦   ¦   +---lib
+    ¦   +---ts-interface-checker
+    ¦   ¦   +---dist
+    ¦   +---tslib
+    ¦   ¦   +---modules
+    ¦   +---type-check
+    ¦   ¦   +---lib
+    ¦   +---type-fest
+    ¦   ¦   +---source
+    ¦   ¦   +---ts41
+    ¦   +---typescript
+    ¦   ¦   +---bin
+    ¦   ¦   +---lib
+    ¦   ¦       +---cs
+    ¦   ¦       +---de
+    ¦   ¦       +---es
+    ¦   ¦       +---fr
+    ¦   ¦       +---it
+    ¦   ¦       +---ja
+    ¦   ¦       +---ko
+    ¦   ¦       +---pl
+    ¦   ¦       +---pt-br
+    ¦   ¦       +---ru
+    ¦   ¦       +---tr
+    ¦   ¦       +---zh-cn
+    ¦   ¦       +---zh-tw
+    ¦   +---undici-types
+    ¦   +---universalify
+    ¦   +---untildify
+    ¦   +---update-browserslist-db
+    ¦   +---uri-js
+    ¦   ¦   +---dist
+    ¦   ¦       +---es5
+    ¦   ¦       +---esnext
+    ¦   ¦           +---schemes
+    ¦   +---util-deprecate
+    ¦   +---vite
+    ¦   ¦   +---bin
+    ¦   ¦   +---dist
+    ¦   ¦   ¦   +---client
+    ¦   ¦   ¦   +---node
+    ¦   ¦   ¦   ¦   +---chunks
+    ¦   ¦   ¦   +---node-cjs
+    ¦   ¦   +---types
+    ¦   +---which
+    ¦   ¦   +---bin
+    ¦   +---word-wrap
+    ¦   +---wrap-ansi
+    ¦   +---wrappy
+    ¦   +---xml2js
+    ¦   ¦   +---lib
+    ¦   ¦   +---node_modules
+    ¦   ¦       +---xmlbuilder
+    ¦   ¦           +---lib
+    ¦   ¦           +---typings
+    ¦   +---xmlbuilder
+    ¦   ¦   +---.vscode
+    ¦   ¦   +---lib
+    ¦   ¦   +---perf
+    ¦   ¦   ¦   +---basic
+    ¦   ¦   +---typings
+    ¦   +---yallist
+    ¦   +---yauzl
+    ¦   +---yocto-queue
+    +---src
+        +---components
+        +---hooks
+        +---pages
+        +---services
+        +---types
+        +---utils

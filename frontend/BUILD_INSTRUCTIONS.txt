@@ -1,0 +1,109 @@
+================================
+DAIRIMAR USDT - ANDROID APK BUILD
+================================
+
+QUICK START - Build the APK in 3 steps:
+=======================================
+
+Step 1: Install Android Studio (if not already installed)
+   - Download: https://developer.android.com/studio
+   - Install with default settings
+   - This will also install Java JDK and Android SDK
+
+Step 2: Build the APK
+   - Option A: Double-click "build-apk.bat" in this folder
+   - Option B: Open Command Prompt here and run:
+
+     build-apk.bat
+
+Step 3: Find your APK
+   Location: android\app\build\outputs\apk\debug\app-debug.apk
+
+   This is the file you install on Android phones!
+
+================================
+
+WHAT'S CONFIGURED:
+==================
+
+✓ App Name: "Dairimar USDT"
+✓ Package: com.usdt.dairimar
+✓ Auto-loads Dairimar dashboard only
+✓ Network permissions configured
+✓ HTTP allowed for local testing
+
+================================
+
+AFTER BUILDING:
+===============
+
+1. INSTALL ON PHONE:
+   - Transfer app-debug.apk to your Android phone
+   - Open it on the phone to install
+   - Enable "Install from Unknown Sources" if asked
+
+2. CONFIGURE BACKEND CONNECTION:
+
+   For TESTING on your LOCAL NETWORK:
+   -----------------------------------
+   a) Find your computer's IP address:
+      - Open Command Prompt
+      - Run: ipconfig
+      - Look for "IPv4 Address" (e.g., 192.168.1.100)
+
+   b) Make sure backend is running:
+      - Run: docker-compose ps
+      - Backend should be "Up"
+
+   c) Connect phone to same Wi-Fi as your computer
+
+   d) Edit .env.production file:
+      Change: VITE_API_URL=http://localhost:3000/api
+      To: VITE_API_URL=http://YOUR_IP_HERE:3000/api
+      Example: VITE_API_URL=http://192.168.1.100:3000/api
+
+   e) Rebuild:
+      - Run: npm run build
+      - Run: npx cap sync android
+      - Run: build-apk.bat
+
+   For PRODUCTION (real server):
+   ------------------------------
+   Edit .env.production:
+   VITE_API_URL=https://your-domain.com/api
+
+================================
+
+TROUBLESHOOTING:
+================
+
+Problem: "gradlew command not found"
+Solution: Install Android Studio first
+
+Problem: Build fails with Java errors
+Solution: Make sure Java JDK 17 is installed (comes with Android Studio)
+
+Problem: App shows "Network Error"
+Solution:
+  - Check backend is running
+  - Verify API URL in .env.production
+  - Make sure phone and computer on same Wi-Fi
+  - Use computer's IP address, not "localhost"
+
+Problem: First build takes very long
+Solution: This is normal! First build downloads dependencies (5-10 minutes)
+
+================================
+
+NEED HELP?
+==========
+
+See MOBILE_APP_README.md for detailed documentation
+
+Check if backend is running:
+  docker-compose ps
+
+Test backend API:
+  Open browser: http://localhost:3000/health
+
+================================

@@ -1,0 +1,86 @@
+========================================
+🔔 NOTIFICATIONS FEATURE ADDED!
+========================================
+
+Dairimar will now get notified on her phone when:
+✓ Patty creates a new VES order
+✓ Brian sends her USDT
+
+========================================
+WHAT YOU NEED TO DO:
+========================================
+
+1. REBUILD THE APK
+   ----------------
+   cd C:\Users\brian\Documents\Exchange\frontend\android
+   gradlew.bat assembleDebug
+
+   APK: app\build\outputs\apk\debug\app-debug.apk
+
+2. INSTALL ON PHONE
+   ----------------
+   - Uninstall old app
+   - Install new APK
+   - Open app
+   - TAP "ALLOW" when asked for notification permission ⚠️
+
+3. TEST NOTIFICATIONS
+   ------------------
+   - Look for "🔔 Test" button in top-right corner
+   - Tap it
+   - You should see: "✅ Notifications Working!"
+
+4. TEST REAL NOTIFICATIONS
+   -----------------------
+   A. Test Order Notification:
+      - Go to http://localhost/patty on computer
+      - Create a new VES order
+      - Wait 30 seconds
+      - Dairimar's phone will buzz: "🆕 New VES Order!"
+
+   B. Test Transfer Notification:
+      - Go to http://localhost on computer
+      - Login as Brian
+      - Transfer USDT to Dairimar
+      - Wait 30 seconds
+      - Dairimar's phone will buzz: "💰 USDT Received!"
+
+========================================
+HOW IT WORKS:
+========================================
+
+- App checks for new items every 30 seconds
+- Works even when app is in background
+- Very low battery usage
+- No external servers needed
+
+NOTIFICATION EXAMPLES:
+---------------------
+🆕 New VES Order!
+3 new orders: 45,000,000 VES total
+
+💰 USDT Received!
+Brian sent you 250.50 USDT
+
+========================================
+TROUBLESHOOTING:
+========================================
+
+Problem: "Can't see test notification"
+Solution:
+- Go to Phone Settings > Apps > Dairimar USDT > Notifications
+- Make sure it's enabled
+
+Problem: "Real notifications not showing"
+Solution:
+- Make sure backend is running: docker-compose ps
+- Wait 30 seconds after action
+- App must be running (can be in background)
+
+========================================
+
+READY? Rebuild the APK now and install it!
+
+See NOTIFICATIONS_ADDED.md for full documentation.
+
+========================================

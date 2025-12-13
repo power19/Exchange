@@ -1,0 +1,38 @@
+========================================
+QUICK DEBUG - 3 STEPS
+========================================
+
+1. OPEN LOGCAT
+--------------
+   - Open Android Studio
+   - Open project: frontend/android
+   - Bottom of screen: Click "Logcat" tab
+   - Run app (green ▶️ button)
+
+2. FILTER LOGS
+--------------
+   - In Logcat search box, type: 📊
+   - OR search: "Balances"
+
+3. LOOK FOR:
+------------
+   📊 API Response - Balances: {...}
+   📊 dai_ves value: [number]
+   📊 dai_ves type: [type]
+
+COPY & PASTE those lines and send to me!
+
+========================================
+ALTERNATIVE (EASIER):
+========================================
+
+Use Chrome DevTools:
+
+1. Run app in Android Studio
+2. On computer: Open Chrome
+3. Go to: chrome://inspect
+4. Click "inspect" under "Dairimar USDT"
+5. Click "Console" tab
+6. See the logs!
+
+========================================

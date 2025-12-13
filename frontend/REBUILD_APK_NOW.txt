@@ -1,0 +1,49 @@
+========================================
+FIXED! NOW REBUILD THE APK
+========================================
+
+The app is now configured to use YOUR IP: 10.10.30.100
+
+REBUILD THE APK NOW:
+====================
+
+Option 1: Android Studio (EASIEST)
+-----------------------------------
+1. Open Android Studio
+2. Open: C:\Users\brian\Documents\Exchange\frontend\android
+3. Wait for Gradle sync
+4. Click: Build > Build Bundle(s) / APK(s) > Build APK(s)
+5. Wait for build
+6. Click "locate" to find APK
+
+Option 2: Command Prompt
+-------------------------
+cd C:\Users\brian\Documents\Exchange\frontend\android
+gradlew.bat assembleDebug
+
+APK Location:
+app\build\outputs\apk\debug\app-debug.apk
+
+========================================
+THEN INSTALL NEW APK ON PHONE
+========================================
+
+1. Uninstall old app from phone (if installed)
+2. Transfer new app-debug.apk to phone
+3. Install the new APK
+4. Make sure backend is running: docker-compose ps
+5. Make sure phone is on same WiFi as computer
+6. Open the app - it should work now!
+
+========================================
+TEST CONNECTION FIRST:
+========================================
+
+On your phone browser, open:
+http://10.10.30.100:3000/health
+
+You should see: {"status":"ok"}
+
+If that works, the app will work too!
+
+========================================

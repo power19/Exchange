@@ -1,0 +1,184 @@
+========================================
+ANDROID STUDIO DEBUGGING GUIDE
+========================================
+
+STEP 1: OPEN PROJECT IN ANDROID STUDIO
+=======================================
+
+1. Open Android Studio
+2. Click: File > Open
+3. Navigate to: C:\Users\brian\Documents\Exchange\frontend\android
+4. Click: OK
+5. Wait for Gradle sync to complete
+
+STEP 2: CONNECT YOUR DEVICE
+============================
+
+Option A: Physical Phone
+------------------------
+1. Enable USB Debugging on your phone (already done)
+2. Connect phone via USB
+3. On phone: Allow USB debugging popup
+4. In Android Studio: Top toolbar should show your device name
+
+Option B: Emulator
+------------------
+1. Click: Device Manager (phone icon on right side)
+2. Create/Start an emulator
+3. Wait for emulator to boot
+
+STEP 3: RUN THE APP WITH DEBUGGING
+===================================
+
+1. In Android Studio toolbar, click the green "Run" button (▶️)
+   OR press: Shift + F10
+
+2. Select your device from the list
+
+3. App will install and launch
+
+4. **IMPORTANT**: Keep Android Studio open!
+
+STEP 4: OPEN LOGCAT (THIS IS KEY!)
+===================================
+
+1. At the bottom of Android Studio, click: "Logcat" tab
+   (If you don't see it: View > Tool Windows > Logcat)
+
+2. In Logcat, you'll see a LOT of logs scrolling
+
+3. **FILTER THE LOGS**: In the filter box (top of Logcat), type:
+
+   📊
+
+   This will show ONLY our custom logs with the 📊 emoji
+
+STEP 5: LOOK FOR THESE LOGS
+============================
+
+When the app loads, you should see:
+
+📊 API Response - Balances: {brian_usdt: 500, dai_usdt: 500, dai_ves: 83000}
+📊 dai_ves value: 83000
+📊 dai_ves type: number
+
+WHAT EACH LINE TELLS US:
+-------------------------
+
+Line 1: Shows the FULL API response
+  → Is it receiving data? ✓
+  → What values are coming back?
+
+Line 2: Shows the dai_ves value specifically
+  → Is it 83000? ✓
+  → Or 0? ✗
+  → Or undefined? ✗
+
+Line 3: Shows the data type
+  → Should be "number"
+  → If it's "string" or "object", that's the problem!
+
+========================================
+WHAT TO LOOK FOR:
+========================================
+
+SCENARIO 1: No logs appear with 📊
+-----------------------------------
+Problem: Logs aren't showing
+Fix:
+- Make sure you typed "📊" in the filter
+- Try clearing filter and searching for "Balances"
+- Check dropdown next to filter is set to "No Filters"
+
+SCENARIO 2: Logs show correct values
+------------------------------------
+📊 API Response - Balances: {dai_usdt: 500, dai_ves: 83000}
+📊 dai_ves value: 83000
+📊 dai_ves type: number
+
+→ Data is reaching the app correctly!
+→ Problem is in the display logic
+→ I can fix this easily
+
+SCENARIO 3: Logs show zeros
+----------------------------
+📊 API Response - Balances: {dai_usdt: 0, dai_ves: 0}
+📊 dai_ves value: 0
+📊 dai_ves type: number
+
+→ API is returning 0
+→ Backend calculation issue
+→ Need to check backend
+
+SCENARIO 4: Logs show undefined
+-------------------------------
+📊 API Response - Balances: {dai_usdt: undefined, dai_ves: undefined}
+📊 dai_ves value: undefined
+📊 dai_ves type: undefined
+
+→ Data not in API response
+→ API connection issue
+
+========================================
+ADVANCED: NETWORK INSPECTOR
+========================================
+
+1. In Logcat, change dropdown from "Firebase" to "No Filters"
+
+2. Type in filter: "http://10.10.30.100"
+
+3. Look for lines like:
+   D/Capacitor: Fetch: http://10.10.30.100:3000/api/balances
+
+4. Should see response with status 200
+
+========================================
+ALTERNATIVE: CHROME DEVTOOLS (EASIER!)
+========================================
+
+1. In Android Studio, run the app
+2. On your computer, open Chrome browser
+3. Go to: chrome://inspect
+4. Wait a few seconds
+5. You should see "Dairimar USDT" listed
+6. Click "inspect"
+7. Click "Console" tab
+8. Refresh the app
+9. You'll see the 📊 logs in Chrome!
+
+This is MUCH easier to read than Logcat!
+
+========================================
+QUICK TEST: CHECK API FROM PHONE
+========================================
+
+1. Open Chrome browser ON YOUR PHONE
+2. Go to: http://10.10.30.100:3000/api/balances
+3. What do you see?
+
+Expected: {"brian_usdt":500,"dai_usdt":500,"dai_ves":83000}
+
+If you see this → API is working
+If you see error → Connection issue
+
+========================================
+WHAT TO SHARE WITH ME:
+========================================
+
+Take a screenshot of Logcat showing:
+- The 📊 lines
+- OR any error messages (red text)
+- OR the full Logcat if you're not sure
+
+You can also just copy/paste the text from Logcat!
+
+========================================
+LOGCAT TIPS:
+========================================
+
+- Use the pause button (||) to stop scrolling
+- Use the clear button (🗑️) to clear old logs
+- Use the dropdown to change log level (Verbose, Debug, Info, etc.)
+- Right-click on a line > "Copy" to copy text
+
+========================================
