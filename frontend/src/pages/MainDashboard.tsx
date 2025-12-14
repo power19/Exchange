@@ -104,13 +104,20 @@ export default function MainDashboard() {
 
     try {
       await api.createPurchase({ amount_usdt, fee_percentage, total_cost_usd });
+      // Purchase succeeded!
       e.currentTarget.reset();
 
-      // Reload data to show updated balance
-      await loadData();
+      // Try to reload data - if it fails, don't break the success flow
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after purchase:', reloadError);
+        // Purchase succeeded but data reload failed - user can refresh manually
+      }
 
       alert(`✅ USDT purchase recorded successfully!\nAmount: ${amount_usdt} USDT\nTotal Cost: $${total_cost_usd}\nFee: ${(fee_percentage * 100).toFixed(2)}%`);
     } catch (error: any) {
+      console.error('Purchase error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to record purchase'}`);
     }
   };
@@ -122,13 +129,19 @@ export default function MainDashboard() {
 
     try {
       await api.createTransfer({ amount_usdt });
+      // Transfer succeeded!
       e.currentTarget.reset();
 
-      // Reload data to show updated balances
-      await loadData();
+      // Try to reload data - if it fails, don't break the success flow
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after transfer:', reloadError);
+      }
 
       alert(`✅ USDT transferred to Dairimar successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
     } catch (error: any) {
+      console.error('Transfer error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to transfer USDT'}`);
     }
   };
@@ -140,13 +153,19 @@ export default function MainDashboard() {
 
     try {
       await api.fulfillCOPOrder(orderId, { exchange_rate });
+      // Order fulfilled!
       setShowFulfillForm(null);
 
-      // Reload data to show updated balances and remove fulfilled order
-      await loadData();
+      // Try to reload data - if it fails, don't break the success flow
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after fulfillment:', reloadError);
+      }
 
       alert('✅ COP order fulfilled successfully!');
     } catch (error: any) {
+      console.error('Fulfill error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to fulfill order'}`);
     }
   };
@@ -159,13 +178,19 @@ export default function MainDashboard() {
 
     try {
       await api.createWithdrawal({ amount_usdt, notes });
+      // Withdrawal succeeded!
       e.currentTarget.reset();
 
-      // Reload profit data and withdrawals
-      await Promise.all([loadProfitData(), loadWithdrawals()]);
+      // Try to reload data - if it fails, don't break the success flow
+      try {
+        await Promise.all([loadProfitData(), loadWithdrawals()]);
+      } catch (reloadError) {
+        console.error('Failed to reload data after withdrawal:', reloadError);
+      }
 
       alert(`✅ Profit withdrawn successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
     } catch (error: any) {
+      console.error('Withdrawal error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to withdraw profit'}`);
     }
   };
