@@ -10,6 +10,7 @@ import { authRoutes } from './auth';
 import { exchangeRatesRoutes } from './exchangeRates';
 import { reportsRoutes } from './reports';
 import { auditLogRoutes } from './auditLogs';
+import { usdtRequestRoutes } from './usdtRequests';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/withdrawals', withdrawalRoutes);
 router.use('/exchange-rates', exchangeRatesRoutes);
 router.use('/reports', reportsRoutes);
 router.use('/audit-logs', auditLogRoutes);
+router.use('/usdt-requests', usdtRequestRoutes);
 
 export { router as apiRoutes };
