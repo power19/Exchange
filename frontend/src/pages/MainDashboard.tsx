@@ -258,6 +258,31 @@ export default function MainDashboard() {
     }
   };
 
+  const handleCancelOrder = async (orderId: number, orderType: 'VES' | 'COP', customerName: string) => {
+    const confirmed = confirm(`Are you sure you want to cancel this ${orderType} order for ${customerName}?`);
+    if (!confirmed) return;
+
+    try {
+      if (orderType === 'VES') {
+        await api.cancelVESOrder(orderId);
+      } else {
+        await api.cancelCOPOrder(orderId);
+      }
+
+      alert('✅ Order cancelled successfully!');
+
+      // Try to reload data
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after cancel:', reloadError);
+      }
+    } catch (error: any) {
+      console.error('Cancel error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to cancel order'}`);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center">
@@ -673,6 +698,15 @@ export default function MainDashboard() {
                         {order.account_number && <p>💳 {order.account_number}</p>}
                       </div>
                     )}
+                    <div className="mt-3 pt-3 border-t border-gray-700">
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleCancelOrder(order.id, 'VES', order.customer_name)}
+                      >
+                        ❌ Cancel Order
+                      </Button>
+                    </div>
                   </div>
                 ))
               )}
@@ -711,13 +745,22 @@ export default function MainDashboard() {
                           </div>
                         )}
                       </div>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => setShowFulfillForm(order.id)}
-                      >
-                        Fulfill
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setShowFulfillForm(order.id)}
+                        >
+                          Fulfill
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleCancelOrder(order.id, 'COP', order.customer_name)}
+                        >
+                          ❌
+                        </Button>
+                      </div>
                     </div>
 
                     {showFulfillForm === order.id && (

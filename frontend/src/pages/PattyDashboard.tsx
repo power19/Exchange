@@ -188,6 +188,24 @@ export default function PattyDashboard() {
     }
   };
 
+  const handleCancelOrder = async (orderId: number, orderType: 'VES' | 'COP', customerName: string) => {
+    const confirmed = confirm(`Are you sure you want to cancel this ${orderType} order for ${customerName}?`);
+    if (!confirmed) return;
+
+    try {
+      if (orderType === 'VES') {
+        await api.cancelVESOrder(orderId);
+      } else {
+        await api.cancelCOPOrder(orderId);
+      }
+
+      alert('✅ Order cancelled successfully!');
+      await loadData();
+    } catch (error: any) {
+      console.error('Cancel error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to cancel order'}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -449,10 +467,12 @@ export default function PattyDashboard() {
                   <div
                     key={order.id}
                     className={`border-l-4 ${
-                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' : 'border-yellow-500 bg-yellow-900/20'
+                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' :
+                      order.status === 'PENDING' ? 'border-yellow-500 bg-yellow-900/20' :
+                      'border-red-500 bg-red-900/20'
                     } rounded-lg p-4`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
                         <p className="font-semibold text-white text-lg">{order.customer_name}</p>
                         <p className="text-sm text-gray-300">
@@ -477,12 +497,25 @@ export default function PattyDashboard() {
                         className={`px-3 py-1 text-xs rounded-full font-medium ${
                           order.status === 'COMPLETED'
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : order.status === 'PENDING'
+                            ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
                         }`}
                       >
                         {order.status}
                       </span>
                     </div>
+                    {order.status === 'PENDING' && (
+                      <div className="flex gap-2 mt-3 pt-3 border-t border-gray-700">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleCancelOrder(order.id, 'VES', order.customer_name)}
+                        >
+                          ❌ Cancel
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 ))
               )}
@@ -500,10 +533,12 @@ export default function PattyDashboard() {
                   <div
                     key={order.id}
                     className={`border-l-4 ${
-                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' : 'border-yellow-500 bg-yellow-900/20'
+                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' :
+                      order.status === 'PENDING' ? 'border-yellow-500 bg-yellow-900/20' :
+                      'border-red-500 bg-red-900/20'
                     } rounded-lg p-4`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
                         <p className="font-semibold text-white text-lg">{order.customer_name}</p>
                         <p className="text-sm text-gray-300">
@@ -528,12 +563,25 @@ export default function PattyDashboard() {
                         className={`px-3 py-1 text-xs rounded-full font-medium ${
                           order.status === 'COMPLETED'
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : order.status === 'PENDING'
+                            ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
                         }`}
                       >
                         {order.status}
                       </span>
                     </div>
+                    {order.status === 'PENDING' && (
+                      <div className="flex gap-2 mt-3 pt-3 border-t border-gray-700">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleCancelOrder(order.id, 'COP', order.customer_name)}
+                        >
+                          ❌ Cancel
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 ))
               )}

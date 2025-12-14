@@ -208,6 +208,10 @@ export const createCOPOrder = (data: { customer_name: string; amount_cop: number
   api.post<COPOrder>('/cop-orders', data);
 export const fulfillCOPOrder = (id: number, data: { exchange_rate: number; date_completed?: string }) =>
   api.post<COPOrder>(`/cop-orders/${id}/fulfill`, data);
+export const updateCOPOrder = (id: number, data: Partial<COPOrder>) =>
+  api.put<COPOrder>(`/cop-orders/${id}`, data);
+export const cancelCOPOrder = (id: number) =>
+  api.post<COPOrder>(`/cop-orders/${id}/cancel`, {});
 
 // Withdrawals
 export const getWithdrawals = () => api.get<Withdrawal[]>('/withdrawals');
