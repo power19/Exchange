@@ -104,9 +104,12 @@ export default function MainDashboard() {
 
     try {
       await api.createPurchase({ amount_usdt, fee_percentage, total_cost_usd });
-      alert(`✅ USDT purchase recorded successfully!\nAmount: ${amount_usdt} USDT\nTotal Cost: $${total_cost_usd}\nFee: ${(fee_percentage * 100).toFixed(2)}%`);
       e.currentTarget.reset();
-      loadData();
+
+      // Reload data to show updated balance
+      await loadData();
+
+      alert(`✅ USDT purchase recorded successfully!\nAmount: ${amount_usdt} USDT\nTotal Cost: $${total_cost_usd}\nFee: ${(fee_percentage * 100).toFixed(2)}%`);
     } catch (error: any) {
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to record purchase'}`);
     }
@@ -119,11 +122,14 @@ export default function MainDashboard() {
 
     try {
       await api.createTransfer({ amount_usdt });
-      alert('USDT transferred to Dairimar successfully!');
       e.currentTarget.reset();
-      loadData();
+
+      // Reload data to show updated balances
+      await loadData();
+
+      alert(`✅ USDT transferred to Dairimar successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
     } catch (error: any) {
-      alert(`Error: ${error.response?.data?.error || 'Failed to transfer USDT'}`);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to transfer USDT'}`);
     }
   };
 
@@ -134,11 +140,14 @@ export default function MainDashboard() {
 
     try {
       await api.fulfillCOPOrder(orderId, { exchange_rate });
-      alert('COP order fulfilled successfully!');
       setShowFulfillForm(null);
-      loadData();
+
+      // Reload data to show updated balances and remove fulfilled order
+      await loadData();
+
+      alert('✅ COP order fulfilled successfully!');
     } catch (error: any) {
-      alert(`Error: ${error.response?.data?.error || 'Failed to fulfill order'}`);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to fulfill order'}`);
     }
   };
 
@@ -150,12 +159,14 @@ export default function MainDashboard() {
 
     try {
       await api.createWithdrawal({ amount_usdt, notes });
-      alert('Profit withdrawn successfully!');
       e.currentTarget.reset();
-      loadProfitData();
-      loadWithdrawals();
+
+      // Reload profit data and withdrawals
+      await Promise.all([loadProfitData(), loadWithdrawals()]);
+
+      alert(`✅ Profit withdrawn successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
     } catch (error: any) {
-      alert(`Error: ${error.response?.data?.error || 'Failed to withdraw profit'}`);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to withdraw profit'}`);
     }
   };
 
