@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CapacitorHttp } from '@capacitor/core';
 import { Capacitor } from '@capacitor/core';
-import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, ExchangeRate, CurrentRates, DailyReport } from '../types';
+import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, ExchangeRate, CurrentRates, DailyReport, USDTRequest, USDTRequestStatus } from '../types';
 
 // Simple API base URL - use environment variable or default to /api for web
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
@@ -235,3 +235,13 @@ export const getDailyReport = (date?: string) =>
   api.get<DailyReport>('/reports/daily', { params: { date } });
 export const getOrdersReport = (start_date: string, end_date: string, type?: 'VES' | 'COP') =>
   api.get('/reports/orders', { params: { start_date, end_date, type } });
+
+// USDT Requests (Dairimar → Brian)
+export const getUSDTRequests = (status?: USDTRequestStatus) =>
+  api.get<USDTRequest[]>('/usdt-requests', { params: { status } });
+export const createUSDTRequest = (data: { amount_usdt: number; reason: string }) =>
+  api.post<USDTRequest>('/usdt-requests', data);
+export const approveUSDTRequest = (id: number, notes?: string) =>
+  api.post<USDTRequest>(`/usdt-requests/${id}/approve`, { notes });
+export const rejectUSDTRequest = (id: number, notes?: string) =>
+  api.post<USDTRequest>(`/usdt-requests/${id}/reject`, { notes });

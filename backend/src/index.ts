@@ -3,12 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import path from 'path';
-import { subdomainMiddleware } from './middleware/subdomain.js';
-import { errorHandler } from './middleware/errorHandler.js';
-import { apiRoutes } from './routes/index.js';
-import pool from './database/connection.js';
-import { globalLimiter } from './middleware/rateLimiter.js';
-import { sanitizeInput } from './middleware/sanitize.js';
+import { subdomainMiddleware } from './middleware/subdomain';
+import { errorHandler } from './middleware/errorHandler';
+import { apiRoutes } from './routes/index';
+import pool from './database/connection';
+import { globalLimiter } from './middleware/rateLimiter';
+import { sanitizeInput } from './middleware/sanitize';
 
 // Load environment variables
 dotenv.config();
