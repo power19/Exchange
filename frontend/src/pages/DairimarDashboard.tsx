@@ -22,6 +22,7 @@ export default function DairimarDashboard() {
   const [useCustomRate, setUseCustomRate] = useState(false);
   const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
   const [completedDate, setCompletedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [mainTab, setMainTab] = useState<'dashboard' | 'reports'>('dashboard');
 
   useEffect(() => {
     loadData();
@@ -232,8 +233,47 @@ export default function DairimarDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Current VES Rate Display */}
-        {currentRate && (
+        {/* Tab Navigation */}
+        <div className="mb-8">
+          <div className="flex border-b border-gray-700">
+            <button
+              onClick={() => setMainTab('dashboard')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                mainTab === 'dashboard'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              📊 Dashboard
+            </button>
+            <button
+              onClick={() => setMainTab('reports')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                mainTab === 'reports'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              📈 Reports
+            </button>
+          </div>
+        </div>
+
+        {/* Reports Tab Content */}
+        {mainTab === 'reports' && (
+          <>
+            {/* Daily Report */}
+            <div className="mb-8">
+              <DailyReportCard />
+            </div>
+          </>
+        )}
+
+        {/* Dashboard Tab Content */}
+        {mainTab === 'dashboard' && (
+          <>
+            {/* Current VES Rate Display */}
+            {currentRate && (
           <Card className="bg-gradient-to-r from-purple-600 to-purple-700 mb-6">
             <div className="flex justify-between items-center">
               <div>
@@ -261,11 +301,6 @@ export default function DairimarDashboard() {
             </p>
           </Card>
         )}
-
-        {/* Daily Report */}
-        <div className="mb-8">
-          <DailyReportCard />
-        </div>
 
         {/* Balance Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -800,6 +835,8 @@ export default function DairimarDashboard() {
             )}
           </div>
         </Card>
+          </>
+        )}
       </main>
     </div>
   );
