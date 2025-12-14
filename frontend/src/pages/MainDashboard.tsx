@@ -429,6 +429,10 @@ export default function MainDashboard() {
           customer_id,
           account_number
         });
+
+        // Show notification
+        await NotificationService.notifyOrderCreated('VES', amount_ves, customer_name);
+
         alert(`✅ Private VES order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_ves.toLocaleString()} VES`);
       } else {
         const amount_cop = parseFloat(formData.get('amount_cop') as string);
@@ -440,6 +444,10 @@ export default function MainDashboard() {
           customer_id,
           account_number
         });
+
+        // Show notification
+        await NotificationService.notifyOrderCreated('COP', amount_cop, customer_name);
+
         alert(`✅ Private COP order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_cop.toLocaleString()} COP`);
       }
 
