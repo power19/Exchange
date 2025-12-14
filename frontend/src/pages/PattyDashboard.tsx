@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import { Card, StatCard, Button } from '../components/modern';
+import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
 
 // Venezuelan bank codes mapping
@@ -453,6 +454,9 @@ export default function PattyDashboard() {
             </Button>
           </form>
         </Card>
+
+        {/* Orders Report */}
+        <OrdersReportCard />
 
         {/* My Orders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

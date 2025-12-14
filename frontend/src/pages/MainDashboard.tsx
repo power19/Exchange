@@ -3,6 +3,7 @@ import * as api from '../services/api';
 import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
+import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, USDTRequest } from '../types';
 
 export default function MainDashboard() {
@@ -353,6 +354,11 @@ export default function MainDashboard() {
         {/* Daily Report */}
         <div className="mb-8">
           <DailyReportCard />
+        </div>
+
+        {/* Orders Report */}
+        <div className="mb-8">
+          <OrdersReportCard />
         </div>
 
         {/* Balance Cards */}
