@@ -20,6 +20,7 @@ export default function MainDashboard() {
   const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
   const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports'>('dashboard');
 
   useEffect(() => {
     loadData();
@@ -438,20 +439,54 @@ export default function MainDashboard() {
           </Card>
         )}
 
-        {/* Exchange Rate Management */}
+        {/* Tab Navigation */}
         <div className="mb-8">
-          <ExchangeRateManager />
+          <div className="flex border-b border-gray-700">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                activeTab === 'dashboard'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              📊 Dashboard
+            </button>
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                activeTab === 'reports'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              📈 Reports
+            </button>
+          </div>
         </div>
 
-        {/* Daily Report */}
-        <div className="mb-8">
-          <DailyReportCard />
-        </div>
+        {/* Reports Tab Content */}
+        {activeTab === 'reports' && (
+          <>
+            {/* Daily Report */}
+            <div className="mb-8">
+              <DailyReportCard />
+            </div>
 
-        {/* Orders Report */}
-        <div className="mb-8">
-          <OrdersReportCard />
-        </div>
+            {/* Orders Report */}
+            <div className="mb-8">
+              <OrdersReportCard />
+            </div>
+          </>
+        )}
+
+        {/* Dashboard Tab Content */}
+        {activeTab === 'dashboard' && (
+          <>
+            {/* Exchange Rate Management */}
+            <div className="mb-8">
+              <ExchangeRateManager />
+            </div>
 
         {/* Balance Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -1288,6 +1323,8 @@ export default function MainDashboard() {
               </table>
             </div>
           </Card>
+        )}
+          </>
         )}
 
         {/* Development Info */}
