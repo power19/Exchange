@@ -73,6 +73,18 @@ export interface Withdrawal {
   notes?: string;
 }
 
+export type USDTRequestStatus = 'PENDING' | 'FULFILLED' | 'REJECTED';
+
+export interface USDTRequest {
+  id: number;
+  date_requested: string;
+  amount_usdt: number;
+  reason: string;
+  status: USDTRequestStatus;
+  date_resolved?: string;
+  notes?: string;
+}
+
 export interface VESShortfall {
   pending_total: number;
   current_balance: number;
