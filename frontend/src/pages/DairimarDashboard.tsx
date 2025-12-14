@@ -138,6 +138,10 @@ export default function DairimarDashboard() {
 
     try {
       await api.createUSDTRequest({ amount_usdt, reason });
+
+      // Show notification to Brian
+      await NotificationService.notifyUSDTRequested(amount_usdt, reason);
+
       alert(`✅ USDT Request submitted successfully!\n\nAmount: ${amount_usdt.toFixed(2)} USDT\nReason: ${reason}`);
       setShowUSDTRequestForm(false);
       form.reset(); // Use saved reference
@@ -165,8 +169,22 @@ export default function DairimarDashboard() {
     }
 
     try {
+      // Get order details before fulfilling
+      const order = pendingOrders.find(o => o.id === orderId);
+
       const response = await api.fulfillVESOrder(orderId, { exchange_rate });
       console.log('✅ Order fulfilled:', response.data);
+
+      // Show notification
+      if (order && response.data.usdt_sold) {
+        await NotificationService.notifyOrderFulfilled(
+          'VES',
+          parseFloat(order.amount_ves as any),
+          order.customer_name,
+          response.data.usdt_sold
+        );
+      }
+
       alert('✅ Order fulfilled successfully!');
       setShowFulfillForm(null);
       setUseCustomRate(false);
