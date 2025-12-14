@@ -26,9 +26,17 @@ function App() {
       pathname: window.location.pathname
     });
 
-    if (envDashboard === 'patty' || envDashboard === 'dairimar') {
-      console.log(`✅ Using ${envDashboard} dashboard (from env var)`);
-      setCurrentDashboard(envDashboard);
+    if (envDashboard === 'patty') {
+      console.log(`✅ Using patty dashboard (from env var)`);
+      setCurrentDashboard('patty');
+      return;
+    } else if (envDashboard === 'dairimar') {
+      console.log(`✅ Using dairimar dashboard (from env var)`);
+      setCurrentDashboard('dairimar');
+      return;
+    } else if (envDashboard === 'brian' || envDashboard === 'main') {
+      console.log(`✅ Using main dashboard (from env var)`);
+      setCurrentDashboard('main');
       return;
     }
 
