@@ -5,11 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run copy-sql",
+    "copy-sql": "node -e \"const fs=require('fs');const path=require('path');const src='src/database';const dest='dist/database';fs.mkdirSync(dest,{recursive:true});fs.readdirSync(src).filter(f=>f.endsWith('.sql')).forEach(f=>fs.copyFileSync(path.join(src,f),path.join(dest,f)))\"",
     "start": "node dist/index.js",
     "migrate": "node dist/database/migrate.js",
     "create-admin": "ts-node src/scripts/createAdmin.ts",
-    "setup": "npm run migrate && npm run create-admin",
+    "setup": "npm run build && npm run migrate && npm run create-admin",
     "test": "jest"
   },
   "dependencies": {
