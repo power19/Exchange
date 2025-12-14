@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import { Card, StatCard, Button } from '../components/modern';
+import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
 
 // Venezuelan bank codes mapping
@@ -57,6 +58,7 @@ export default function PattyDashboard() {
   });
 
   const [pasteValue, setPasteValue] = useState('');
+  const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
 
   useEffect(() => {
     loadData();
@@ -188,6 +190,59 @@ export default function PattyDashboard() {
     }
   };
 
+  const handleCancelOrder = async (orderId: number, orderType: 'VES' | 'COP', customerName: string) => {
+    const confirmed = confirm(`Are you sure you want to cancel this ${orderType} order for ${customerName}?`);
+    if (!confirmed) return;
+
+    try {
+      if (orderType === 'VES') {
+        await api.cancelVESOrder(orderId);
+      } else {
+        await api.cancelCOPOrder(orderId);
+      }
+
+      alert('✅ Order cancelled successfully!');
+      await loadData();
+    } catch (error: any) {
+      console.error('Cancel error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to cancel order'}`);
+    }
+  };
+
+  const handleEditOrder = async (orderId: number, orderType: 'VES' | 'COP', e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const updateData: any = {
+      customer_name: formData.get('customer_name') as string,
+      bank: (formData.get('bank') as string)?.trim() || undefined,
+      phone_number: (formData.get('phone_number') as string)?.trim() || undefined,
+      customer_id: (formData.get('customer_id') as string)?.trim() || undefined,
+      account_number: (formData.get('account_number') as string)?.trim() || undefined,
+    };
+
+    if (orderType === 'VES') {
+      updateData.amount_ves = parseFloat(formData.get('amount_ves') as string);
+    } else {
+      updateData.amount_cop = parseFloat(formData.get('amount_cop') as string);
+    }
+
+    try {
+      if (orderType === 'VES') {
+        await api.updateVESOrder(orderId, updateData);
+      } else {
+        await api.updateCOPOrder(orderId, updateData);
+      }
+
+      alert('✅ Order updated successfully!');
+      setShowEditForm(null);
+      await loadData();
+    } catch (error: any) {
+      console.error('Edit error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to update order'}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -436,6 +491,9 @@ export default function PattyDashboard() {
           </form>
         </Card>
 
+        {/* Orders Report */}
+        <OrdersReportCard />
+
         {/* My Orders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* VES Orders */}
@@ -449,10 +507,12 @@ export default function PattyDashboard() {
                   <div
                     key={order.id}
                     className={`border-l-4 ${
-                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' : 'border-yellow-500 bg-yellow-900/20'
+                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' :
+                      order.status === 'PENDING' ? 'border-yellow-500 bg-yellow-900/20' :
+                      'border-red-500 bg-red-900/20'
                     } rounded-lg p-4`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
                         <p className="font-semibold text-white text-lg">{order.customer_name}</p>
                         <p className="text-sm text-gray-300">
@@ -477,12 +537,117 @@ export default function PattyDashboard() {
                         className={`px-3 py-1 text-xs rounded-full font-medium ${
                           order.status === 'COMPLETED'
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : order.status === 'PENDING'
+                            ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
                         }`}
                       >
                         {order.status}
                       </span>
                     </div>
+                    {order.status === 'PENDING' && (
+                      <>
+                        <div className="flex gap-2 mt-3 pt-3 border-t border-gray-700">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => setShowEditForm({ id: order.id, type: 'VES' })}
+                          >
+                            ✏️ Edit
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => handleCancelOrder(order.id, 'VES', order.customer_name)}
+                          >
+                            ❌ Cancel
+                          </Button>
+                        </div>
+                        {showEditForm?.id === order.id && showEditForm.type === 'VES' && (
+                          <form
+                            onSubmit={(e) => handleEditOrder(order.id, 'VES', e)}
+                            className="mt-4 pt-4 border-t border-gray-700 space-y-3"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Customer Name</label>
+                              <input
+                                type="text"
+                                name="customer_name"
+                                defaultValue={order.customer_name}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Amount (VES)</label>
+                              <input
+                                type="number"
+                                name="amount_ves"
+                                defaultValue={order.amount_ves}
+                                step="1"
+                                min="1"
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Bank</label>
+                                <input
+                                  type="text"
+                                  name="bank"
+                                  defaultValue={order.bank || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                                <input
+                                  type="text"
+                                  name="phone_number"
+                                  defaultValue={order.phone_number || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Customer ID</label>
+                                <input
+                                  type="text"
+                                  name="customer_id"
+                                  defaultValue={order.customer_id || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Account Number</label>
+                                <input
+                                  type="text"
+                                  name="account_number"
+                                  defaultValue={order.account_number || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button type="submit" variant="success" fullWidth size="sm">
+                                Save Changes
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                fullWidth
+                                size="sm"
+                                onClick={() => setShowEditForm(null)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </form>
+                        )}
+                      </>
+                    )}
                   </div>
                 ))
               )}
@@ -500,10 +665,12 @@ export default function PattyDashboard() {
                   <div
                     key={order.id}
                     className={`border-l-4 ${
-                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' : 'border-yellow-500 bg-yellow-900/20'
+                      order.status === 'COMPLETED' ? 'border-green-500 bg-green-900/20' :
+                      order.status === 'PENDING' ? 'border-yellow-500 bg-yellow-900/20' :
+                      'border-red-500 bg-red-900/20'
                     } rounded-lg p-4`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
                         <p className="font-semibold text-white text-lg">{order.customer_name}</p>
                         <p className="text-sm text-gray-300">
@@ -528,12 +695,117 @@ export default function PattyDashboard() {
                         className={`px-3 py-1 text-xs rounded-full font-medium ${
                           order.status === 'COMPLETED'
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : order.status === 'PENDING'
+                            ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
                         }`}
                       >
                         {order.status}
                       </span>
                     </div>
+                    {order.status === 'PENDING' && (
+                      <>
+                        <div className="flex gap-2 mt-3 pt-3 border-t border-gray-700">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => setShowEditForm({ id: order.id, type: 'COP' })}
+                          >
+                            ✏️ Edit
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => handleCancelOrder(order.id, 'COP', order.customer_name)}
+                          >
+                            ❌ Cancel
+                          </Button>
+                        </div>
+                        {showEditForm?.id === order.id && showEditForm.type === 'COP' && (
+                          <form
+                            onSubmit={(e) => handleEditOrder(order.id, 'COP', e)}
+                            className="mt-4 pt-4 border-t border-gray-700 space-y-3"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Customer Name</label>
+                              <input
+                                type="text"
+                                name="customer_name"
+                                defaultValue={order.customer_name}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Amount (COP)</label>
+                              <input
+                                type="number"
+                                name="amount_cop"
+                                defaultValue={order.amount_cop}
+                                step="1"
+                                min="1"
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Bank</label>
+                                <input
+                                  type="text"
+                                  name="bank"
+                                  defaultValue={order.bank || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                                <input
+                                  type="text"
+                                  name="phone_number"
+                                  defaultValue={order.phone_number || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Customer ID</label>
+                                <input
+                                  type="text"
+                                  name="customer_id"
+                                  defaultValue={order.customer_id || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Account Number</label>
+                                <input
+                                  type="text"
+                                  name="account_number"
+                                  defaultValue={order.account_number || ''}
+                                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button type="submit" variant="success" fullWidth size="sm">
+                                Save Changes
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                fullWidth
+                                size="sm"
+                                onClick={() => setShowEditForm(null)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </form>
+                        )}
+                      </>
+                    )}
                   </div>
                 ))
               )}

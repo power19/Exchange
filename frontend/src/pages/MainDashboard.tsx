@@ -3,6 +3,7 @@ import * as api from '../services/api';
 import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
+import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, USDTRequest } from '../types';
 
 export default function MainDashboard() {
@@ -16,6 +17,8 @@ export default function MainDashboard() {
   const [usdtRequests, setUsdtRequests] = useState<USDTRequest[]>([]);
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
   const [showRejectForm, setShowRejectForm] = useState<number | null>(null);
+  const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
+  const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -107,7 +110,8 @@ export default function MainDashboard() {
 
   const handleBuyUSDT = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const total_cost_usd = parseFloat(formData.get('total_cost_usd') as string);
 
@@ -117,7 +121,7 @@ export default function MainDashboard() {
     try {
       await api.createPurchase({ amount_usdt, fee_percentage, total_cost_usd });
       // Purchase succeeded!
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
 
       // Try to reload data - if it fails, don't break the success flow
       try {
@@ -136,13 +140,14 @@ export default function MainDashboard() {
 
   const handleTransferUSDT = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
 
     try {
       await api.createTransfer({ amount_usdt });
       // Transfer succeeded!
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
 
       // Try to reload data - if it fails, don't break the success flow
       try {
@@ -184,14 +189,15 @@ export default function MainDashboard() {
 
   const handleWithdrawProfit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const notes = formData.get('notes') as string;
 
     try {
       await api.createWithdrawal({ amount_usdt, notes });
       // Withdrawal succeeded!
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
 
       // Try to reload data - if it fails, don't break the success flow
       try {
@@ -252,6 +258,121 @@ export default function MainDashboard() {
     } catch (error: any) {
       console.error('Rejection error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to reject request'}`);
+    }
+  };
+
+  const handleCancelOrder = async (orderId: number, orderType: 'VES' | 'COP', customerName: string) => {
+    const confirmed = confirm(`Are you sure you want to cancel this ${orderType} order for ${customerName}?`);
+    if (!confirmed) return;
+
+    try {
+      if (orderType === 'VES') {
+        await api.cancelVESOrder(orderId);
+      } else {
+        await api.cancelCOPOrder(orderId);
+      }
+
+      alert('✅ Order cancelled successfully!');
+
+      // Try to reload data
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after cancel:', reloadError);
+      }
+    } catch (error: any) {
+      console.error('Cancel error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to cancel order'}`);
+    }
+  };
+
+  const handleEditOrder = async (orderId: number, orderType: 'VES' | 'COP', e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const updateData: any = {
+      customer_name: formData.get('customer_name') as string,
+      bank: (formData.get('bank') as string)?.trim() || undefined,
+      phone_number: (formData.get('phone_number') as string)?.trim() || undefined,
+      customer_id: (formData.get('customer_id') as string)?.trim() || undefined,
+      account_number: (formData.get('account_number') as string)?.trim() || undefined,
+    };
+
+    if (orderType === 'VES') {
+      updateData.amount_ves = parseFloat(formData.get('amount_ves') as string);
+    } else {
+      updateData.amount_cop = parseFloat(formData.get('amount_cop') as string);
+    }
+
+    try {
+      if (orderType === 'VES') {
+        await api.updateVESOrder(orderId, updateData);
+      } else {
+        await api.updateCOPOrder(orderId, updateData);
+      }
+
+      alert('✅ Order updated successfully!');
+      setShowEditForm(null);
+
+      // Try to reload data
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after edit:', reloadError);
+      }
+    } catch (error: any) {
+      console.error('Edit error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to update order'}`);
+    }
+  };
+
+  const handleCreatePrivateOrder = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const customer_name = formData.get('customer_name') as string;
+    const bank = (formData.get('bank') as string)?.trim() || undefined;
+    const phone_number = (formData.get('phone_number') as string)?.trim() || undefined;
+    const customer_id = (formData.get('customer_id') as string)?.trim() || undefined;
+    const account_number = (formData.get('account_number') as string)?.trim() || undefined;
+
+    try {
+      if (privateOrderType === 'VES') {
+        const amount_ves = parseFloat(formData.get('amount_ves') as string);
+        await api.createVESOrder({
+          customer_name,
+          amount_ves,
+          bank,
+          phone_number,
+          customer_id,
+          account_number
+        });
+        alert(`✅ Private VES order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_ves.toLocaleString()} VES`);
+      } else {
+        const amount_cop = parseFloat(formData.get('amount_cop') as string);
+        await api.createCOPOrder({
+          customer_name,
+          amount_cop,
+          bank,
+          phone_number,
+          customer_id,
+          account_number
+        });
+        alert(`✅ Private COP order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_cop.toLocaleString()} COP`);
+      }
+
+      form.reset();
+
+      // Try to reload data
+      try {
+        await loadData();
+      } catch (reloadError) {
+        console.error('Failed to reload data after creating private order:', reloadError);
+      }
+    } catch (error: any) {
+      console.error('Create private order error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to create order'}`);
     }
   };
 
@@ -325,6 +446,11 @@ export default function MainDashboard() {
         {/* Daily Report */}
         <div className="mb-8">
           <DailyReportCard />
+        </div>
+
+        {/* Orders Report */}
+        <div className="mb-8">
+          <OrdersReportCard />
         </div>
 
         {/* Balance Cards */}
@@ -464,6 +590,132 @@ export default function MainDashboard() {
                   </div>
                 </Card>
               )}
+            </Card>
+
+            {/* Private Orders Section */}
+            <Card className="bg-gradient-to-r from-purple-900/30 to-orange-900/30 border-2 border-purple-500/30 mt-6">
+              <h3 className="text-2xl font-bold mb-6">🔒 My Private Orders</h3>
+              <p className="text-sm text-gray-400 mb-6">
+                Create your own VES and COP orders separately from Patty's orders
+              </p>
+
+              {/* Order Type Selector */}
+              <div className="flex gap-3 mb-6">
+                <Button
+                  variant={privateOrderType === 'VES' ? 'primary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setPrivateOrderType('VES')}
+                >
+                  VES Order 🇻🇪
+                </Button>
+                <Button
+                  variant={privateOrderType === 'COP' ? 'primary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setPrivateOrderType('COP')}
+                >
+                  COP Order 🇨🇴
+                </Button>
+              </div>
+
+              {/* Order Form */}
+              <form onSubmit={handleCreatePrivateOrder} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Customer Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="customer_name"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                      required
+                      placeholder="Customer name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      {privateOrderType === 'VES' ? 'Amount (VES) *' : 'Amount (COP) *'}
+                    </label>
+                    <input
+                      type="number"
+                      name={privateOrderType === 'VES' ? 'amount_ves' : 'amount_cop'}
+                      step="1"
+                      min="1"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                      required
+                      placeholder={privateOrderType === 'VES' ? 'e.g., 1000000' : 'e.g., 200000'}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Bank
+                    </label>
+                    <input
+                      type="text"
+                      name="bank"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                      placeholder="Bank name (optional)"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      name="phone_number"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                      placeholder="Phone (optional)"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Customer ID
+                    </label>
+                    <input
+                      type="text"
+                      name="customer_id"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                      placeholder="ID number (optional)"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Account Number
+                    </label>
+                    <input
+                      type="text"
+                      name="account_number"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                      placeholder="Account (optional)"
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
+                  <p className="text-sm text-purple-300">
+                    💡 <strong>Private Orders:</strong>{' '}
+                    {privateOrderType === 'VES'
+                      ? 'VES orders will be sent to Dairimar for fulfillment'
+                      : 'COP orders will appear in your pending COP orders for you to fulfill'}
+                  </p>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant={privateOrderType === 'VES' ? 'primary' : 'success'}
+                  fullWidth
+                  size="lg"
+                >
+                  Create {privateOrderType} Order
+                </Button>
+              </form>
             </Card>
           </div>
         )}
@@ -670,6 +922,109 @@ export default function MainDashboard() {
                         {order.account_number && <p>💳 {order.account_number}</p>}
                       </div>
                     )}
+                    <div className="mt-3 pt-3 border-t border-gray-700">
+                      <div className="flex gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setShowEditForm({ id: order.id, type: 'VES' })}
+                        >
+                          ✏️ Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleCancelOrder(order.id, 'VES', order.customer_name)}
+                        >
+                          ❌ Cancel
+                        </Button>
+                      </div>
+                      {showEditForm?.id === order.id && showEditForm.type === 'VES' && (
+                        <form
+                          onSubmit={(e) => handleEditOrder(order.id, 'VES', e)}
+                          className="mt-4 pt-4 border-t border-gray-700 space-y-3"
+                        >
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Customer Name</label>
+                              <input
+                                type="text"
+                                name="customer_name"
+                                defaultValue={order.customer_name}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Amount (VES)</label>
+                              <input
+                                type="number"
+                                name="amount_ves"
+                                defaultValue={order.amount_ves}
+                                step="1"
+                                min="1"
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Bank</label>
+                              <input
+                                type="text"
+                                name="bank"
+                                defaultValue={order.bank || ''}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                              <input
+                                type="text"
+                                name="phone_number"
+                                defaultValue={order.phone_number || ''}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                              />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Customer ID</label>
+                              <input
+                                type="text"
+                                name="customer_id"
+                                defaultValue={order.customer_id || ''}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Account</label>
+                              <input
+                                type="text"
+                                name="account_number"
+                                defaultValue={order.account_number || ''}
+                                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button type="submit" variant="success" fullWidth size="sm">
+                              Save Changes
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              fullWidth
+                              size="sm"
+                              onClick={() => setShowEditForm(null)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </form>
+                      )}
+                    </div>
                   </div>
                 ))
               )}
@@ -708,14 +1063,116 @@ export default function MainDashboard() {
                           </div>
                         )}
                       </div>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => setShowFulfillForm(order.id)}
-                      >
-                        Fulfill
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setShowFulfillForm(order.id)}
+                        >
+                          Fulfill
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setShowEditForm({ id: order.id, type: 'COP' })}
+                        >
+                          ✏️
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleCancelOrder(order.id, 'COP', order.customer_name)}
+                        >
+                          ❌
+                        </Button>
+                      </div>
                     </div>
+
+                    {showEditForm?.id === order.id && showEditForm.type === 'COP' && (
+                      <form
+                        onSubmit={(e) => handleEditOrder(order.id, 'COP', e)}
+                        className="mt-4 pt-4 border-t border-gray-700 space-y-3"
+                      >
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Customer Name</label>
+                            <input
+                              type="text"
+                              name="customer_name"
+                              defaultValue={order.customer_name}
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Amount (COP)</label>
+                            <input
+                              type="number"
+                              name="amount_cop"
+                              defaultValue={order.amount_cop}
+                              step="1"
+                              min="1"
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Bank</label>
+                            <input
+                              type="text"
+                              name="bank"
+                              defaultValue={order.bank || ''}
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                            <input
+                              type="text"
+                              name="phone_number"
+                              defaultValue={order.phone_number || ''}
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Customer ID</label>
+                            <input
+                              type="text"
+                              name="customer_id"
+                              defaultValue={order.customer_id || ''}
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Account</label>
+                            <input
+                              type="text"
+                              name="account_number"
+                              defaultValue={order.account_number || ''}
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-3 py-2 text-sm"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button type="submit" variant="success" fullWidth size="sm">
+                            Save Changes
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            fullWidth
+                            size="sm"
+                            onClick={() => setShowEditForm(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </form>
+                    )}
 
                     {showFulfillForm === order.id && (
                       <form
