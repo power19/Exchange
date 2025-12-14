@@ -304,7 +304,7 @@ export default function DairimarDashboard() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="text-xl font-bold text-cyan-400">
-                          {request.amount_usdt.toFixed(2)} USDT
+                          {Number(request.amount_usdt).toFixed(2)} USDT
                         </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(request.status)}`}>
                           {request.status}

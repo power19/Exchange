@@ -97,16 +97,18 @@ export default function MainDashboard() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
-    const fee_percentage = parseFloat(formData.get('fee_percentage') as string) / 100;
     const total_cost_usd = parseFloat(formData.get('total_cost_usd') as string);
+
+    // Calculate fee percentage: (total_cost - amount) / amount * 100
+    const fee_percentage = ((total_cost_usd - amount_usdt) / amount_usdt);
 
     try {
       await api.createPurchase({ amount_usdt, fee_percentage, total_cost_usd });
-      alert('USDT purchase recorded successfully!');
+      alert(`✅ USDT purchase recorded successfully!\nAmount: ${amount_usdt} USDT\nTotal Cost: $${total_cost_usd}\nFee: ${(fee_percentage * 100).toFixed(2)}%`);
       e.currentTarget.reset();
       loadData();
     } catch (error: any) {
-      alert(`Error: ${error.response?.data?.error || 'Failed to record purchase'}`);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to record purchase'}`);
     }
   };
 
@@ -383,23 +385,11 @@ export default function MainDashboard() {
                   name="amount_usdt"
                   step="0.01"
                   min="0.01"
-                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                   required
                   placeholder="e.g., 1000.00"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Fee %</label>
-                <input
-                  type="number"
-                  name="fee_percentage"
-                  step="0.01"
-                  min="0"
-                  max="100"
-                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
-                  required
-                  placeholder="e.g., 4.00"
-                />
+                <p className="text-xs text-gray-500 mt-1">How much USDT you're buying</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Total Cost (USD)</label>
@@ -408,10 +398,16 @@ export default function MainDashboard() {
                   name="total_cost_usd"
                   step="0.01"
                   min="0.01"
-                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                  className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                   required
                   placeholder="e.g., 1040.00"
                 />
+                <p className="text-xs text-gray-500 mt-1">Total amount you paid (including fees)</p>
+              </div>
+              <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-3">
+                <p className="text-xs text-cyan-300">
+                  💡 Fee percentage will be calculated automatically
+                </p>
               </div>
               <Button type="submit" variant="primary" fullWidth>
                 Record Purchase
