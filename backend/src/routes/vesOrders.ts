@@ -5,6 +5,7 @@ import { requirePattyOrBrian, requireDairimarOrBrian, requireBrianOrDairimar } f
 import { orderLimiter, writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 import { preventDuplicates } from '../middleware/idempotency';
+import { logCreate, logFulfill, logUpdate, logCancel } from '../utils/auditHelper';
 
 const router = Router();
 
@@ -194,8 +195,25 @@ router.post('/:id/fulfill', requireDairimarOrBrian(), writeLimiter, async (req, 
       [rateValidation.value, usdt_sold, date_completed || new Date(), id]
     );
 
+    const fulfilledOrder = result.rows[0];
+
     await client.query('COMMIT');
-    res.json(result.rows[0]);
+
+    // Log the audit trail
+    await logFulfill(
+      req,
+      'ves_orders',
+      parseInt(id, 10),
+      { status: order.status },
+      {
+        status: 'COMPLETED',
+        exchange_rate: fulfilledOrder.exchange_rate,
+        usdt_sold: fulfilledOrder.usdt_sold
+      },
+      `VES order fulfilled: ${fulfilledOrder.amount_ves} VES at rate ${fulfilledOrder.exchange_rate} = ${fulfilledOrder.usdt_sold} USDT`
+    );
+
+    res.json(fulfilledOrder);
   } catch (error) {
     await client.query('ROLLBACK');
     next(error);

@@ -9,6 +9,7 @@ import { withdrawalRoutes } from './withdrawals';
 import { authRoutes } from './auth';
 import { exchangeRatesRoutes } from './exchangeRates';
 import { reportsRoutes } from './reports';
+import { auditLogRoutes } from './auditLogs';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/cop-orders', copOrderRoutes);
 router.use('/withdrawals', withdrawalRoutes);
 router.use('/exchange-rates', exchangeRatesRoutes);
 router.use('/reports', reportsRoutes);
+router.use('/audit-logs', auditLogRoutes);
 
 export { router as apiRoutes };

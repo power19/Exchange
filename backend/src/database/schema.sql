@@ -109,18 +109,21 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS audit_logs (
     id SERIAL PRIMARY KEY,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    username VARCHAR(100) NOT NULL,
-    action VARCHAR(20) NOT NULL CHECK (action IN ('CREATE', 'UPDATE', 'DELETE')),
+    user_role VARCHAR(20) NOT NULL CHECK (user_role IN ('brian', 'dairimar', 'patty', 'system')),
+    action VARCHAR(20) NOT NULL CHECK (action IN ('CREATE', 'UPDATE', 'DELETE', 'FULFILL', 'CANCEL', 'APPROVE', 'REJECT')),
     table_name VARCHAR(50) NOT NULL,
-    record_id INTEGER NOT NULL,
+    record_id INTEGER,
     old_values JSONB,
     new_values JSONB,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
     notes TEXT
 );
 
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_table_record ON audit_logs(table_name, record_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_user_role ON audit_logs(user_role);
 CREATE INDEX IF NOT EXISTS idx_ves_orders_status ON ves_orders(status);
 CREATE INDEX IF NOT EXISTS idx_ves_orders_date_submitted ON ves_orders(date_submitted DESC);
 CREATE INDEX IF NOT EXISTS idx_ves_orders_date_completed ON ves_orders(date_completed DESC);

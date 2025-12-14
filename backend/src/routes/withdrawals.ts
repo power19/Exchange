@@ -4,6 +4,7 @@ import { BalanceService } from '../services/balanceService';
 import { requireBrian } from '../middleware/rbac';
 import { criticalLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
+import { logCreate } from '../utils/auditHelper';
 
 const router = Router();
 
@@ -65,8 +66,23 @@ router.post('/', requireBrian(), criticalLimiter, async (req, res, next) => {
       [date || new Date(), amountValidation.value, notesValidation.sanitized]
     );
 
+    const withdrawal = result.rows[0];
+
     await client.query('COMMIT');
-    res.status(201).json(result.rows[0]);
+
+    // Log the audit trail (critical operation)
+    await logCreate(
+      req,
+      'withdrawals',
+      withdrawal.id,
+      {
+        amount_usdt: withdrawal.amount_usdt,
+        notes: withdrawal.notes
+      },
+      `Profit withdrawal: ${withdrawal.amount_usdt} USDT`
+    );
+
+    res.status(201).json(withdrawal);
   } catch (error) {
     await client.query('ROLLBACK');
     next(error);
