@@ -3,7 +3,7 @@ import * as api from '../services/api';
 import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
-import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal } from '../types';
+import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, USDTRequest } from '../types';
 
 export default function MainDashboard() {
   const [balances, setBalances] = useState<Balances | null>(null);
@@ -13,11 +13,14 @@ export default function MainDashboard() {
   const [pendingVESOrders, setPendingVESOrders] = useState<VESOrder[]>([]);
   const [pendingCOPOrders, setPendingCOPOrders] = useState<COPOrder[]>([]);
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
+  const [usdtRequests, setUsdtRequests] = useState<USDTRequest[]>([]);
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
+  const [showRejectForm, setShowRejectForm] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadData();
+    loadUSDTRequests();
     checkAuth();
   }, []);
 
@@ -65,6 +68,15 @@ export default function MainDashboard() {
       setWithdrawals(withdrawalsRes.data);
     } catch (error) {
       console.error('Error loading withdrawals:', error);
+    }
+  };
+
+  const loadUSDTRequests = async () => {
+    try {
+      const requestsRes = await api.getUSDTRequests();
+      setUsdtRequests(requestsRes.data);
+    } catch (error) {
+      console.error('Error loading USDT requests:', error);
     }
   };
 
@@ -192,6 +204,54 @@ export default function MainDashboard() {
     } catch (error: any) {
       console.error('Withdrawal error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to withdraw profit'}`);
+    }
+  };
+
+  const handleApproveUSDTRequest = async (requestId: number, notes?: string) => {
+    try {
+      const response = await api.approveUSDTRequest(requestId, notes);
+      alert(`✅ USDT Request approved!\n\nAmount: ${response.data.amount_usdt} USDT transferred to Dairimar`);
+
+      // Try to reload data
+      try {
+        await Promise.all([loadData(), loadUSDTRequests()]);
+      } catch (reloadError) {
+        console.error('Failed to reload data after approval:', reloadError);
+      }
+    } catch (error: any) {
+      console.error('Approval error:', error);
+      const errorMsg = error.response?.data?.error || 'Failed to approve request';
+      const details = error.response?.data?.shortfall
+        ? `\n\nShortfall: ${error.response.data.shortfall} USDT\nCurrent Balance: ${error.response.data.current_balance} USDT`
+        : '';
+      alert(`❌ Error: ${errorMsg}${details}`);
+    }
+  };
+
+  const handleRejectUSDTRequest = async (requestId: number, e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const notes = (formData.get('notes') as string).trim();
+
+    if (!notes || notes.length < 5) {
+      alert('❌ Rejection reason must be at least 5 characters long');
+      return;
+    }
+
+    try {
+      await api.rejectUSDTRequest(requestId, notes);
+      alert('✅ USDT Request rejected');
+      setShowRejectForm(null);
+
+      // Try to reload data
+      try {
+        await loadUSDTRequests();
+      } catch (reloadError) {
+        console.error('Failed to reload requests after rejection:', reloadError);
+      }
+    } catch (error: any) {
+      console.error('Rejection error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to reject request'}`);
     }
   };
 
@@ -478,6 +538,104 @@ export default function MainDashboard() {
           </Card>
         </div>
 
+        {/* USDT Requests from Dairimar */}
+        {usdtRequests.filter(r => r.status === 'PENDING').length > 0 && (
+          <Card className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold">💸 USDT Requests from Dairimar</h3>
+              <span className="bg-yellow-500/20 text-yellow-400 text-xs font-medium px-3 py-1 rounded-full">
+                {usdtRequests.filter(r => r.status === 'PENDING').length} pending
+              </span>
+            </div>
+            <div className="space-y-4">
+              {usdtRequests
+                .filter(r => r.status === 'PENDING')
+                .map((request) => (
+                  <div
+                    key={request.id}
+                    className="bg-[#151932] rounded-lg p-5 border-l-4 border-yellow-500"
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <p className="text-2xl font-bold text-yellow-400">
+                          ${parseFloat(request.amount_usdt as any).toFixed(2)} USDT
+                        </p>
+                        <p className="text-sm text-gray-400 mt-1">
+                          Requested: {new Date(request.date_requested).toLocaleString()}
+                        </p>
+                        <div className="mt-3 p-3 bg-gray-800/50 rounded border border-gray-700">
+                          <p className="text-xs text-gray-400 mb-1">Reason:</p>
+                          <p className="text-sm text-white">{request.reason}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 mt-4">
+                      <Button
+                        variant="success"
+                        size="sm"
+                        onClick={() => {
+                          const notes = prompt('Optional notes for approval:');
+                          if (notes !== null) {
+                            handleApproveUSDTRequest(request.id, notes || undefined);
+                          }
+                        }}
+                      >
+                        ✅ Approve & Transfer
+                      </Button>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => setShowRejectForm(request.id)}
+                      >
+                        ❌ Reject
+                      </Button>
+                    </div>
+
+                    {showRejectForm === request.id && (
+                      <form
+                        onSubmit={(e) => handleRejectUSDTRequest(request.id, e)}
+                        className="mt-4 pt-4 border-t border-gray-700"
+                      >
+                        <div className="space-y-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Rejection Reason (Required)
+                            </label>
+                            <textarea
+                              name="notes"
+                              rows={3}
+                              className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2"
+                              required
+                              placeholder="Explain why this request is being rejected..."
+                            />
+                            <p className="mt-1 text-xs text-gray-500">
+                              Minimum 5 characters required
+                            </p>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Button type="submit" variant="danger" fullWidth size="sm">
+                              Confirm Rejection
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              fullWidth
+                              size="sm"
+                              onClick={() => setShowRejectForm(null)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </Card>
+        )}
+
         {/* Pending Orders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {/* VES Orders */}
@@ -605,6 +763,75 @@ export default function MainDashboard() {
             </div>
           </Card>
         </div>
+
+        {/* USDT Request History */}
+        {usdtRequests.length > 0 && (
+          <Card className="mb-8">
+            <h3 className="text-xl font-bold mb-4">📋 USDT Request History</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
+                      Date
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
+                      Amount
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
+                      Reason
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
+                      Status
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
+                      Resolved
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
+                      Notes
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-700">
+                  {usdtRequests.map((request) => (
+                    <tr key={request.id}>
+                      <td className="px-4 py-3 text-sm text-gray-300">
+                        {new Date(request.date_requested).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 text-sm font-medium text-yellow-400">
+                        ${parseFloat(request.amount_usdt as any).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-400 max-w-xs truncate">
+                        {request.reason}
+                      </td>
+                      <td className="px-4 py-3 text-sm">
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium ${
+                            request.status === 'PENDING'
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : request.status === 'FULFILLED'
+                              ? 'bg-green-500/20 text-green-400'
+                              : 'bg-red-500/20 text-red-400'
+                          }`}
+                        >
+                          {request.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-400">
+                        {request.date_resolved
+                          ? new Date(request.date_resolved).toLocaleDateString()
+                          : '-'}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-400 max-w-xs truncate">
+                        {request.notes || '-'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
 
         {/* Development Info */}
         <div className="bg-cyan-500/10 border-l-4 border-cyan-400 p-4 rounded">
