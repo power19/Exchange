@@ -9,7 +9,7 @@
     "build:patty": "tsc && vite build --mode patty",
     "build:brian": "tsc && vite build --mode brian",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "sync:dairimar": "npm run build:dairimar && copy capacitor.config.dairimar.ts capacitor.config.ts && npx cap sync android",
     "sync:patty": "npm run build:patty && copy capacitor.config.patty.ts capacitor.config.ts && npx cap sync android",
     "sync:brian": "npm run build:brian && copy capacitor.config.brian.ts capacitor.config.ts && npx cap sync android",
@@ -23,24 +23,25 @@
     "@capacitor/clipboard": "^7.0.2",
     "@capacitor/core": "^7.4.4",
     "@capacitor/local-notifications": "^7.0.3",
-    "axios": "^1.6.2",
+    "axios": "^1.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.1"
+    "react-router-dom": "^7.10.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "@vitejs/plugin-react": "^5.1.2",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.56.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.8"
+    "vite": "^7.2.7"
   }
 }

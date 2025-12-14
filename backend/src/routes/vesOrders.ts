@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import pool from '../database/connection';
 import { BalanceService } from '../services/balanceService';
+import { requirePattyOrBrian, requireDairimarOrBrian, requireBrianOrDairimar } from '../middleware/rbac';
+import { orderLimiter, writeLimiter } from '../middleware/rateLimiter';
+import { validators } from '../middleware/sanitize';
+import { preventDuplicates } from '../middleware/idempotency';
+import { logCreate, logFulfill, logUpdate, logCancel } from '../utils/auditHelper';
 
 const router = Router();
 
-// Get all VES orders
-router.get('/', async (req, res, next) => {
+// Get all VES orders (Brian and Dairimar can view)
+router.get('/', requireBrianOrDairimar(), async (req, res, next) => {
   try {
     const { status } = req.query;
 
@@ -26,51 +31,85 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Create new VES order (Patty submits)
-router.post('/', async (req, res, next) => {
+// Create new VES order (Patty or Brian, with idempotency protection)
+router.post('/', requirePattyOrBrian(), orderLimiter, preventDuplicates(), async (req, res, next) => {
   const client = await pool.connect();
   try {
+    await client.query('BEGIN');
+
     const { customer_name, amount_ves, date_submitted, bank, phone_number, customer_id, account_number } = req.body;
 
-    // Validation
-    if (!customer_name || customer_name.trim() === '') {
-      return res.status(400).json({ error: 'Customer name required' });
-    }
-    if (!amount_ves || amount_ves <= 0) {
-      return res.status(400).json({ error: 'Invalid VES amount' });
+    // Enhanced validation with sanitizers
+    const nameValidation = validators.customerName(customer_name);
+    if (!nameValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: nameValidation.error });
     }
 
-    // Validate optional fields (reject empty strings)
-    if (bank !== undefined && bank !== null && bank.trim() === '') {
-      return res.status(400).json({ error: 'Bank cannot be empty if provided' });
+    const amountValidation = validators.amount(amount_ves, {
+      min: 1,
+      max: 10000000000, // 10 billion VES
+      allowDecimals: false,
+      fieldName: 'VES amount'
+    });
+
+    if (!amountValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: amountValidation.error });
     }
-    if (phone_number !== undefined && phone_number !== null && phone_number.trim() === '') {
-      return res.status(400).json({ error: 'Phone number cannot be empty if provided' });
+
+    // Validate optional fields
+    const bankValidation = validators.bankName(bank);
+    if (!bankValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: bankValidation.error });
     }
-    if (customer_id !== undefined && customer_id !== null && customer_id.trim() === '') {
-      return res.status(400).json({ error: 'Customer ID cannot be empty if provided' });
+
+    const phoneValidation = validators.phoneNumber(phone_number);
+    if (!phoneValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: phoneValidation.error });
     }
-    if (account_number !== undefined && account_number !== null && account_number.trim() === '') {
-      return res.status(400).json({ error: 'Account number cannot be empty if provided' });
+
+    const customerIdValidation = validators.customerId(customer_id);
+    if (!customerIdValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: customerIdValidation.error });
+    }
+
+    const accountValidation = validators.accountNumber(account_number);
+    if (!accountValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: accountValidation.error });
     }
 
     const result = await client.query(
       `INSERT INTO ves_orders (date_submitted, customer_name, amount_ves, bank, phone_number, customer_id, account_number, status)
        VALUES ($1, $2, $3, $4, $5, $6, $7, 'PENDING')
        RETURNING *`,
-      [date_submitted || new Date(), customer_name, amount_ves, bank || null, phone_number || null, customer_id || null, account_number || null]
+      [
+        date_submitted || new Date(),
+        nameValidation.sanitized,
+        amountValidation.value,
+        bankValidation.sanitized,
+        phoneValidation.sanitized,
+        customerIdValidation.sanitized,
+        accountValidation.sanitized
+      ]
     );
 
+    await client.query('COMMIT');
     res.status(201).json(result.rows[0]);
   } catch (error) {
+    await client.query('ROLLBACK');
     next(error);
   } finally {
     client.release();
   }
 });
 
-// Fulfill VES order (Dairimar completes) - uses current rate or custom rate
-router.post('/:id/fulfill', async (req, res, next) => {
+// Fulfill VES order (Dairimar or Brian - uses current rate or custom rate)
+router.post('/:id/fulfill', requireDairimarOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -117,10 +156,17 @@ router.post('/:id/fulfill', async (req, res, next) => {
       finalRate = parseFloat(rateResult.rows[0].rate);
     }
 
-    // Validation
-    if (finalRate <= 0) {
+    // Enhanced validation
+    const rateValidation = validators.amount(finalRate, {
+      min: 0.01,
+      max: 1000000,
+      allowDecimals: true,
+      fieldName: 'Exchange rate'
+    });
+
+    if (!rateValidation.valid) {
       await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'Invalid exchange rate' });
+      return res.status(400).json({ error: rateValidation.error });
     }
 
     // Check Dairimar's VES balance
@@ -135,7 +181,7 @@ router.post('/:id/fulfill', async (req, res, next) => {
     }
 
     // Calculate USDT sold
-    const usdt_sold = order.amount_ves / finalRate;
+    const usdt_sold = order.amount_ves / rateValidation.value!;
 
     // Update order
     const result = await client.query(
@@ -146,11 +192,28 @@ router.post('/:id/fulfill', async (req, res, next) => {
            date_completed = $3
        WHERE id = $4
        RETURNING *`,
-      [finalRate, usdt_sold, date_completed || new Date(), id]
+      [rateValidation.value, usdt_sold, date_completed || new Date(), id]
     );
 
+    const fulfilledOrder = result.rows[0];
+
     await client.query('COMMIT');
-    res.json(result.rows[0]);
+
+    // Log the audit trail
+    await logFulfill(
+      req,
+      'ves_orders',
+      parseInt(id, 10),
+      { status: order.status },
+      {
+        status: 'COMPLETED',
+        exchange_rate: fulfilledOrder.exchange_rate,
+        usdt_sold: fulfilledOrder.usdt_sold
+      },
+      `VES order fulfilled: ${fulfilledOrder.amount_ves} VES at rate ${fulfilledOrder.exchange_rate} = ${fulfilledOrder.usdt_sold} USDT`
+    );
+
+    res.json(fulfilledOrder);
   } catch (error) {
     await client.query('ROLLBACK');
     next(error);
@@ -159,8 +222,8 @@ router.post('/:id/fulfill', async (req, res, next) => {
   }
 });
 
-// Update VES order (Patty can edit pending orders)
-router.put('/:id', async (req, res, next) => {
+// Update VES order (Patty or Brian - can edit pending orders)
+router.put('/:id', requirePattyOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -187,44 +250,74 @@ router.put('/:id', async (req, res, next) => {
       return res.status(400).json({ error: 'Can only edit pending orders' });
     }
 
-    // Validation
-    if (customer_name !== undefined && customer_name.trim() === '') {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'Customer name cannot be empty' });
-    }
-    if (amount_ves !== undefined && amount_ves <= 0) {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'Invalid VES amount' });
-    }
-
-    // Update only provided fields
+    // Validation with sanitizers
     const updates: string[] = [];
     const values: any[] = [];
     let paramCount = 1;
 
     if (customer_name !== undefined) {
+      const validation = validators.customerName(customer_name);
+      if (!validation.valid) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: validation.error });
+      }
       updates.push(`customer_name = $${paramCount++}`);
-      values.push(customer_name);
+      values.push(validation.sanitized);
     }
+
     if (amount_ves !== undefined) {
+      const validation = validators.amount(amount_ves, {
+        min: 1,
+        max: 10000000000,
+        allowDecimals: false,
+        fieldName: 'VES amount'
+      });
+      if (!validation.valid) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: validation.error });
+      }
       updates.push(`amount_ves = $${paramCount++}`);
-      values.push(amount_ves);
+      values.push(validation.value);
     }
+
     if (bank !== undefined) {
+      const validation = validators.bankName(bank);
+      if (!validation.valid) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: validation.error });
+      }
       updates.push(`bank = $${paramCount++}`);
-      values.push(bank || null);
+      values.push(validation.sanitized);
     }
+
     if (phone_number !== undefined) {
+      const validation = validators.phoneNumber(phone_number);
+      if (!validation.valid) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: validation.error });
+      }
       updates.push(`phone_number = $${paramCount++}`);
-      values.push(phone_number || null);
+      values.push(validation.sanitized);
     }
+
     if (customer_id !== undefined) {
+      const validation = validators.customerId(customer_id);
+      if (!validation.valid) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: validation.error });
+      }
       updates.push(`customer_id = $${paramCount++}`);
-      values.push(customer_id || null);
+      values.push(validation.sanitized);
     }
+
     if (account_number !== undefined) {
+      const validation = validators.accountNumber(account_number);
+      if (!validation.valid) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: validation.error });
+      }
       updates.push(`account_number = $${paramCount++}`);
-      values.push(account_number || null);
+      values.push(validation.sanitized);
     }
 
     if (updates.length === 0) {
@@ -248,8 +341,8 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-// Cancel VES order (Patty can cancel pending orders)
-router.post('/:id/cancel', async (req, res, next) => {
+// Cancel VES order (Patty or Brian - can cancel pending orders)
+router.post('/:id/cancel', requirePattyOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');

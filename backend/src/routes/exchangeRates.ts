@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import pool from '../database/connection';
+import { requireBrianOrDairimar, requireAnyRole } from '../middleware/rbac';
+import { writeLimiter } from '../middleware/rateLimiter';
+import { validators } from '../middleware/sanitize';
 
 const router = Router();
 
-// Get current active rate for a currency
-router.get('/current/:currency', async (req, res, next) => {
+// Get current active rate for a currency (accessible to all roles)
+router.get('/current/:currency', requireAnyRole(), async (req, res, next) => {
   try {
     const { currency } = req.params;
 
@@ -30,8 +33,8 @@ router.get('/current/:currency', async (req, res, next) => {
   }
 });
 
-// Get all current active rates
-router.get('/current', async (req, res, next) => {
+// Get all current active rates (accessible to all roles)
+router.get('/current', requireAnyRole(), async (req, res, next) => {
   try {
     const result = await pool.query(
       `SELECT DISTINCT ON (currency) *
@@ -51,8 +54,8 @@ router.get('/current', async (req, res, next) => {
   }
 });
 
-// Get rate history for a currency
-router.get('/history/:currency', async (req, res, next) => {
+// Get rate history for a currency (Brian and Dairimar only)
+router.get('/history/:currency', requireBrianOrDairimar(), async (req, res, next) => {
   try {
     const { currency } = req.params;
     const { limit = 10 } = req.query;
@@ -61,12 +64,24 @@ router.get('/history/:currency', async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid currency. Must be VES or COP' });
     }
 
+    // Validate limit
+    const limitValidation = validators.amount(limit, {
+      min: 1,
+      max: 100,
+      allowDecimals: false,
+      fieldName: 'Limit'
+    });
+
+    if (!limitValidation.valid) {
+      return res.status(400).json({ error: limitValidation.error });
+    }
+
     const result = await pool.query(
       `SELECT * FROM exchange_rates
        WHERE currency = $1
        ORDER BY created_at DESC
        LIMIT $2`,
-      [currency.toUpperCase(), limit]
+      [currency.toUpperCase(), limitValidation.value]
     );
 
     res.json(result.rows);
@@ -75,8 +90,8 @@ router.get('/history/:currency', async (req, res, next) => {
   }
 });
 
-// Get today's rate history
-router.get('/history/today/:currency', async (req, res, next) => {
+// Get today's rate history (Brian and Dairimar only)
+router.get('/history/today/:currency', requireBrianOrDairimar(), async (req, res, next) => {
   try {
     const { currency } = req.params;
 
@@ -102,21 +117,38 @@ router.get('/history/today/:currency', async (req, res, next) => {
   }
 });
 
-// Set new exchange rate (Admin only)
-router.post('/', async (req, res, next) => {
+// Set new exchange rate (Brian and Dairimar only, with rate limiting)
+router.post('/', requireBrianOrDairimar(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
+    await client.query('BEGIN');
+
     const { currency, rate, set_by = 'admin' } = req.body;
 
-    // Validation
+    // Enhanced validation
     if (!currency || !['VES', 'COP'].includes(currency.toUpperCase())) {
+      await client.query('ROLLBACK');
       return res.status(400).json({ error: 'Valid currency required (VES or COP)' });
     }
-    if (!rate || rate <= 0) {
-      return res.status(400).json({ error: 'Valid rate required (must be > 0)' });
+
+    const rateValidation = validators.amount(rate, {
+      min: 0.01,
+      max: 10000000,
+      allowDecimals: true,
+      fieldName: 'Exchange rate'
+    });
+
+    if (!rateValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: rateValidation.error });
     }
 
-    await client.query('BEGIN');
+    // Sanitize set_by
+    const setByValidation = validators.customerName(set_by || 'admin');
+    if (!setByValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Invalid set_by value' });
+    }
 
     // Deactivate all previous rates for this currency
     await client.query(
@@ -129,7 +161,7 @@ router.post('/', async (req, res, next) => {
       `INSERT INTO exchange_rates (currency, rate, set_by, is_active)
        VALUES ($1, $2, $3, true)
        RETURNING *`,
-      [currency.toUpperCase(), rate, set_by]
+      [currency.toUpperCase(), rateValidation.value, setByValidation.sanitized]
     );
 
     await client.query('COMMIT');

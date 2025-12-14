@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import pool from '../database/connection';
+import { requireBrian } from '../middleware/rbac';
 
 const router = Router();
 
-// Get daily report
-router.get('/daily', async (req, res, next) => {
+// Get daily report (PRIVATE - Brian only, contains profit data)
+router.get('/daily', requireBrian(), async (req, res, next) => {
   try {
     const { date } = req.query;
 
@@ -107,8 +108,8 @@ router.get('/daily', async (req, res, next) => {
   }
 });
 
-// Get orders by date range
-router.get('/orders', async (req, res, next) => {
+// Get orders by date range (PRIVATE - Brian only)
+router.get('/orders', requireBrian(), async (req, res, next) => {
   try {
     const { start_date, end_date, type } = req.query;
 
@@ -116,7 +117,6 @@ router.get('/orders', async (req, res, next) => {
       return res.status(400).json({ error: 'start_date and end_date required' });
     }
 
-    let query = '';
     let params: any[] = [start_date, end_date];
 
     if (type === 'VES' || !type) {
