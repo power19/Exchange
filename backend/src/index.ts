@@ -7,6 +7,8 @@ import { subdomainMiddleware } from './middleware/subdomain.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { apiRoutes } from './routes/index.js';
 import pool from './database/connection.js';
+import { globalLimiter } from './middleware/rateLimiter.js';
+import { sanitizeInput } from './middleware/sanitize.js';
 
 // Load environment variables
 dotenv.config();
@@ -75,6 +77,12 @@ app.use((req, res, next) => {
   console.log(`[${timestamp}] ${req.method} ${req.path}`);
   next();
 });
+
+// Global rate limiting (across all API endpoints)
+app.use('/api', globalLimiter);
+
+// Input sanitization (protect against XSS, injection attacks)
+app.use(sanitizeInput);
 
 // Subdomain detection middleware
 app.use(subdomainMiddleware);

@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import pool from '../database/connection';
 import { BalanceService } from '../services/balanceService';
+import { requireDairimar, requireBrianOrDairimar } from '../middleware/rbac';
+import { writeLimiter } from '../middleware/rateLimiter';
+import { validators } from '../middleware/sanitize';
 
 const router = Router();
 
-// Get all conversions
-router.get('/', async (req, res, next) => {
+// Get all conversions (Brian and Dairimar can view)
+router.get('/', requireBrianOrDairimar(), async (req, res, next) => {
   try {
     const result = await pool.query(
       'SELECT * FROM conversions ORDER BY date DESC'
@@ -16,41 +19,63 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Create new conversion (USDT → VES)
-router.post('/', async (req, res, next) => {
+// Create new conversion (Dairimar only - USDT → VES)
+router.post('/', requireDairimar(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
+    await client.query('BEGIN');
+
     const { usdt_amount, exchange_rate, date } = req.body;
 
-    // Validation
-    if (!usdt_amount || usdt_amount <= 0) {
-      return res.status(400).json({ error: 'Invalid USDT amount' });
+    // Enhanced validation
+    const usdtValidation = validators.amount(usdt_amount, {
+      min: 0.01,
+      max: 1000000,
+      allowDecimals: true,
+      fieldName: 'USDT amount'
+    });
+
+    if (!usdtValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: usdtValidation.error });
     }
-    if (!exchange_rate || exchange_rate <= 0) {
-      return res.status(400).json({ error: 'Invalid exchange rate' });
+
+    const rateValidation = validators.amount(exchange_rate, {
+      min: 0.01,
+      max: 1000000,
+      allowDecimals: true,
+      fieldName: 'Exchange rate'
+    });
+
+    if (!rateValidation.valid) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: rateValidation.error });
     }
 
     // Check Dairimar's USDT balance
     const daiBalance = await BalanceService.getDaiUSDTBalance();
-    if (usdt_amount > daiBalance) {
+    if (usdtValidation.value! > daiBalance) {
+      await client.query('ROLLBACK');
       return res.status(400).json({
         error: 'Insufficient USDT balance',
         current_balance: daiBalance,
-        requested: usdt_amount
+        requested: usdtValidation.value
       });
     }
 
-    const ves_received = usdt_amount * exchange_rate;
+    const ves_received = usdtValidation.value! * rateValidation.value!;
 
     const result = await client.query(
       `INSERT INTO conversions (date, usdt_amount, ves_received, exchange_rate)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [date || new Date(), usdt_amount, ves_received, exchange_rate]
+      [date || new Date(), usdtValidation.value, ves_received, rateValidation.value]
     );
 
+    await client.query('COMMIT');
     res.status(201).json(result.rows[0]);
   } catch (error) {
+    await client.query('ROLLBACK');
     next(error);
   } finally {
     client.release();
