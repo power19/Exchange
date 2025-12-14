@@ -121,15 +121,29 @@ export default function DairimarDashboard() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
-    const reason = formData.get('reason') as string;
+    const reason = (formData.get('reason') as string).trim();
+
+    // Frontend validation
+    if (!reason || reason.length < 5) {
+      alert('❌ Reason must be at least 5 characters long');
+      return;
+    }
+
+    if (!amount_usdt || amount_usdt <= 0) {
+      alert('❌ Amount must be greater than 0');
+      return;
+    }
 
     try {
       await api.createUSDTRequest({ amount_usdt, reason });
-      alert('✅ USDT Request submitted successfully!');
+      alert(`✅ USDT Request submitted successfully!\n\nAmount: ${amount_usdt.toFixed(2)} USDT\nReason: ${reason}`);
       setShowUSDTRequestForm(false);
+      e.currentTarget.reset();
       loadData();
     } catch (error: any) {
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to submit request'}`);
+      console.error('USDT Request Error:', error.response?.data);
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to submit request';
+      alert(`❌ Error: ${errorMessage}`);
     }
   };
 
@@ -459,10 +473,12 @@ export default function DairimarDashboard() {
                   <textarea
                     name="reason"
                     rows={3}
+                    minLength={5}
                     className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-3 focus:outline-none focus:border-cyan-500"
-                    placeholder="Why do you need this USDT?"
+                    placeholder="Why do you need this USDT? (minimum 5 characters)"
                     required
                   />
+                  <p className="text-xs text-gray-500 mt-1">Minimum 5 characters required</p>
                 </div>
 
                 <div className="flex gap-3 pt-4">
