@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import MainDashboard from './pages/MainDashboard'
 import PattyDashboard from './pages/PattyDashboard'
 import DairimarDashboard from './pages/DairimarDashboard'
+import ModernDashboardExample from './pages/ModernDashboardExample'
 
 function App() {
   const [currentDashboard, setCurrentDashboard] = useState<'main' | 'patty' | 'dairimar'>('main');
@@ -53,6 +54,7 @@ function App() {
         <Route path="/patty" element={<PattyDashboard />} />
         <Route path="/dairimar" element={<DairimarDashboard />} />
         <Route path="/main" element={<MainDashboard />} />
+        <Route path="/modern" element={<ModernDashboardExample />} />
 
         {/* Default route based on subdomain */}
         <Route
