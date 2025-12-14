@@ -4,7 +4,7 @@ import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
 import OrdersReportCard from '../components/OrdersReportCard';
-import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, USDTRequest } from '../types';
+import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest } from '../types';
 
 export default function MainDashboard() {
   const [balances, setBalances] = useState<Balances | null>(null);
@@ -14,13 +14,14 @@ export default function MainDashboard() {
   const [pendingVESOrders, setPendingVESOrders] = useState<VESOrder[]>([]);
   const [pendingCOPOrders, setPendingCOPOrders] = useState<COPOrder[]>([]);
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [usdtRequests, setUsdtRequests] = useState<USDTRequest[]>([]);
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
   const [showRejectForm, setShowRejectForm] = useState<number | null>(null);
   const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
   const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses'>('dashboard');
 
   useEffect(() => {
     loadData();
@@ -52,6 +53,7 @@ export default function MainDashboard() {
       setIsAuthenticated(true);
       loadProfitData();
       loadWithdrawals();
+      loadExpenses();
     } catch (error) {
       setIsAuthenticated(false);
     }
@@ -72,6 +74,15 @@ export default function MainDashboard() {
       setWithdrawals(withdrawalsRes.data);
     } catch (error) {
       console.error('Error loading withdrawals:', error);
+    }
+  };
+
+  const loadExpenses = async () => {
+    try {
+      const expensesRes = await api.getExpenses();
+      setExpenses(expensesRes.data);
+    } catch (error) {
+      console.error('Error loading expenses:', error);
     }
   };
 
@@ -211,6 +222,44 @@ export default function MainDashboard() {
     } catch (error: any) {
       console.error('Withdrawal error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to withdraw profit'}`);
+    }
+  };
+
+  const handleCreateExpense = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const amount_usd = parseFloat(formData.get('amount_usd') as string);
+    const description = formData.get('description') as string;
+    const date = formData.get('date') as string;
+
+    try {
+      await api.createExpense({ amount_usd, description, date });
+      form.reset();
+
+      try {
+        await loadExpenses();
+      } catch (reloadError) {
+        console.error('Failed to reload expenses:', reloadError);
+      }
+
+      alert(`✅ Expense recorded successfully!\nAmount: $${amount_usd.toFixed(2)}`);
+    } catch (error: any) {
+      console.error('Expense error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to record expense'}`);
+    }
+  };
+
+  const handleDeleteExpense = async (id: number, description: string) => {
+    const confirmed = confirm(`Are you sure you want to delete this expense?\n\n"${description}"`);
+    if (!confirmed) return;
+
+    try {
+      await api.deleteExpense(id);
+      await loadExpenses();
+      alert('✅ Expense deleted successfully!');
+    } catch (error: any) {
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to delete expense'}`);
     }
   };
 
@@ -462,6 +511,18 @@ export default function MainDashboard() {
             >
               📈 Reports
             </button>
+            {isAuthenticated && (
+              <button
+                onClick={() => setActiveTab('expenses')}
+                className={`px-6 py-3 font-medium transition-colors ${
+                  activeTab === 'expenses'
+                    ? 'text-cyan-400 border-b-2 border-cyan-400'
+                    : 'text-gray-400 hover:text-gray-300'
+                }`}
+              >
+                💸 Expenses
+              </button>
+            )}
           </div>
         </div>
 
@@ -477,6 +538,103 @@ export default function MainDashboard() {
             <div className="mb-8">
               <OrdersReportCard />
             </div>
+          </>
+        )}
+
+        {/* Expenses Tab Content */}
+        {activeTab === 'expenses' && isAuthenticated && (
+          <>
+            {/* Add Expense Form */}
+            <Card className="mb-8">
+              <h2 className="text-2xl font-bold mb-6">💸 Record New Expense</h2>
+              <form onSubmit={handleCreateExpense} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                    <input
+                      type="date"
+                      name="date"
+                      defaultValue={new Date().toISOString().split('T')[0]}
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Amount (USD)</label>
+                    <input
+                      type="number"
+                      name="amount_usd"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="0.00"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                  <textarea
+                    name="description"
+                    rows={3}
+                    placeholder="What was this expense for?"
+                    className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                    required
+                  />
+                </div>
+                <Button type="submit" variant="primary" fullWidth>
+                  💾 Save Expense
+                </Button>
+              </form>
+            </Card>
+
+            {/* Expenses List */}
+            <Card>
+              <h2 className="text-2xl font-bold mb-6">📋 Expense History</h2>
+              {expenses.length === 0 ? (
+                <p className="text-gray-400 text-center py-8">No expenses recorded yet</p>
+              ) : (
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {expenses.map((expense) => (
+                    <div
+                      key={expense.id}
+                      className="bg-[#151932] rounded-lg p-5 border-l-4 border-red-500"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <p className="text-xl font-bold text-red-400">
+                            ${parseFloat(expense.amount_usd as any).toFixed(2)}
+                          </p>
+                          <p className="text-sm text-gray-400 mt-1">
+                            {new Date(expense.date).toLocaleDateString()}
+                          </p>
+                          <p className="text-sm text-white mt-2">{expense.description}</p>
+                        </div>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDeleteExpense(expense.id, expense.description)}
+                        >
+                          🗑️ Delete
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Total Expenses Summary */}
+              {expenses.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-gray-700">
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-semibold text-gray-300">Total Expenses:</span>
+                    <span className="text-2xl font-bold text-red-400">
+                      ${expenses.reduce((sum, exp) => sum + parseFloat(exp.amount_usd as any), 0).toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </Card>
           </>
         )}
 

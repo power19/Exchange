@@ -11,6 +11,7 @@ import { exchangeRatesRoutes } from './exchangeRates';
 import { reportsRoutes } from './reports';
 import { auditLogRoutes } from './auditLogs';
 import { usdtRequestRoutes } from './usdtRequests';
+import expensesRouter from './expenses';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.use('/conversions', conversionRoutes);
 router.use('/ves-orders', vesOrderRoutes);
 router.use('/cop-orders', copOrderRoutes);
 router.use('/withdrawals', withdrawalRoutes);
+router.use('/expenses', expensesRouter);
 router.use('/exchange-rates', exchangeRatesRoutes);
 router.use('/reports', reportsRoutes);
 router.use('/audit-logs', auditLogRoutes);
