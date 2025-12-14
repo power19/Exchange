@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
+import { NotificationService } from '../services/notificationService';
 import { Card, StatCard, Button } from '../components/modern';
 import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
@@ -179,6 +180,9 @@ export default function PattyDashboard() {
       form.reset();
       setFormData({ bank: '', customer_id: '', phone_number: '' });
       setPasteValue('');
+
+      // Show notification
+      await NotificationService.notifyOrderCreated(orderType, amount, customer_name);
 
       // Reload data to show new order
       await loadData();

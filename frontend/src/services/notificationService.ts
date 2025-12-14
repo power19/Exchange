@@ -207,6 +207,161 @@ export class NotificationService {
   }
 
   /**
+   * Show notification when an order is created (for Patty)
+   */
+  static async notifyOrderCreated(orderType: 'VES' | 'COP', amount: number, customerName: string) {
+    try {
+      const isCapacitor = !!(window as any).Capacitor;
+      if (!isCapacitor) return;
+
+      const notificationId = Math.floor(Math.random() * 2147483647);
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: `✅ ${orderType} Order Created!`,
+            body: `Order for ${customerName}: ${amount.toLocaleString()} ${orderType}`,
+            id: notificationId,
+            schedule: { at: new Date(Date.now() + 100) },
+            sound: undefined,
+            attachments: undefined,
+            actionTypeId: '',
+            extra: { type: 'order_created', orderType }
+          }
+        ]
+      });
+
+      console.log(`📢 Order created notification sent: ${orderType} - ${amount}`);
+    } catch (error) {
+      console.error('Error showing order created notification:', error);
+    }
+  }
+
+  /**
+   * Show notification when an order is fulfilled
+   */
+  static async notifyOrderFulfilled(orderType: 'VES' | 'COP', amount: number, customerName: string, usdtSold: number) {
+    try {
+      const isCapacitor = !!(window as any).Capacitor;
+      if (!isCapacitor) return;
+
+      const notificationId = Math.floor(Math.random() * 2147483647);
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: `🎉 ${orderType} Order Fulfilled!`,
+            body: `${customerName}: ${amount.toLocaleString()} ${orderType} → $${usdtSold.toFixed(2)} USDT sold`,
+            id: notificationId,
+            schedule: { at: new Date(Date.now() + 100) },
+            sound: undefined,
+            attachments: undefined,
+            actionTypeId: '',
+            extra: { type: 'order_fulfilled', orderType }
+          }
+        ]
+      });
+
+      console.log(`📢 Order fulfilled notification sent: ${orderType} - ${customerName}`);
+    } catch (error) {
+      console.error('Error showing order fulfilled notification:', error);
+    }
+  }
+
+  /**
+   * Show notification when USDT is requested (for Brian)
+   */
+  static async notifyUSDTRequested(amount: number, reason: string) {
+    try {
+      const isCapacitor = !!(window as any).Capacitor;
+      if (!isCapacitor) return;
+
+      const notificationId = Math.floor(Math.random() * 2147483647);
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: '💵 USDT Request from Dairimar',
+            body: `Request: $${amount.toFixed(2)} USDT - ${reason}`,
+            id: notificationId,
+            schedule: { at: new Date(Date.now() + 100) },
+            sound: undefined,
+            attachments: undefined,
+            actionTypeId: '',
+            extra: { type: 'usdt_requested' }
+          }
+        ]
+      });
+
+      console.log(`📢 USDT request notification sent: $${amount}`);
+    } catch (error) {
+      console.error('Error showing USDT request notification:', error);
+    }
+  }
+
+  /**
+   * Show notification when USDT transfer is approved (for Dairimar)
+   */
+  static async notifyUSDTTransferApproved(amount: number) {
+    try {
+      const isCapacitor = !!(window as any).Capacitor;
+      if (!isCapacitor) return;
+
+      const notificationId = Math.floor(Math.random() * 2147483647);
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: '✅ USDT Request Approved!',
+            body: `Brian approved your request: $${amount.toFixed(2)} USDT transferred`,
+            id: notificationId,
+            schedule: { at: new Date(Date.now() + 100) },
+            sound: undefined,
+            attachments: undefined,
+            actionTypeId: '',
+            extra: { type: 'usdt_approved' }
+          }
+        ]
+      });
+
+      console.log(`📢 USDT approved notification sent: $${amount}`);
+    } catch (error) {
+      console.error('Error showing USDT approved notification:', error);
+    }
+  }
+
+  /**
+   * Show notification when USDT request is rejected (for Dairimar)
+   */
+  static async notifyUSDTRequestRejected(amount: number, reason?: string) {
+    try {
+      const isCapacitor = !!(window as any).Capacitor;
+      if (!isCapacitor) return;
+
+      const notificationId = Math.floor(Math.random() * 2147483647);
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: '❌ USDT Request Rejected',
+            body: `Your request for $${amount.toFixed(2)} was rejected${reason ? `: ${reason}` : ''}`,
+            id: notificationId,
+            schedule: { at: new Date(Date.now() + 100) },
+            sound: undefined,
+            attachments: undefined,
+            actionTypeId: '',
+            extra: { type: 'usdt_rejected' }
+          }
+        ]
+      });
+
+      console.log(`📢 USDT rejected notification sent: $${amount}`);
+    } catch (error) {
+      console.error('Error showing USDT rejected notification:', error);
+    }
+  }
+
+  /**
    * Show a test notification
    */
   static async showTestNotification() {
