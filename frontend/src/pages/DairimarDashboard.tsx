@@ -119,7 +119,8 @@ export default function DairimarDashboard() {
 
   const handleUSDTRequest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const reason = (formData.get('reason') as string).trim();
 
@@ -138,7 +139,7 @@ export default function DairimarDashboard() {
       await api.createUSDTRequest({ amount_usdt, reason });
       alert(`✅ USDT Request submitted successfully!\n\nAmount: ${amount_usdt.toFixed(2)} USDT\nReason: ${reason}`);
       setShowUSDTRequestForm(false);
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
       loadData();
     } catch (error: any) {
       console.error('USDT Request Error:', error.response?.data);

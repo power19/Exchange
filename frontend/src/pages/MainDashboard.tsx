@@ -107,7 +107,8 @@ export default function MainDashboard() {
 
   const handleBuyUSDT = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const total_cost_usd = parseFloat(formData.get('total_cost_usd') as string);
 
@@ -117,7 +118,7 @@ export default function MainDashboard() {
     try {
       await api.createPurchase({ amount_usdt, fee_percentage, total_cost_usd });
       // Purchase succeeded!
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
 
       // Try to reload data - if it fails, don't break the success flow
       try {
@@ -136,13 +137,14 @@ export default function MainDashboard() {
 
   const handleTransferUSDT = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
 
     try {
       await api.createTransfer({ amount_usdt });
       // Transfer succeeded!
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
 
       // Try to reload data - if it fails, don't break the success flow
       try {
@@ -184,14 +186,15 @@ export default function MainDashboard() {
 
   const handleWithdrawProfit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget; // Save reference before async operations
+    const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const notes = formData.get('notes') as string;
 
     try {
       await api.createWithdrawal({ amount_usdt, notes });
       // Withdrawal succeeded!
-      e.currentTarget.reset();
+      form.reset(); // Use saved reference
 
       // Try to reload data - if it fails, don't break the success flow
       try {
