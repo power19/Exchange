@@ -45,7 +45,7 @@ export default function DailyReportCard() {
       <div className="flex justify-between items-center mb-4">
         <div>
           <h3 className="text-xl font-bold text-gray-800">Daily Report</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-base font-semibold text-gray-900 mt-1">
             {new Date(selectedDate).toLocaleDateString('en-US', {
               weekday: 'long',
               year: 'numeric',
