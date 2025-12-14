@@ -74,6 +74,15 @@ CREATE TABLE IF NOT EXISTS withdrawals (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Expenses table (business expenses tracking)
+CREATE TABLE IF NOT EXISTS expenses (
+    id SERIAL PRIMARY KEY,
+    date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    amount_usd DECIMAL(10, 2) NOT NULL CHECK (amount_usd > 0),
+    description TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- USDT Requests table (Dairimar → Brian)
 CREATE TABLE IF NOT EXISTS usdt_requests (
     id SERIAL PRIMARY KEY,

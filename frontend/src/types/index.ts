@@ -73,6 +73,13 @@ export interface Withdrawal {
   notes?: string;
 }
 
+export interface Expense {
+  id: number;
+  date: string;
+  amount_usd: number;
+  description: string;
+}
+
 export type USDTRequestStatus = 'PENDING' | 'FULFILLED' | 'REJECTED';
 
 export interface USDTRequest {

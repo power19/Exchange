@@ -59,6 +59,7 @@ export default function PattyDashboard() {
 
   const [pasteValue, setPasteValue] = useState('');
   const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports'>('dashboard');
 
   useEffect(() => {
     loadData();
@@ -265,8 +266,37 @@ export default function PattyDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Daily Report */}
-        {dailyReport && (
+        {/* Tab Navigation */}
+        <div className="mb-8">
+          <div className="flex border-b border-gray-700">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                activeTab === 'dashboard'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              📊 Dashboard
+            </button>
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                activeTab === 'reports'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              📈 Reports
+            </button>
+          </div>
+        </div>
+
+        {/* Reports Tab Content */}
+        {activeTab === 'reports' && (
+          <>
+            {/* Daily Report */}
+            {dailyReport && (
           <Card className="bg-gradient-to-r from-pink-600 to-purple-600 mb-8">
             <h2 className="text-2xl font-bold mb-6 text-white">Today's Report - {dailyReport.date}</h2>
 
@@ -323,8 +353,16 @@ export default function PattyDashboard() {
           </Card>
         )}
 
-        {/* VES Balance */}
-        <div className="mb-8">
+            {/* Orders Report */}
+            <OrdersReportCard />
+          </>
+        )}
+
+        {/* Dashboard Tab Content */}
+        {activeTab === 'dashboard' && (
+          <>
+            {/* VES Balance */}
+            <div className="mb-8">
           <StatCard
             title="Dairimar's VES Balance"
             value={balances?.dai_ves.toLocaleString() || '0'}
@@ -490,9 +528,6 @@ export default function PattyDashboard() {
             </Button>
           </form>
         </Card>
-
-        {/* Orders Report */}
-        <OrdersReportCard />
 
         {/* My Orders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -812,6 +847,8 @@ export default function PattyDashboard() {
             </div>
           </Card>
         </div>
+          </>
+        )}
       </main>
     </div>
   );

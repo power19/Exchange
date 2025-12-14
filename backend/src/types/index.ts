@@ -62,6 +62,13 @@ export interface Withdrawal {
   notes?: string;
 }
 
+export interface Expense {
+  id: number;
+  date: Date;
+  amount_usd: number;
+  description: string;
+}
+
 export interface USDTRequest {
   id: number;
   date_requested: Date;

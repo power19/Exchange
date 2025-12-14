@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CapacitorHttp } from '@capacitor/core';
 import { Capacitor } from '@capacitor/core';
-import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, ExchangeRate, CurrentRates, DailyReport, USDTRequest, USDTRequestStatus } from '../types';
+import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, Expense, ExchangeRate, CurrentRates, DailyReport, USDTRequest, USDTRequestStatus } from '../types';
 
 // Simple API base URL - use environment variable or default to /api for web
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
@@ -217,6 +217,12 @@ export const cancelCOPOrder = (id: number) =>
 export const getWithdrawals = () => api.get<Withdrawal[]>('/withdrawals');
 export const createWithdrawal = (data: { amount_usdt: number; notes?: string; date?: string }) =>
   api.post<Withdrawal>('/withdrawals', data);
+
+// Expenses
+export const getExpenses = () => api.get<Expense[]>('/expenses');
+export const createExpense = (data: { amount_usd: number; description: string; date?: string }) =>
+  api.post<Expense>('/expenses', data);
+export const deleteExpense = (id: number) => api.delete(`/expenses/${id}`);
 
 // Auth
 export const login = (username: string, password: string) =>
