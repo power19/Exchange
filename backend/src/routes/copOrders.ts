@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import pool from '../database/connection';
 import { BalanceService } from '../services/balanceService';
-import { requirePatty, requireBrian } from '../middleware/rbac';
+import { requirePattyOrBrian, requireBrian } from '../middleware/rbac';
 import { orderLimiter, writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 import { preventDuplicates } from '../middleware/idempotency';
@@ -30,8 +30,8 @@ router.get('/', requireBrian(), async (req, res, next) => {
   }
 });
 
-// Create new COP order (Patty only, with idempotency protection)
-router.post('/', requirePatty(), orderLimiter, preventDuplicates(), async (req, res, next) => {
+// Create new COP order (Patty or Brian, with idempotency protection)
+router.post('/', requirePattyOrBrian(), orderLimiter, preventDuplicates(), async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -204,8 +204,8 @@ router.post('/:id/fulfill', requireBrian(), writeLimiter, async (req, res, next)
   }
 });
 
-// Update COP order (Patty only - can edit pending orders)
-router.put('/:id', requirePatty(), writeLimiter, async (req, res, next) => {
+// Update COP order (Patty or Brian - can edit pending orders)
+router.put('/:id', requirePattyOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -323,8 +323,8 @@ router.put('/:id', requirePatty(), writeLimiter, async (req, res, next) => {
   }
 });
 
-// Cancel COP order (Patty only - can cancel pending orders)
-router.post('/:id/cancel', requirePatty(), writeLimiter, async (req, res, next) => {
+// Cancel COP order (Patty or Brian - can cancel pending orders)
+router.post('/:id/cancel', requirePattyOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');

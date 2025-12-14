@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import pool from '../database/connection';
 import { BalanceService } from '../services/balanceService';
-import { requireDairimar, requireBrianOrDairimar } from '../middleware/rbac';
+import { requireDairimarOrBrian, requireBrianOrDairimar } from '../middleware/rbac';
 import { writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 
@@ -19,8 +19,8 @@ router.get('/', requireBrianOrDairimar(), async (req, res, next) => {
   }
 });
 
-// Create new conversion (Dairimar only - USDT → VES)
-router.post('/', requireDairimar(), writeLimiter, async (req, res, next) => {
+// Create new conversion (Dairimar or Brian - USDT → VES)
+router.post('/', requireDairimarOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');

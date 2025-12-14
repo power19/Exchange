@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import pool from '../database/connection';
 import { BalanceService } from '../services/balanceService';
-import { requirePatty, requireDairimar, requireBrianOrDairimar } from '../middleware/rbac';
+import { requirePattyOrBrian, requireDairimarOrBrian, requireBrianOrDairimar } from '../middleware/rbac';
 import { orderLimiter, writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 import { preventDuplicates } from '../middleware/idempotency';
@@ -30,8 +30,8 @@ router.get('/', requireBrianOrDairimar(), async (req, res, next) => {
   }
 });
 
-// Create new VES order (Patty only, with idempotency protection)
-router.post('/', requirePatty(), orderLimiter, preventDuplicates(), async (req, res, next) => {
+// Create new VES order (Patty or Brian, with idempotency protection)
+router.post('/', requirePattyOrBrian(), orderLimiter, preventDuplicates(), async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -107,8 +107,8 @@ router.post('/', requirePatty(), orderLimiter, preventDuplicates(), async (req, 
   }
 });
 
-// Fulfill VES order (Dairimar only - uses current rate or custom rate)
-router.post('/:id/fulfill', requireDairimar(), writeLimiter, async (req, res, next) => {
+// Fulfill VES order (Dairimar or Brian - uses current rate or custom rate)
+router.post('/:id/fulfill', requireDairimarOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -204,8 +204,8 @@ router.post('/:id/fulfill', requireDairimar(), writeLimiter, async (req, res, ne
   }
 });
 
-// Update VES order (Patty only - can edit pending orders)
-router.put('/:id', requirePatty(), writeLimiter, async (req, res, next) => {
+// Update VES order (Patty or Brian - can edit pending orders)
+router.put('/:id', requirePattyOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -323,8 +323,8 @@ router.put('/:id', requirePatty(), writeLimiter, async (req, res, next) => {
   }
 });
 
-// Cancel VES order (Patty only - can cancel pending orders)
-router.post('/:id/cancel', requirePatty(), writeLimiter, async (req, res, next) => {
+// Cancel VES order (Patty or Brian - can cancel pending orders)
+router.post('/:id/cancel', requirePattyOrBrian(), writeLimiter, async (req, res, next) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');

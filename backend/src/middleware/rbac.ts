@@ -82,6 +82,16 @@ export const requireBrianOrDairimar = () => requireRole(['brian', 'dairimar']);
 export const requireAnyRole = () => requireRole(['brian', 'dairimar', 'patty']);
 
 /**
+ * Allow Patty or Brian (Brian has admin override for order management)
+ */
+export const requirePattyOrBrian = () => requireRole(['patty', 'brian']);
+
+/**
+ * Allow Dairimar or Brian (Brian has admin override for VES operations)
+ */
+export const requireDairimarOrBrian = () => requireRole(['dairimar', 'brian']);
+
+/**
  * Log access attempts for auditing
  * Can be used before requireRole to track all access attempts
  */
