@@ -1,0 +1,59 @@
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./cloudflare-certs:/etc/nginx/certs:ro
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: usdt-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: usdt_exchange
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SuperStrongPass123!
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 10
+
+  backend:
+    image: power1984/powermental-app:latest
+    container_name: usdt-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://postgres:SuperStrongPass123!@db:5432/usdt_exchange
+      JWT_SECRET: ChangeMeToSomethingVeryLongAndRandom123!
+      CORS_ORIGINS: https://main.powermental.fit,https://dai.powermental.fit,https://patty.powermental.fit,https://api.powermental.fit
+      VIRTUAL_HOST: api.powermental.fit
+      VIRTUAL_PORT: 3000
+      VIRTUAL_PATH: /
+    command: sh -c "npm run migrate && npm start"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: nginx:alpine
+    container_name: usdt-frontend
+    restart: unless-stopped
+    volumes:
+      - ./frontend-dist:/usr/share/nginx/html:ro
+    environment:
+      VIRTUAL_HOST: main.powermental.fit,dai.powermental.fit,patty.powermental.fit
+
+volumes:
+  pgdata:
+  vhost:
+  html:
