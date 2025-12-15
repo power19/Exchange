@@ -1,17 +1,18 @@
 @echo off
 echo ========================================
-echo Building USDT Exchange System
+echo Building USDT Exchange System v2.0
 echo ========================================
 echo.
 
 echo Step 1: Building Backend Docker Image
 echo --------------------------------------
 cd backend
-docker build -t power1984/powermental-app:latest .
+docker build -t power1984/powermental-app:2.0 .
 if %errorlevel% neq 0 (
     echo Backend build failed!
     exit /b 1
 )
+docker tag power1984/powermental-app:2.0 power1984/powermental-app:latest
 cd ..
 
 echo.
@@ -31,6 +32,7 @@ echo Step 3: Pushing Backend Image to Docker Hub
 echo --------------------------------------
 echo Please login to Docker Hub if prompted:
 docker login
+docker push power1984/powermental-app:2.0
 docker push power1984/powermental-app:latest
 if %errorlevel% neq 0 (
     echo Push failed!
@@ -43,7 +45,9 @@ echo BUILD SUCCESSFUL!
 echo ========================================
 echo.
 echo Frontend dist files are in: frontend\dist\
-echo Backend image pushed to: power1984/powermental-app:latest
+echo Backend images pushed to Docker Hub:
+echo   - power1984/powermental-app:2.0
+echo   - power1984/powermental-app:latest
 echo.
 echo Next steps:
 echo 1. Copy frontend to VPS: scp -r frontend\dist\* admin@powermental:~/usdt-exchange/frontend-dist/
