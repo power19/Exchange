@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+# Install timezone data for proper timezone support
+RUN apk add --no-cache tzdata
+
 WORKDIR /app
 
 # Copy package files
