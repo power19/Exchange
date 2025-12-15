@@ -20,6 +20,7 @@ export default function MainDashboard() {
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
   const [showRejectForm, setShowRejectForm] = useState<number | null>(null);
   const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses'>('dashboard');
@@ -29,6 +30,13 @@ export default function MainDashboard() {
     loadUSDTRequests();
     checkAuth();
   }, []);
+
+  // Load expenses when switching to expenses tab
+  useEffect(() => {
+    if (activeTab === 'expenses' && isAuthenticated) {
+      loadExpenses();
+    }
+  }, [activeTab, isAuthenticated]);
 
   const loadData = async () => {
     try {
@@ -263,6 +271,27 @@ export default function MainDashboard() {
     } catch (error: any) {
       console.error('Expense error:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to record expense'}`);
+    }
+  };
+
+  const handleUpdateExpense = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingExpense) return;
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const amount_usd = parseFloat(formData.get('amount_usd') as string);
+    const description = formData.get('description') as string;
+    const date = formData.get('date') as string;
+
+    try {
+      await api.updateExpense(editingExpense.id, { amount_usd, description, date });
+      setEditingExpense(null);
+      await loadExpenses();
+      alert(`✅ Expense updated successfully!\nAmount: $${amount_usd.toFixed(2)}`);
+    } catch (error: any) {
+      console.error('Update expense error:', error);
+      alert(`❌ Error: ${error.response?.data?.error || 'Failed to update expense'}`);
     }
   };
 
@@ -584,17 +613,19 @@ export default function MainDashboard() {
         {/* Expenses Tab Content */}
         {activeTab === 'expenses' && isAuthenticated && (
           <>
-            {/* Add Expense Form */}
+            {/* Add/Edit Expense Form */}
             <Card className="mb-8">
-              <h2 className="text-2xl font-bold mb-6">💸 Record New Expense</h2>
-              <form onSubmit={handleCreateExpense} className="space-y-4">
+              <h2 className="text-2xl font-bold mb-6">
+                {editingExpense ? '✏️ Edit Expense' : '💸 Record New Expense'}
+              </h2>
+              <form onSubmit={editingExpense ? handleUpdateExpense : handleCreateExpense} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
                     <input
                       type="date"
                       name="date"
-                      defaultValue={new Date().toISOString().split('T')[0]}
+                      defaultValue={editingExpense ? new Date(editingExpense.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
                       className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                       required
                     />
@@ -606,6 +637,7 @@ export default function MainDashboard() {
                       name="amount_usd"
                       step="0.01"
                       min="0.01"
+                      defaultValue={editingExpense ? parseFloat(editingExpense.amount_usd as any) : undefined}
                       placeholder="0.00"
                       className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                       required
@@ -617,14 +649,22 @@ export default function MainDashboard() {
                   <textarea
                     name="description"
                     rows={3}
+                    defaultValue={editingExpense ? editingExpense.description : ''}
                     placeholder="What was this expense for?"
                     className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                     required
                   />
                 </div>
-                <Button type="submit" variant="primary" fullWidth>
-                  💾 Save Expense
-                </Button>
+                <div className="flex gap-3">
+                  <Button type="submit" variant="primary" fullWidth>
+                    {editingExpense ? '💾 Update Expense' : '💾 Save Expense'}
+                  </Button>
+                  {editingExpense && (
+                    <Button type="button" variant="secondary" onClick={() => setEditingExpense(null)}>
+                      ❌ Cancel
+                    </Button>
+                  )}
+                </div>
               </form>
             </Card>
 
@@ -650,13 +690,22 @@ export default function MainDashboard() {
                           </p>
                           <p className="text-sm text-white mt-2">{expense.description}</p>
                         </div>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => handleDeleteExpense(expense.id, expense.description)}
-                        >
-                          🗑️ Delete
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => setEditingExpense(expense)}
+                          >
+                            ✏️ Edit
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => handleDeleteExpense(expense.id, expense.description)}
+                          >
+                            🗑️ Delete
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}

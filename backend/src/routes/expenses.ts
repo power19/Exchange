@@ -45,6 +45,39 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+// Update expense (protected - requires authentication)
+router.put('/:id', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { date, amount_usd, description } = req.body;
+
+    if (!amount_usd || amount_usd <= 0) {
+      return res.status(400).json({ error: 'Invalid amount' });
+    }
+
+    if (!description || description.trim() === '') {
+      return res.status(400).json({ error: 'Description is required' });
+    }
+
+    const result = await pool.query<Expense>(
+      `UPDATE expenses
+       SET date = $1, amount_usd = $2, description = $3
+       WHERE id = $4
+       RETURNING *`,
+      [date || new Date(), amount_usd, description.trim(), id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Expense not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating expense:', error);
+    res.status(500).json({ error: 'Failed to update expense' });
+  }
+});
+
 // Delete expense (protected - requires authentication)
 router.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
   try {

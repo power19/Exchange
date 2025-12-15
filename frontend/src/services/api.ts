@@ -222,6 +222,8 @@ export const createWithdrawal = (data: { amount_usdt: number; notes?: string; da
 export const getExpenses = () => api.get<Expense[]>('/expenses');
 export const createExpense = (data: { amount_usd: number; description: string; date?: string }) =>
   api.post<Expense>('/expenses', data);
+export const updateExpense = (id: number, data: { amount_usd: number; description: string; date?: string }) =>
+  api.put<Expense>(`/expenses/${id}`, data);
 export const deleteExpense = (id: number) => api.delete(`/expenses/${id}`);
 
 // Auth
