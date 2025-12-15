@@ -81,9 +81,10 @@ export default function MainDashboard() {
   const loadExpenses = async () => {
     try {
       const expensesRes = await api.getExpenses();
-      setExpenses(expensesRes.data);
+      setExpenses(Array.isArray(expensesRes.data) ? expensesRes.data : []);
     } catch (error) {
       console.error('Error loading expenses:', error);
+      setExpenses([]); // Ensure expenses is always an array
     }
   };
 
@@ -630,7 +631,7 @@ export default function MainDashboard() {
             {/* Expenses List */}
             <Card>
               <h2 className="text-2xl font-bold mb-6">📋 Expense History</h2>
-              {expenses.length === 0 ? (
+              {!expenses || expenses.length === 0 ? (
                 <p className="text-gray-400 text-center py-8">No expenses recorded yet</p>
               ) : (
                 <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -663,7 +664,7 @@ export default function MainDashboard() {
               )}
 
               {/* Total Expenses Summary */}
-              {expenses.length > 0 && (
+              {expenses && expenses.length > 0 && (
                 <div className="mt-6 pt-6 border-t border-gray-700">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-300">Total Expenses:</span>
