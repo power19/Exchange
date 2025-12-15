@@ -1,110 +1,47 @@
 #!/bin/bash
+set -e
 
-# USDT Exchange VPS Deployment Script
-# This script helps deploy the application to production
+echo "🚀 Building and deploying USDT Exchange System"
+echo "================================================"
 
-set -e  # Exit on error
-
-echo "========================================="
-echo "USDT Exchange Production Deployment"
-echo "========================================="
-echo ""
-
-# Check if .env.production exists
-if [ ! -f .env.production ]; then
-    echo "❌ Error: .env.production file not found!"
-    echo "Please create .env.production with your configuration."
-    echo "See .env.production.example for reference."
-    exit 1
-fi
-
-# Load environment variables
-export $(cat .env.production | grep -v '^#' | xargs)
-
-# Verify required environment variables
-REQUIRED_VARS=("MAIN_DOMAIN" "PATTY_DOMAIN" "DAI_DOMAIN" "LETSENCRYPT_EMAIL" "DB_PASSWORD" "JWT_SECRET" "ADMIN_PASSWORD")
-
-echo "🔍 Checking environment variables..."
-for var in "${REQUIRED_VARS[@]}"; do
-    if [ -z "${!var}" ]; then
-        echo "❌ Error: $var is not set in .env.production"
-        exit 1
-    fi
-done
-echo "✅ All required environment variables are set"
-echo ""
-
-# Check if Docker is installed
-if ! command -v docker &> /dev/null; then
-    echo "❌ Error: Docker is not installed"
-    echo "Please install Docker first:"
-    echo "  curl -fsSL https://get.docker.com -o get-docker.sh"
-    echo "  sudo sh get-docker.sh"
-    exit 1
-fi
-
-# Check if Docker Compose is installed
-if ! command -v docker-compose &> /dev/null; then
-    echo "❌ Error: Docker Compose is not installed"
-    echo "Please install Docker Compose first:"
-    echo "  sudo apt install docker-compose -y"
-    exit 1
-fi
-
-echo "✅ Docker and Docker Compose are installed"
-echo ""
-
-# Show deployment configuration
-echo "📋 Deployment Configuration:"
-echo "   Main Domain:   $MAIN_DOMAIN"
-echo "   Patty Domain:  $PATTY_DOMAIN"
-echo "   Dai Domain:    $DAI_DOMAIN"
-echo "   Email:         $LETSENCRYPT_EMAIL"
-echo ""
-
-# Confirm deployment
-read -p "Do you want to proceed with deployment? (yes/no): " confirm
-if [ "$confirm" != "yes" ]; then
-    echo "Deployment cancelled."
-    exit 0
-fi
+# Configuration
+DOCKER_USERNAME="power1984"
+BACKEND_IMAGE="$DOCKER_USERNAME/powermental-app"
+VERSION=${1:-latest}
 
 echo ""
-echo "🚀 Starting deployment..."
-echo ""
-
-# Stop existing containers if any
-echo "📦 Stopping existing containers (if any)..."
-docker-compose -f docker-compose.prod.yml down 2>/dev/null || true
-
-# Build and start services
-echo "🔨 Building and starting services..."
-docker-compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+echo "📦 Step 1: Building Backend Docker Image"
+echo "----------------------------------------"
+cd backend
+docker build -t $BACKEND_IMAGE:$VERSION .
+docker tag $BACKEND_IMAGE:$VERSION $BACKEND_IMAGE:latest
 
 echo ""
-echo "⏳ Waiting for services to start..."
-sleep 10
-
-# Check container status
-echo ""
-echo "📊 Container Status:"
-docker-compose -f docker-compose.prod.yml ps
+echo "📦 Step 2: Building Frontend"
+echo "----------------------------------------"
+cd ../frontend
+npm install
+npm run build
 
 echo ""
-echo "✅ Deployment initiated!"
+echo "🔐 Step 3: Pushing Backend Image to Docker Hub"
+echo "----------------------------------------"
+echo "Please login to Docker Hub if not already logged in:"
+docker login
+docker push $BACKEND_IMAGE:$VERSION
+docker push $BACKEND_IMAGE:latest
+
 echo ""
-echo "🔍 To monitor logs:"
-echo "   docker-compose -f docker-compose.prod.yml logs -f"
+echo "✅ Build Complete!"
+echo "=================="
 echo ""
-echo "🌐 Your dashboards will be available at:"
-echo "   https://$MAIN_DOMAIN (Main Dashboard)"
-echo "   https://$PATTY_DOMAIN (Patty's Dashboard)"
-echo "   https://$DAI_DOMAIN (Dairimar's Dashboard)"
+echo "Frontend dist files are in: frontend/dist/"
+echo "Backend image pushed to: $BACKEND_IMAGE:$VERSION"
 echo ""
-echo "⏰ SSL certificates may take 2-5 minutes to generate."
-echo "   You can check progress with:"
-echo "   docker-compose -f docker-compose.prod.yml logs -f letsencrypt"
+echo "Next steps:"
+echo "1. Copy frontend/dist/* to VPS: scp -r frontend/dist/* admin@powermental:~/usdt-exchange/frontend-dist/"
+echo "2. SSH to VPS: ssh admin@powermental"
+echo "3. Pull new backend image: docker pull $BACKEND_IMAGE:latest"
+echo "4. Restart containers: cd ~/usdt-exchange && docker-compose up -d --force-recreate backend"
+echo "5. Check logs: docker-compose logs -f backend"
 echo ""
-echo "========================================="
-echo "Deployment Complete! 🎉"
-echo "========================================="
