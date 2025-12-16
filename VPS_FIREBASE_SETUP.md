@@ -2,13 +2,20 @@
 
 Follow these steps to configure Firebase push notifications on your VPS.
 
+## Important: Docker Image Rebuild Required
+
+Your VPS uses a pre-built Docker image (`power1984/powermental-app:latest`). To enable Firebase push notifications, you need to:
+1. Build a new Docker image with Firebase support
+2. Push it to Docker Hub
+3. Pull and restart on VPS
+
 ## Step 1: Upload firebase-service-account.json to VPS
 
 From your PC (where you have the firebase-service-account.json file):
 
 ```bash
-# Upload the file to VPS backend directory
-scp firebase-service-account.json admin@powermental.fit:~/usdt-exchange/backend/
+# Upload the file to VPS usdt-exchange directory
+scp firebase-service-account.json admin@powermental.fit:~/usdt-exchange/
 ```
 
 **Expected output:**
@@ -16,16 +23,41 @@ scp firebase-service-account.json admin@powermental.fit:~/usdt-exchange/backend/
 firebase-service-account.json    100%  2341    45.2KB/s   00:00
 ```
 
-## Step 2: Upload Updated docker-compose.yml to VPS
+## Step 2: Upload Updated docker-compose.production.yml to VPS
 
 From your Exchange directory on PC:
 
 ```bash
-# Upload the updated docker-compose.yml
-scp docker-compose.yml admin@powermental.fit:~/usdt-exchange/
+# Upload the updated production compose file
+scp docker-compose.production.yml admin@powermental.fit:~/usdt-exchange/
 ```
 
-## Step 3: Verify Files on VPS
+## Step 3: Build and Push New Docker Image (From Your PC)
+
+**IMPORTANT:** Since you're using a Docker image, you need to rebuild with Firebase support:
+
+```bash
+# On your PC, navigate to Exchange directory
+cd C:\Users\brian\Exchange
+
+# Pull latest changes
+git pull
+
+# Login to Docker Hub (if not already logged in)
+docker login
+
+# Build new backend image with Firebase support
+cd backend
+docker build -t power1984/powermental-app:latest .
+
+# Push to Docker Hub
+docker push power1984/powermental-app:latest
+
+# Go back to root
+cd ..
+```
+
+## Step 4: Verify Files on VPS
 
 SSH into your VPS and check files are in place:
 
@@ -33,35 +65,38 @@ SSH into your VPS and check files are in place:
 ssh admin@powermental.fit
 cd ~/usdt-exchange
 
-# Check docker-compose.yml has Firebase config
-grep -A 2 "GOOGLE_APPLICATION_CREDENTIALS" docker-compose.yml
+# Check docker-compose.production.yml has Firebase config
+grep -A 2 "GOOGLE_APPLICATION_CREDENTIALS" docker-compose.production.yml
 
 # Check firebase-service-account.json exists
-ls -lh backend/firebase-service-account.json
+ls -lh firebase-service-account.json
 ```
 
 **Expected output:**
 ```
       GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-service-account.json
     volumes:
-      - ./backend/firebase-service-account.json:/app/firebase-service-account.json:ro
+      - ./firebase-service-account.json:/app/firebase-service-account.json:ro
 
 -rw-r--r-- 1 admin admin 2.3K Dec 16 firebase-service-account.json
 ```
 
-## Step 4: Restart Backend Container
+## Step 5: Pull New Image and Restart Backend Container
 
 ```bash
 cd ~/usdt-exchange
 
-# Rebuild and restart backend only
-docker-compose up -d --build backend
+# Pull the new image with Firebase support
+docker compose -f docker-compose.production.yml pull backend
+
+# Restart backend with new image
+docker compose -f docker-compose.production.yml up -d backend
 
 # Wait a few seconds for startup
-sleep 5
+sleep 10
 
 # Check backend logs for Firebase initialization
-docker-compose logs backend | grep -i firebase
+docker compose -f docker-compose.production.yml logs backend | grep -i firebase
 ```
 
 **Expected output (success):**
@@ -74,17 +109,17 @@ docker-compose logs backend | grep -i firebase
 - "Invalid service account" → Wrong JSON file, re-download from Firebase Console
 - "Permission denied" → Run `chmod 644 backend/firebase-service-account.json`
 
-## Step 5: Verify Backend is Running
+## Step 6: Verify Backend is Running
 
 ```bash
 # Check all containers are running
-docker-compose ps
+docker compose -f docker-compose.production.yml ps
 
 # Test backend health endpoint
-curl http://localhost:3000/health
+curl https://api.powermental.fit/health
 
 # Check recent backend logs
-docker-compose logs -f backend --tail=50
+docker compose -f docker-compose.production.yml logs backend --tail=50
 ```
 
 **Expected output:**
@@ -97,12 +132,12 @@ frontend  running
 {"status":"ok","timestamp":"2024-01-15T..."}
 ```
 
-## Step 6: Test Device Token Registration
+## Step 7: Test Device Token Registration
 
 From your Android phone, open Brian's app. Check backend logs:
 
 ```bash
-docker-compose logs -f backend
+docker compose -f docker-compose.production.yml logs -f backend
 ```
 
 **Expected output when app opens:**
@@ -115,16 +150,11 @@ docker-compose logs -f backend
 
 ### Problem: "Cannot find module firebase-admin"
 
-**Solution:**
-```bash
-cd ~/usdt-exchange
-docker-compose exec backend npm install firebase-admin
-docker-compose restart backend
-```
+**Solution:** Rebuild the Docker image with firebase-admin installed (see Step 3)
 
 ### Problem: "GOOGLE_APPLICATION_CREDENTIALS not set"
 
-**Solution:** Check docker-compose.yml has the environment variable under `backend:` service (not under `db:`)
+**Solution:** Check docker-compose.production.yml has the environment variable under `backend:` service
 
 ### Problem: "Invalid service account JSON"
 
@@ -138,11 +168,14 @@ docker-compose restart backend
 **Solution:**
 ```bash
 # Check detailed logs
-docker-compose logs backend
+docker compose -f docker-compose.production.yml logs backend
 
-# If needed, rebuild from scratch
-docker-compose down
-docker-compose up -d --build
+# Verify file permissions
+chmod 644 firebase-service-account.json
+
+# Pull latest image and restart
+docker compose -f docker-compose.production.yml pull backend
+docker compose -f docker-compose.production.yml up -d backend
 ```
 
 ## Next Steps
