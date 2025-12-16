@@ -71,7 +71,7 @@ export class NotificationService {
    */
   private static async checkForNewItems() {
     try {
-      const apiUrl = import.meta.env.VITE_MOBILE_API_URL || 'http://10.10.30.100:3000/api';
+      const apiUrl = import.meta.env.VITE_API_URL || '/api';
 
       if (this.userRole === 'brian') {
         await this.checkForBrian(apiUrl);
