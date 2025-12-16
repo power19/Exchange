@@ -21,6 +21,14 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
+    build: {
+      rollupOptions: {
+        external: [
+          // Externalize Capacitor push notifications - only used in native apps
+          '@capacitor/push-notifications'
+        ]
+      }
+    },
     define: {
       'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL),
       'import.meta.env.VITE_APP_DASHBOARD': JSON.stringify(env.VITE_APP_DASHBOARD),
