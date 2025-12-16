@@ -88,10 +88,12 @@ export default function MainDashboard() {
 
   const loadExpenses = async () => {
     try {
+      console.log('📊 Loading expenses...');
       const expensesRes = await api.getExpenses();
+      console.log('✅ Expenses loaded:', expensesRes.data?.length || 0, 'items');
       setExpenses(Array.isArray(expensesRes.data) ? expensesRes.data : []);
-    } catch (error) {
-      console.error('Error loading expenses:', error);
+    } catch (error: any) {
+      console.error('❌ Error loading expenses:', error?.response?.status, error?.response?.data || error?.message);
       setExpenses([]); // Ensure expenses is always an array
     }
   };
@@ -260,17 +262,12 @@ export default function MainDashboard() {
     try {
       await api.createExpense({ amount_usd, description, date });
       form.reset();
-
-      try {
-        await loadExpenses();
-      } catch (reloadError) {
-        console.error('Failed to reload expenses:', reloadError);
-      }
-
+      await loadExpenses();
       alert(`✅ Expense recorded successfully!\nAmount: $${amount_usd.toFixed(2)}`);
     } catch (error: any) {
       console.error('Expense error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to record expense'}`);
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to record expense';
+      alert(`❌ Error: ${errorMsg}\n\nPlease make sure you're logged in.`);
     }
   };
 
