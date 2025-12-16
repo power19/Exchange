@@ -72,6 +72,7 @@ export class NotificationService {
   private static async checkForNewItems() {
     try {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
+      console.log(`🔄 [${new Date().toLocaleTimeString()}] Checking for new items... Role: ${this.userRole}, First check: ${this.isFirstCheck}`);
 
       if (this.userRole === 'brian') {
         await this.checkForBrian(apiUrl);
@@ -82,8 +83,9 @@ export class NotificationService {
       }
 
       this.isFirstCheck = false;
+      console.log(`✅ [${new Date().toLocaleTimeString()}] Check completed`);
     } catch (error) {
-      console.error('Error checking for new items:', error);
+      console.error('❌ Error checking for new items:', error);
     }
   }
 
