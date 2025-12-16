@@ -29,6 +29,14 @@ export default function MainDashboard() {
     loadData();
     loadUSDTRequests();
     checkAuth();
+
+    // Initialize notifications (mobile only)
+    NotificationService.initialize('brian');
+
+    // Cleanup on unmount
+    return () => {
+      NotificationService.stopMonitoring();
+    };
   }, []);
 
   // Load expenses when switching to expenses tab
