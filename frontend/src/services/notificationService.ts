@@ -161,7 +161,7 @@ export class NotificationService {
             body: `${orders.length} new order${orders.length > 1 ? 's' : ''}: ${totalAmount.toLocaleString()} VES total`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) }, // Show immediately
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'new_order' }
@@ -192,7 +192,7 @@ export class NotificationService {
             body: `Brian sent you ${totalAmount.toFixed(2)} USDT`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) }, // Show immediately
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'new_transfer' }
@@ -223,7 +223,7 @@ export class NotificationService {
             body: `Order for ${customerName}: ${amount.toLocaleString()} ${orderType}`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'order_created', orderType }
@@ -254,7 +254,7 @@ export class NotificationService {
             body: `${customerName}: ${amount.toLocaleString()} ${orderType} → $${usdtSold.toFixed(2)} USDT sold`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'order_fulfilled', orderType }
@@ -285,7 +285,7 @@ export class NotificationService {
             body: `Request: $${amount.toFixed(2)} USDT - ${reason}`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'usdt_requested' }
@@ -316,7 +316,7 @@ export class NotificationService {
             body: `Brian approved your request: $${amount.toFixed(2)} USDT transferred`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'usdt_approved' }
@@ -347,7 +347,7 @@ export class NotificationService {
             body: `Your request for $${amount.toFixed(2)} was rejected${reason ? `: ${reason}` : ''}`,
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'usdt_rejected' }
@@ -376,7 +376,7 @@ export class NotificationService {
             body: 'You will receive alerts for new orders and USDT transfers',
             id: notificationId,
             schedule: { at: new Date(Date.now() + 100) },
-            sound: undefined,
+            sound: 'default',
             attachments: undefined,
             actionTypeId: '',
             extra: { type: 'test' }
