@@ -1,6 +1,18 @@
-import { PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
-import * as api from './api';
+import { registerDeviceToken } from './api';
+
+// Only import push notification types on native platforms to avoid build errors
+let PushNotifications: any;
+let Token: any;
+let PushNotificationSchema: any;
+
+if (Capacitor.isNativePlatform()) {
+  import('@capacitor/push-notifications').then((module) => {
+    PushNotifications = module.PushNotifications;
+    Token = module.Token;
+    PushNotificationSchema = module.PushNotificationSchema;
+  });
+}
 
 export class PushNotificationService {
   /**
@@ -14,6 +26,12 @@ export class PushNotificationService {
     }
 
     try {
+      // Wait for PushNotifications to be loaded
+      if (!PushNotifications) {
+        const module = await import('@capacitor/push-notifications');
+        PushNotifications = module.PushNotifications;
+      }
+
       // Request permission
       const permission = await PushNotifications.requestPermissions();
 
@@ -24,24 +42,24 @@ export class PushNotificationService {
         await PushNotifications.register();
 
         // Listen for registration success
-        PushNotifications.addListener('registration', async (token: Token) => {
+        PushNotifications.addListener('registration', async (token: any) => {
           console.log('📱 Device token:', token.value);
-          await this.registerDeviceToken(role, token.value);
+          await this.registerDeviceTokenWithBackend(role, token.value);
         });
 
         // Listen for registration errors
-        PushNotifications.addListener('registrationError', (error) => {
+        PushNotifications.addListener('registrationError', (error: any) => {
           console.error('❌ Push registration error:', error);
         });
 
         // Listen for push notifications received
-        PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+        PushNotifications.addListener('pushNotificationReceived', (notification: any) => {
           console.log('📩 Push notification received:', notification);
           // Notification is automatically displayed by the OS
         });
 
         // Listen for notification taps
-        PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+        PushNotifications.addListener('pushNotificationActionPerformed', (action: any) => {
           console.log('👆 Notification tapped:', action);
           // Handle notification tap (e.g., navigate to specific screen)
         });
@@ -49,7 +67,7 @@ export class PushNotificationService {
       } else {
         console.log('❌ Push notification permission denied');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Error initializing push notifications:', error);
     }
   }
@@ -57,9 +75,9 @@ export class PushNotificationService {
   /**
    * Register device token with backend
    */
-  private static async registerDeviceToken(role: 'brian' | 'dairimar' | 'patty', token: string): Promise<void> {
+  private static async registerDeviceTokenWithBackend(role: 'brian' | 'dairimar' | 'patty', token: string): Promise<void> {
     try {
-      const response = await api.api.post('/device-tokens/register', {
+      const response = await registerDeviceToken({
         user_role: role,
         device_token: token,
         device_id: Capacitor.getPlatform(),
@@ -67,7 +85,7 @@ export class PushNotificationService {
       });
 
       console.log('✅ Device token registered with backend:', response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Failed to register device token:', error);
     }
   }
@@ -79,9 +97,13 @@ export class PushNotificationService {
     if (!Capacitor.isNativePlatform()) return;
 
     try {
+      if (!PushNotifications) {
+        const module = await import('@capacitor/push-notifications');
+        PushNotifications = module.PushNotifications;
+      }
       // Remove all listeners
       await PushNotifications.removeAllListeners();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error unregistering push notifications:', error);
     }
   }

@@ -257,3 +257,9 @@ export const approveUSDTRequest = (id: number, notes?: string) =>
   api.post<USDTRequest>(`/usdt-requests/${id}/approve`, { notes });
 export const rejectUSDTRequest = (id: number, notes?: string) =>
   api.post<USDTRequest>(`/usdt-requests/${id}/reject`, { notes });
+
+// Device Tokens (Push Notifications)
+export const registerDeviceToken = (data: { user_role: string; device_token: string; device_id?: string; platform?: string }) =>
+  api.post('/device-tokens/register', data);
+export const unregisterDeviceToken = (data: { device_token: string }) =>
+  api.post('/device-tokens/unregister', data);
