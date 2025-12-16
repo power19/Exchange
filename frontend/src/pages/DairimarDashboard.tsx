@@ -172,9 +172,6 @@ export default function DairimarDashboard() {
     }
 
     try {
-      // Get order details before fulfilling
-      const order = pendingOrders.find(o => o.id === orderId);
-
       const response = await api.fulfillVESOrder(orderId, { exchange_rate });
       console.log('✅ Order fulfilled:', response.data);
 

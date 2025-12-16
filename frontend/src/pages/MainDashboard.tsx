@@ -208,10 +208,7 @@ export default function MainDashboard() {
     const exchange_rate = parseFloat(formData.get('exchange_rate') as string);
 
     try {
-      // Get order details before fulfilling
-      const order = pendingCOPOrders.find(o => o.id === orderId);
-
-      const response = await api.fulfillCOPOrder(orderId, { exchange_rate });
+      await api.fulfillCOPOrder(orderId, { exchange_rate });
 
       // Order fulfilled!
       setShowFulfillForm(null);
@@ -343,9 +340,6 @@ export default function MainDashboard() {
     }
 
     try {
-      // Get request details before rejecting
-      const request = usdtRequests.find(r => r.id === requestId);
-
       await api.rejectUSDTRequest(requestId, notes);
 
       alert('✅ USDT Request rejected');
