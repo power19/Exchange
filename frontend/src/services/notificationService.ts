@@ -1,5 +1,5 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
-import { CapacitorHttp } from '@capacitor/core';
+import { CapacitorHttp, Capacitor } from '@capacitor/core';
 
 export class NotificationService {
   private static checkInterval: number | null = null;
@@ -17,9 +17,11 @@ export class NotificationService {
   static async initialize(role: 'brian' | 'dairimar' | 'patty') {
     this.userRole = role;
 
-    // Check if running in Capacitor (mobile)
-    const isCapacitor = !!(window as any).Capacitor;
-    if (!isCapacitor) return;
+    // Only run on native mobile platforms (NOT web)
+    if (!Capacitor.isNativePlatform()) {
+      console.log('⚠️ Notifications disabled - not running on native platform');
+      return;
+    }
 
     try {
       // Request permission
@@ -414,8 +416,7 @@ export class NotificationService {
    */
   static async notifyOrderCreated(orderType: 'VES' | 'COP', amount: number, customerName: string) {
     try {
-      const isCapacitor = !!(window as any).Capacitor;
-      if (!isCapacitor) return;
+      if (!Capacitor.isNativePlatform()) return;
 
       const notificationId = Math.floor(Math.random() * 2147483647);
 
@@ -445,8 +446,7 @@ export class NotificationService {
    */
   static async notifyOrderFulfilled(orderType: 'VES' | 'COP', amount: number, customerName: string, usdtSold: number) {
     try {
-      const isCapacitor = !!(window as any).Capacitor;
-      if (!isCapacitor) return;
+      if (!Capacitor.isNativePlatform()) return;
 
       const notificationId = Math.floor(Math.random() * 2147483647);
 
@@ -476,8 +476,7 @@ export class NotificationService {
    */
   static async notifyUSDTRequested(amount: number, reason: string) {
     try {
-      const isCapacitor = !!(window as any).Capacitor;
-      if (!isCapacitor) return;
+      if (!Capacitor.isNativePlatform()) return;
 
       const notificationId = Math.floor(Math.random() * 2147483647);
 
@@ -507,8 +506,7 @@ export class NotificationService {
    */
   static async notifyUSDTTransferApproved(amount: number) {
     try {
-      const isCapacitor = !!(window as any).Capacitor;
-      if (!isCapacitor) return;
+      if (!Capacitor.isNativePlatform()) return;
 
       const notificationId = Math.floor(Math.random() * 2147483647);
 
@@ -538,8 +536,7 @@ export class NotificationService {
    */
   static async notifyUSDTRequestRejected(amount: number, reason?: string) {
     try {
-      const isCapacitor = !!(window as any).Capacitor;
-      if (!isCapacitor) return;
+      if (!Capacitor.isNativePlatform()) return;
 
       const notificationId = Math.floor(Math.random() * 2147483647);
 

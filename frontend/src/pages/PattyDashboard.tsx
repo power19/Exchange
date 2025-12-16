@@ -195,9 +195,6 @@ export default function PattyDashboard() {
       setFormData({ bank: '', customer_id: '', phone_number: '' });
       setPasteValue('');
 
-      // Show notification
-      await NotificationService.notifyOrderCreated(orderType, amount, customer_name);
-
       // Reload data to show new order
       await loadData();
 
