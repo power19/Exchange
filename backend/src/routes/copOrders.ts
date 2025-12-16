@@ -5,6 +5,7 @@ import { requirePattyOrBrian, requireBrian } from '../middleware/rbac';
 import { orderLimiter, writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 import { preventDuplicates } from '../middleware/idempotency';
+import { PushNotificationService } from '../services/pushNotificationService';
 
 const router = Router();
 
@@ -98,6 +99,10 @@ router.post('/', requirePattyOrBrian(), orderLimiter, preventDuplicates(), async
     );
 
     await client.query('COMMIT');
+
+    // Send push notification to Brian
+    await PushNotificationService.notifyNewCOPOrder(result.rows[0]);
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');
@@ -195,6 +200,10 @@ router.post('/:id/fulfill', requireBrian(), writeLimiter, async (req, res, next)
     );
 
     await client.query('COMMIT');
+
+    // Send push notification to Patty
+    await PushNotificationService.notifyCOPOrderFulfilled(result.rows[0]);
+
     res.json(result.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');

@@ -4,6 +4,7 @@ import { BalanceService } from '../services/balanceService';
 import { requireBrian, requireBrianOrDairimar } from '../middleware/rbac';
 import { writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
+import { PushNotificationService } from '../services/pushNotificationService';
 
 const router = Router();
 
@@ -59,6 +60,10 @@ router.post('/', requireBrian(), writeLimiter, async (req, res, next) => {
     );
 
     await client.query('COMMIT');
+
+    // Send push notification to Dairimar
+    await PushNotificationService.notifyUSDTTransfer(result.rows[0]);
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');

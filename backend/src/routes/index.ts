@@ -12,6 +12,7 @@ import { reportsRoutes } from './reports';
 import { auditLogRoutes } from './auditLogs';
 import { usdtRequestRoutes } from './usdtRequests';
 import { expensesRoutes } from './expenses';
+import deviceTokenRoutes from './deviceTokens';
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use('/exchange-rates', exchangeRatesRoutes);
 router.use('/reports', reportsRoutes);
 router.use('/audit-logs', auditLogRoutes);
 router.use('/usdt-requests', usdtRequestRoutes);
+router.use('/device-tokens', deviceTokenRoutes);
 
 export { router as apiRoutes };

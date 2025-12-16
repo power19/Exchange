@@ -5,6 +5,7 @@ import { requireDairimarOrBrian, requireBrian } from '../middleware/rbac';
 import { orderLimiter, writeLimiter, criticalLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 import { logCreate, logApprove, logReject } from '../utils/auditHelper';
+import { PushNotificationService } from '../services/pushNotificationService';
 
 const router = Router();
 
@@ -90,6 +91,9 @@ router.post('/', requireDairimarOrBrian(), orderLimiter, async (req, res, next) 
     const request = result.rows[0];
 
     await client.query('COMMIT');
+
+    // Send push notification to Brian
+    await PushNotificationService.notifyUSDTRequested(request);
 
     // Log the audit trail
     await logCreate(
@@ -199,6 +203,9 @@ router.post('/:id/approve', requireBrian(), criticalLimiter, async (req, res, ne
 
     await client.query('COMMIT');
 
+    // Send push notification to Dairimar
+    await PushNotificationService.notifyUSDTTransferApproved(transfer);
+
     // Log the audit trail for approval
     await logApprove(
       req,
@@ -280,6 +287,9 @@ router.post('/:id/reject', requireBrian(), writeLimiter, async (req, res, next) 
     const rejectedRequest = result.rows[0];
 
     await client.query('COMMIT');
+
+    // Send push notification to Dairimar
+    await PushNotificationService.notifyUSDTRequestRejected(rejectedRequest);
 
     // Log the audit trail
     await logReject(

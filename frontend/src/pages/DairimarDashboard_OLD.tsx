@@ -16,7 +16,7 @@ export default function DairimarDashboard() {
     loadData();
 
     // Initialize notifications (mobile only)
-    NotificationService.initialize();
+    NotificationService.initialize('dairimar');
 
     // Cleanup on unmount
     return () => {

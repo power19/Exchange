@@ -33,9 +33,16 @@ export default function MainDashboard() {
     // Initialize notifications (mobile only)
     NotificationService.initialize('brian');
 
+    // Refresh USDT requests and orders every 30 seconds
+    const refreshInterval = setInterval(() => {
+      loadUSDTRequests();
+      loadData(); // Also refresh pending orders
+    }, 30000);
+
     // Cleanup on unmount
     return () => {
       NotificationService.stopMonitoring();
+      clearInterval(refreshInterval);
     };
   }, []);
 
@@ -201,20 +208,7 @@ export default function MainDashboard() {
     const exchange_rate = parseFloat(formData.get('exchange_rate') as string);
 
     try {
-      // Get order details before fulfilling
-      const order = pendingCOPOrders.find(o => o.id === orderId);
-
-      const response = await api.fulfillCOPOrder(orderId, { exchange_rate });
-
-      // Show notification
-      if (order && response.data.usdt_sold) {
-        await NotificationService.notifyOrderFulfilled(
-          'COP',
-          parseFloat(order.amount_cop as any),
-          order.customer_name,
-          response.data.usdt_sold
-        );
-      }
+      await api.fulfillCOPOrder(orderId, { exchange_rate });
 
       // Order fulfilled!
       setShowFulfillForm(null);
@@ -317,9 +311,6 @@ export default function MainDashboard() {
     try {
       const response = await api.approveUSDTRequest(requestId, notes);
 
-      // Show notification to Dairimar
-      await NotificationService.notifyUSDTTransferApproved(response.data.amount_usdt);
-
       alert(`✅ USDT Request approved!\n\nAmount: ${response.data.amount_usdt} USDT transferred to Dairimar`);
 
       // Try to reload data
@@ -349,18 +340,7 @@ export default function MainDashboard() {
     }
 
     try {
-      // Get request details before rejecting
-      const request = usdtRequests.find(r => r.id === requestId);
-
       await api.rejectUSDTRequest(requestId, notes);
-
-      // Show notification to Dairimar
-      if (request) {
-        await NotificationService.notifyUSDTRequestRejected(
-          parseFloat(request.amount_usdt as any),
-          notes
-        );
-      }
 
       alert('✅ USDT Request rejected');
       setShowRejectForm(null);
@@ -465,9 +445,6 @@ export default function MainDashboard() {
           account_number
         });
 
-        // Show notification
-        await NotificationService.notifyOrderCreated('VES', amount_ves, customer_name);
-
         alert(`✅ Private VES order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_ves.toLocaleString()} VES`);
       } else {
         const amount_cop = parseFloat(formData.get('amount_cop') as string);
@@ -479,9 +456,6 @@ export default function MainDashboard() {
           customer_id,
           account_number
         });
-
-        // Show notification
-        await NotificationService.notifyOrderCreated('COP', amount_cop, customer_name);
 
         alert(`✅ Private COP order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_cop.toLocaleString()} COP`);
       }

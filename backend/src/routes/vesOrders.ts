@@ -6,6 +6,7 @@ import { orderLimiter, writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
 import { preventDuplicates } from '../middleware/idempotency';
 import { logCreate, logFulfill, logUpdate, logCancel } from '../utils/auditHelper';
+import { PushNotificationService } from '../services/pushNotificationService';
 
 const router = Router();
 
@@ -99,6 +100,10 @@ router.post('/', requirePattyOrBrian(), orderLimiter, preventDuplicates(), async
     );
 
     await client.query('COMMIT');
+
+    // Send push notification to Brian and Dairimar
+    await PushNotificationService.notifyNewVESOrder(result.rows[0]);
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');
@@ -212,6 +217,9 @@ router.post('/:id/fulfill', requireDairimarOrBrian(), writeLimiter, async (req, 
       },
       `VES order fulfilled: ${fulfilledOrder.amount_ves} VES at rate ${fulfilledOrder.exchange_rate} = ${fulfilledOrder.usdt_sold} USDT`
     );
+
+    // Send push notification to Brian and Patty
+    await PushNotificationService.notifyVESOrderFulfilled(fulfilledOrder);
 
     res.json(fulfilledOrder);
   } catch (error) {

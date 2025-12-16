@@ -129,6 +129,18 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     notes TEXT
 );
 
+-- Device tokens table for push notifications
+CREATE TABLE IF NOT EXISTS device_tokens (
+    id SERIAL PRIMARY KEY,
+    user_role VARCHAR(20) NOT NULL CHECK (user_role IN ('brian', 'dairimar', 'patty')),
+    device_token TEXT NOT NULL UNIQUE,
+    device_id TEXT,
+    platform VARCHAR(20) CHECK (platform IN ('android', 'ios')),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_used_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN NOT NULL DEFAULT true
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_table_record ON audit_logs(table_name, record_id);
@@ -145,3 +157,4 @@ CREATE INDEX IF NOT EXISTS idx_transfers_date ON transfers(date);
 CREATE INDEX IF NOT EXISTS idx_conversions_date ON conversions(date);
 CREATE INDEX IF NOT EXISTS idx_exchange_rates_currency_active ON exchange_rates(currency, is_active) WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_exchange_rates_created_at ON exchange_rates(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_device_tokens_user_role ON device_tokens(user_role) WHERE is_active = true;

@@ -68,9 +68,15 @@ export default function PattyDashboard() {
     // Initialize notifications (mobile only)
     NotificationService.initialize('patty');
 
+    // Refresh orders and balances every 30 seconds
+    const refreshInterval = setInterval(() => {
+      loadData();
+    }, 30000);
+
     // Cleanup on unmount
     return () => {
       NotificationService.stopMonitoring();
+      clearInterval(refreshInterval);
     };
   }, []);
 
@@ -188,9 +194,6 @@ export default function PattyDashboard() {
       form.reset();
       setFormData({ bank: '', customer_id: '', phone_number: '' });
       setPasteValue('');
-
-      // Show notification
-      await NotificationService.notifyOrderCreated(orderType, amount, customer_name);
 
       // Reload data to show new order
       await loadData();
