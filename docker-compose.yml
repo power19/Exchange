@@ -30,7 +30,7 @@ services:
       DATABASE_URL: postgresql://postgres:postgres123@db:5432/usdt_exchange
       JWT_SECRET: ${JWT_SECRET:-change-this-secret-in-production}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
-      CORS_ORIGINS: "http://localhost,http://localhost:80,http://10.10.30.100,http://10.10.30.100:80"
+      CORS_ORIGINS: "https://powermental.fit,https://pato.powermental.fit,https://dai.powermental.fit,http://localhost,http://localhost:80"
       GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-service-account.json
     volumes:
       - ./firebase-service-account.json:/app/firebase-service-account.json:ro
