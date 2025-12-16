@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
-import { NotificationService } from '../services/notificationService';
+import { PushNotificationService } from '../services/pushNotificationService';
 import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
@@ -30,8 +30,8 @@ export default function MainDashboard() {
     loadUSDTRequests();
     checkAuth();
 
-    // Initialize notifications (mobile only)
-    NotificationService.initialize('brian');
+    // Initialize push notifications (mobile only)
+    PushNotificationService.initialize('brian');
 
     // Refresh USDT requests and orders every 30 seconds
     const refreshInterval = setInterval(() => {
@@ -41,7 +41,7 @@ export default function MainDashboard() {
 
     // Cleanup on unmount
     return () => {
-      NotificationService.stopMonitoring();
+      PushNotificationService.unregister();
       clearInterval(refreshInterval);
     };
   }, []);

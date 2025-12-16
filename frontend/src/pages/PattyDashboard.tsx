@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
-import { NotificationService } from '../services/notificationService';
+import { PushNotificationService } from '../services/pushNotificationService';
 import { Card, StatCard, Button } from '../components/modern';
 import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
@@ -65,8 +65,8 @@ export default function PattyDashboard() {
   useEffect(() => {
     loadData();
 
-    // Initialize notifications (mobile only)
-    NotificationService.initialize('patty');
+    // Initialize push notifications (mobile only)
+    PushNotificationService.initialize('patty');
 
     // Refresh orders and balances every 30 seconds
     const refreshInterval = setInterval(() => {
@@ -75,7 +75,7 @@ export default function PattyDashboard() {
 
     // Cleanup on unmount
     return () => {
-      NotificationService.stopMonitoring();
+      PushNotificationService.unregister();
       clearInterval(refreshInterval);
     };
   }, []);
