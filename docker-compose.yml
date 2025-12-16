@@ -31,6 +31,9 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-this-secret-in-production}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
       CORS_ORIGINS: "http://localhost,http://localhost:80,http://10.10.30.100,http://10.10.30.100:80"
+      GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-service-account.json
+    volumes:
+      - ./backend/firebase-service-account.json:/app/firebase-service-account.json:ro
     depends_on:
       db:
         condition: service_healthy
