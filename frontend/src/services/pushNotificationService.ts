@@ -1,19 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { registerDeviceToken } from './api';
 
-// Only import push notification types on native platforms to avoid build errors
-let PushNotifications: any;
-let Token: any;
-let PushNotificationSchema: any;
-
-if (Capacitor.isNativePlatform()) {
-  import('@capacitor/push-notifications').then((module) => {
-    PushNotifications = module.PushNotifications;
-    Token = module.Token;
-    PushNotificationSchema = module.PushNotificationSchema;
-  });
-}
-
 export class PushNotificationService {
   /**
    * Initialize push notifications for the given user role
@@ -26,11 +13,9 @@ export class PushNotificationService {
     }
 
     try {
-      // Wait for PushNotifications to be loaded
-      if (!PushNotifications) {
-        const module = await import('@capacitor/push-notifications');
-        PushNotifications = module.PushNotifications;
-      }
+      // Dynamically import push notifications only on native platforms
+      // @ts-ignore - Module only available on native platforms
+      const { PushNotifications } = await import('@capacitor/push-notifications');
 
       // Request permission
       const permission = await PushNotifications.requestPermissions();
@@ -97,10 +82,8 @@ export class PushNotificationService {
     if (!Capacitor.isNativePlatform()) return;
 
     try {
-      if (!PushNotifications) {
-        const module = await import('@capacitor/push-notifications');
-        PushNotifications = module.PushNotifications;
-      }
+      // @ts-ignore - Module only available on native platforms
+      const { PushNotifications } = await import('@capacitor/push-notifications');
       // Remove all listeners
       await PushNotifications.removeAllListeners();
     } catch (error: any) {
