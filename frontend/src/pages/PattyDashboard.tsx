@@ -64,6 +64,14 @@ export default function PattyDashboard() {
 
   useEffect(() => {
     loadData();
+
+    // Initialize notifications (mobile only)
+    NotificationService.initialize('patty');
+
+    // Cleanup on unmount
+    return () => {
+      NotificationService.stopMonitoring();
+    };
   }, []);
 
   const loadData = async () => {
