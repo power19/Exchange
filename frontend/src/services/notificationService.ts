@@ -162,10 +162,10 @@ export class NotificationService {
     } else {
       const newRequests = requests.filter((req: any) => !this.notifiedUSDTRequestIds.has(req.id));
       if (newRequests.length > 0) {
-        newRequests.forEach((req: any) => {
-          this.notifyUSDTRequested(req.amount_usdt, req.reason);
+        for (const req of newRequests) {
+          await this.notifyUSDTRequested(req.amount_usdt, req.reason);
           this.notifiedUSDTRequestIds.add(req.id);
-        });
+        }
       }
     }
   }
