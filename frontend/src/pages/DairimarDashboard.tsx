@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
-import { NotificationService } from '../services/notificationService';
+import { PushNotificationService } from '../services/pushNotificationService';
 import DailyReportCard from '../components/DailyReportCard';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
@@ -27,8 +27,8 @@ export default function DairimarDashboard() {
   useEffect(() => {
     loadData();
 
-    // Initialize notifications (mobile only)
-    NotificationService.initialize('dairimar');
+    // Initialize push notifications (mobile only)
+    PushNotificationService.initialize('dairimar');
 
     // Refresh pending orders and balances every 30 seconds
     const refreshInterval = setInterval(() => {
@@ -37,7 +37,7 @@ export default function DairimarDashboard() {
 
     // Cleanup on unmount
     return () => {
-      NotificationService.stopMonitoring();
+      PushNotificationService.unregister();
       clearInterval(refreshInterval);
     };
   }, []);
@@ -228,13 +228,7 @@ export default function DairimarDashboard() {
               >
                 🔄 {loading ? 'Refreshing...' : 'Refresh'}
               </Button>
-              <Button
-                onClick={() => NotificationService.showTestNotification()}
-                variant="ghost"
-                size="sm"
-              >
-                🔔 Test
-              </Button>
+              {/* Push notifications are sent from server, no test button needed */}
             </div>
           </div>
         </div>
