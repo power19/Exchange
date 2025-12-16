@@ -68,9 +68,15 @@ export default function PattyDashboard() {
     // Initialize notifications (mobile only)
     NotificationService.initialize('patty');
 
+    // Refresh orders and balances every 30 seconds
+    const refreshInterval = setInterval(() => {
+      loadData();
+    }, 30000);
+
     // Cleanup on unmount
     return () => {
       NotificationService.stopMonitoring();
+      clearInterval(refreshInterval);
     };
   }, []);
 

@@ -33,9 +33,16 @@ export default function MainDashboard() {
     // Initialize notifications (mobile only)
     NotificationService.initialize('brian');
 
+    // Refresh USDT requests and orders every 30 seconds
+    const refreshInterval = setInterval(() => {
+      loadUSDTRequests();
+      loadData(); // Also refresh pending orders
+    }, 30000);
+
     // Cleanup on unmount
     return () => {
       NotificationService.stopMonitoring();
+      clearInterval(refreshInterval);
     };
   }, []);
 

@@ -30,9 +30,15 @@ export default function DairimarDashboard() {
     // Initialize notifications (mobile only)
     NotificationService.initialize('dairimar');
 
+    // Refresh pending orders and balances every 30 seconds
+    const refreshInterval = setInterval(() => {
+      loadData();
+    }, 30000);
+
     // Cleanup on unmount
     return () => {
       NotificationService.stopMonitoring();
+      clearInterval(refreshInterval);
     };
   }, []);
 
