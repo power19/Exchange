@@ -7,8 +7,8 @@ Follow these steps to configure Firebase push notifications on your VPS.
 From your PC (where you have the firebase-service-account.json file):
 
 ```bash
-# Upload the file to VPS backend directory
-scp firebase-service-account.json admin@powermental.fit:~/usdt-exchange/backend/
+# Upload the file to VPS usdt-exchange directory
+scp firebase-service-account.json admin@powermental.fit:~/usdt-exchange/
 ```
 
 **Expected output:**
@@ -37,14 +37,14 @@ cd ~/usdt-exchange
 grep -A 2 "GOOGLE_APPLICATION_CREDENTIALS" docker-compose.yml
 
 # Check firebase-service-account.json exists
-ls -lh backend/firebase-service-account.json
+ls -lh firebase-service-account.json
 ```
 
 **Expected output:**
 ```
       GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-service-account.json
     volumes:
-      - ./backend/firebase-service-account.json:/app/firebase-service-account.json:ro
+      - ./firebase-service-account.json:/app/firebase-service-account.json:ro
 
 -rw-r--r-- 1 admin admin 2.3K Dec 16 firebase-service-account.json
 ```
@@ -139,6 +139,9 @@ docker-compose restart backend
 ```bash
 # Check detailed logs
 docker-compose logs backend
+
+# Verify file permissions
+chmod 644 firebase-service-account.json
 
 # If needed, rebuild from scratch
 docker-compose down
