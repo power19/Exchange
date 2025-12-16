@@ -39,6 +39,9 @@ services:
       VIRTUAL_HOST: api.powermental.fit
       VIRTUAL_PORT: 3000
       VIRTUAL_PATH: /
+      GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-service-account.json
+    volumes:
+      - ./firebase-service-account.json:/app/firebase-service-account.json:ro
     command: sh -c "npm run migrate && npm start"
     depends_on:
       db:
