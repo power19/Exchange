@@ -3,32 +3,8 @@ import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
 import { Card, StatCard, Button } from '../components/modern';
 import OrdersReportCard from '../components/OrdersReportCard';
+import { parseCustomerData, formatParsedData, type ParsedCustomerData } from '../utils/customerDataParser';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
-
-// Venezuelan bank codes mapping
-const BANK_CODES: Record<string, string> = {
-  '0102': 'Banco de Venezuela',
-  '0104': 'Banco Venezolano de Crédito',
-  '0105': 'Mercantil',
-  '0108': 'Banco Provincial (BBVA)',
-  '0114': 'Bancaribe',
-  '0115': 'Banco Exterior',
-  '0128': 'Banco Caroní',
-  '0134': 'Banesco',
-  '0137': 'Banco Sofitasa',
-  '0138': 'Banco Plaza',
-  '0151': 'BFC Banco Fondo Común',
-  '0156': '100% Banco',
-  '0163': 'Banco del Tesoro',
-  '0169': 'Mi Banco',
-  '0171': 'Banco Activo',
-  '0172': 'Bancamiga',
-  '0174': 'Banplus',
-  '0175': 'Banco Bicentenario',
-  '0177': 'BANFANB',
-  '0191': 'Banco Nacional de Crédito (BNC)',
-  '0601': 'Instituto Municipal de Crédito Popular',
-};
 
 // Bank list for Venezuela and Colombia
 const BANKS = [
@@ -59,6 +35,8 @@ export default function PattyDashboard() {
   });
 
   const [pasteValue, setPasteValue] = useState('');
+  const [parsedData, setParsedData] = useState<ParsedCustomerData | null>(null);
+  const [showParsePreview, setShowParsePreview] = useState(false);
   const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'reports'>('dashboard');
 
@@ -126,30 +104,35 @@ export default function PattyDashboard() {
     }
   };
 
-  const handleQuickPaste = (value: string) => {
-    setPasteValue(value);
-
-    // Remove any spaces or special characters
-    const cleaned = value.replace(/\s+/g, '');
-
-    // Expected format: 4 digits bank code + 8 digits ID + 11 digits phone (total 23)
-    if (cleaned.length === 23 && /^\d+$/.test(cleaned)) {
-      const bankCode = cleaned.substring(0, 4);
-      const idNumber = cleaned.substring(4, 12);
-      const phoneNumber = cleaned.substring(12, 23);
-
-      const bankName = BANK_CODES[bankCode] || '';
-
-      setFormData({
-        bank: bankName,
-        customer_id: idNumber,
-        phone_number: phoneNumber
-      });
-
-      alert(`✅ Auto-filled!\nBank: ${bankName || 'Unknown code: ' + bankCode}\nID: ${idNumber}\nPhone: ${phoneNumber}`);
-    } else if (cleaned.length > 0) {
-      alert(`❌ Invalid format. Expected 23 digits.\nReceived: ${cleaned.length} characters\n\nFormat: [4-digit bank code][8-digit ID][11-digit phone]`);
+  const handleParse = () => {
+    if (!pasteValue.trim()) {
+      alert('Please paste customer data first');
+      return;
     }
+
+    const parsed = parseCustomerData(pasteValue);
+    setParsedData(parsed);
+    setShowParsePreview(true);
+  };
+
+  const handleApplyParsedData = () => {
+    if (!parsedData) return;
+
+    setFormData({
+      bank: parsedData.bank || '',
+      customer_id: parsedData.customer_id || '',
+      phone_number: parsedData.phone_number || ''
+    });
+
+    setShowParsePreview(false);
+    alert('✅ Data auto-filled! You can edit the fields before submitting.');
+  };
+
+  const handleClearPaste = () => {
+    setPasteValue('');
+    setParsedData(null);
+    setShowParsePreview(false);
+    setFormData({ bank: '', customer_id: '', phone_number: '' });
   };
 
   const handleSubmitOrder = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -194,6 +177,8 @@ export default function PattyDashboard() {
       form.reset();
       setFormData({ bank: '', customer_id: '', phone_number: '' });
       setPasteValue('');
+      setParsedData(null);
+      setShowParsePreview(false);
 
       // Reload data to show new order
       await loadData();
@@ -398,6 +383,8 @@ export default function PattyDashboard() {
                 setOrderType('VES');
                 setFormData({ bank: '', customer_id: '', phone_number: '' });
                 setPasteValue('');
+                setParsedData(null);
+                setShowParsePreview(false);
               }}
               variant={orderType === 'VES' ? 'primary' : 'secondary'}
               size="md"
@@ -409,6 +396,8 @@ export default function PattyDashboard() {
                 setOrderType('COP');
                 setFormData({ bank: '', customer_id: '', phone_number: '' });
                 setPasteValue('');
+                setParsedData(null);
+                setShowParsePreview(false);
               }}
               variant={orderType === 'COP' ? 'success' : 'secondary'}
               size="md"
@@ -417,36 +406,84 @@ export default function PattyDashboard() {
             </Button>
           </div>
 
-          {/* Quick Paste Feature (VES only) */}
-          {orderType === 'VES' && (
-            <Card className="bg-cyan-900/30 border-2 border-cyan-500/50 mb-6">
-              <h3 className="text-sm font-semibold text-cyan-300 mb-2">⚡ Quick Paste</h3>
-              <p className="text-xs text-cyan-200 mb-4">
-                Paste format: [Bank Code][ID][Phone] (23 digits)
-                <br />
-                Example: 01023015990104122030300
-              </p>
+          {/* Smart Parser - Works for both VES and COP */}
+          <Card className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border-2 border-cyan-500/50 mb-6">
+            <h3 className="text-lg font-semibold text-cyan-300 mb-2">🤖 Smart Customer Data Parser</h3>
+            <p className="text-sm text-cyan-200 mb-4">
+              Paste customer data in ANY format! The AI will extract phone, ID, and bank info.
+              <br />
+              <span className="text-xs text-gray-400">
+                Examples: "04121234567 30159901 0102" • "CI: 12345678 Tel: 04141234567 Banesco" • "0108/22323587/04120535855"
+              </span>
+            </p>
+
+            {/* Paste Input */}
+            <div className="space-y-3">
+              <textarea
+                value={pasteValue}
+                onChange={(e) => setPasteValue(e.target.value)}
+                placeholder="Paste customer payment info here...&#10;&#10;Examples:&#10;• 16404830 04163530414 0102&#10;• CI: 12591337 Teléfono: 04146109044 Banco provincial&#10;• 0108/22323587/04120535855&#10;• 04243413600 24375975 Venezuela"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 min-h-[100px] font-mono text-sm"
+              />
+
+              {/* Action Buttons */}
               <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={pasteValue}
-                  onChange={(e) => handleQuickPaste(e.target.value)}
-                  placeholder="Paste customer info here..."
-                  className="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                />
                 <Button
-                  onClick={() => {
-                    setPasteValue('');
-                    setFormData({ bank: '', customer_id: '', phone_number: '' });
-                  }}
+                  onClick={handleParse}
+                  variant="primary"
+                  size="md"
+                  disabled={!pasteValue.trim()}
+                >
+                  🔍 Parse Data
+                </Button>
+                <Button
+                  onClick={handleClearPaste}
                   variant="secondary"
                   size="md"
                 >
                   Clear
                 </Button>
               </div>
-            </Card>
-          )}
+
+              {/* Preview Parsed Data */}
+              {showParsePreview && parsedData && (
+                <div className="bg-gray-800/50 border border-cyan-500/30 rounded-lg p-4 mt-4">
+                  <h4 className="text-sm font-semibold text-cyan-400 mb-3">📋 Extracted Data:</h4>
+                  <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono mb-4">
+                    {formatParsedData(parsedData)}
+                  </pre>
+
+                  {/* Show warnings for low confidence */}
+                  {(parsedData.confidence.phone < 70 || parsedData.confidence.id < 70 || parsedData.confidence.bank < 70) && (
+                    <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-lg p-3 mb-3">
+                      <p className="text-xs text-yellow-300">
+                        ⚠️ Some fields have low confidence. Please verify the auto-filled data before submitting.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Apply Button */}
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={handleApplyParsedData}
+                      variant="success"
+                      size="sm"
+                      fullWidth
+                    >
+                      ✅ Auto-Fill Form
+                    </Button>
+                    <Button
+                      onClick={() => setShowParsePreview(false)}
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Card>
 
           <form onSubmit={handleSubmitOrder} className="space-y-4">
             <div>
