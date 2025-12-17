@@ -69,13 +69,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
 }
 
-apply from: 'capacitor.build.gradle'
+// Apply google-services plugin (must be after dependencies)
+apply plugin: 'com.google.gms.google-services'
 
-try {
-    def servicesJSON = file('google-services.json')
-    if (servicesJSON.text) {
-        apply plugin: 'com.google.gms.google-services'
-    }
-} catch(Exception e) {
-    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
-}
+apply from: 'capacitor.build.gradle'

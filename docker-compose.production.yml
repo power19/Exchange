@@ -52,7 +52,7 @@ services:
     container_name: usdt-frontend
     restart: unless-stopped
     volumes:
-      - ./frontend-dist:/usr/share/nginx/html:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
     environment:
       VIRTUAL_HOST: main.powermental.fit,dai.powermental.fit,patty.powermental.fit
 
