@@ -396,8 +396,8 @@ export default function DairimarDashboard() {
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {/* Action Button */}
+        <div className="mb-8">
           <Button
             onClick={() => setShowConvertForm(true)}
             variant="primary"
@@ -406,57 +406,7 @@ export default function DairimarDashboard() {
           >
             Convert USDT to VES
           </Button>
-          <Button
-            onClick={() => setShowUSDTRequestForm(true)}
-            variant="success"
-            fullWidth
-            icon={<>📨</>}
-          >
-            Request USDT from Brian
-          </Button>
         </div>
-
-        {/* USDT Requests Section */}
-        {usdtRequests.length > 0 && (
-          <Card className="mb-8">
-            <h3 className="text-xl font-bold mb-4">My USDT Requests</h3>
-            <div className="space-y-3">
-              {usdtRequests.map((request) => (
-                <div
-                  key={request.id}
-                  className="bg-[#151932] rounded-lg p-4 border border-gray-700"
-                >
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-xl font-bold text-cyan-400">
-                          {Number(request.amount_usdt).toFixed(2)} USDT
-                        </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(request.status)}`}>
-                          {request.status}
-                        </span>
-                      </div>
-                      <p className="text-gray-300 text-sm mb-1">{request.reason}</p>
-                      <p className="text-gray-500 text-xs">
-                        Requested: {new Date(request.date_requested).toLocaleDateString()}
-                      </p>
-                      {request.date_resolved && (
-                        <p className="text-gray-500 text-xs">
-                          Resolved: {new Date(request.date_resolved).toLocaleDateString()}
-                        </p>
-                      )}
-                      {request.notes && (
-                        <p className="text-gray-400 text-sm mt-2 italic">
-                          Note: {request.notes}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        )}
 
         {/* Pending Orders Alert */}
         {shortfall && (
