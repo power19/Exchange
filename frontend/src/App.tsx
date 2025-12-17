@@ -4,6 +4,7 @@ import MainDashboard from './pages/MainDashboard'
 import PattyDashboard from './pages/PattyDashboard'
 import DairimarDashboard from './pages/DairimarDashboard'
 import ModernDashboardExample from './pages/ModernDashboardExample'
+import { PushNotificationService } from './services/pushNotificationService'
 
 function App() {
   const [currentDashboard, setCurrentDashboard] = useState<'main' | 'patty' | 'dairimar'>('main');
@@ -29,14 +30,17 @@ function App() {
     if (envDashboard === 'patty') {
       console.log(`✅ Using patty dashboard (from env var)`);
       setCurrentDashboard('patty');
+      PushNotificationService.initialize('patty');
       return;
     } else if (envDashboard === 'dairimar') {
       console.log(`✅ Using dairimar dashboard (from env var)`);
       setCurrentDashboard('dairimar');
+      PushNotificationService.initialize('dairimar');
       return;
     } else if (envDashboard === 'brian' || envDashboard === 'main') {
       console.log(`✅ Using main dashboard (from env var)`);
       setCurrentDashboard('main');
+      PushNotificationService.initialize('brian');
       return;
     }
 
@@ -46,12 +50,15 @@ function App() {
     if (hostname.startsWith('pato.') || hostname.startsWith('patty.')) {
       console.log('✅ Using patty dashboard (from hostname)');
       setCurrentDashboard('patty');
+      PushNotificationService.initialize('patty');
     } else if (hostname.startsWith('dai.')) {
       console.log('✅ Using dairimar dashboard (from hostname)');
       setCurrentDashboard('dairimar');
+      PushNotificationService.initialize('dairimar');
     } else {
       console.log('✅ Using main dashboard (default)');
       setCurrentDashboard('main');
+      PushNotificationService.initialize('brian');
     }
   }, []);
 
