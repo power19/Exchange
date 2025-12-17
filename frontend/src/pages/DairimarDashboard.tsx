@@ -22,7 +22,7 @@ export default function DairimarDashboard() {
   const [useCustomRate, setUseCustomRate] = useState(false);
   const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
   const [completedDate, setCompletedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [mainTab, setMainTab] = useState<'dashboard' | 'reports'>('dashboard');
+  const [mainTab, setMainTab] = useState<'dashboard' | 'reports' | 'requests'>('dashboard');
 
   useEffect(() => {
     loadData();
@@ -258,6 +258,16 @@ export default function DairimarDashboard() {
             >
               📈 Reports
             </button>
+            <button
+              onClick={() => setMainTab('requests')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                mainTab === 'requests'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              💵 USDT Requests {usdtRequests.length > 0 && `(${usdtRequests.length})`}
+            </button>
           </div>
         </div>
 
@@ -268,6 +278,70 @@ export default function DairimarDashboard() {
             <div className="mb-8">
               <DailyReportCard />
             </div>
+          </>
+        )}
+
+        {/* USDT Requests Tab Content */}
+        {mainTab === 'requests' && (
+          <>
+            <div className="mb-6">
+              <Button
+                onClick={() => setShowUSDTRequestForm(true)}
+                variant="success"
+                fullWidth
+              >
+                💵 Request USDT from Brian
+              </Button>
+            </div>
+
+            {usdtRequests.length === 0 ? (
+              <Card className="text-center py-12">
+                <p className="text-gray-400 text-lg mb-4">No USDT requests yet</p>
+                <p className="text-gray-500 text-sm">
+                  Click the button above to request USDT from Brian when you need more balance.
+                </p>
+              </Card>
+            ) : (
+              <Card>
+                <h3 className="text-2xl font-bold mb-6">My USDT Requests</h3>
+                <div className="space-y-4">
+                  {usdtRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="bg-[#151932] rounded-lg p-5 border border-gray-700"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-2xl font-bold text-cyan-400">
+                              {Number(request.amount_usdt).toFixed(2)} USDT
+                            </span>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(request.status)}`}>
+                              {request.status}
+                            </span>
+                          </div>
+                          <p className="text-gray-300 mb-2">{request.reason}</p>
+                          <p className="text-gray-500 text-sm">
+                            Requested: {new Date(request.date_requested).toLocaleDateString()} at {new Date(request.date_requested).toLocaleTimeString()}
+                          </p>
+                          {request.date_resolved && (
+                            <p className="text-gray-500 text-sm">
+                              Resolved: {new Date(request.date_resolved).toLocaleDateString()} at {new Date(request.date_resolved).toLocaleTimeString()}
+                            </p>
+                          )}
+                          {request.notes && (
+                            <div className="mt-3 p-3 bg-blue-900/20 rounded-lg border border-blue-500/30">
+                              <p className="text-blue-300 text-sm font-medium mb-1">Brian's Response:</p>
+                              <p className="text-gray-300">{request.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
           </>
         )}
 
