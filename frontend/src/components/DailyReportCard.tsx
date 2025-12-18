@@ -131,29 +131,20 @@ export default function DailyReportCard() {
       <div className="mt-4 pt-4 border-t grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
         <div>
           <p className="text-gray-600">Purchases</p>
-          <p className="font-semibold">
-            {report.purchases.count > 0
-              ? `${report.purchases.count} transaction${report.purchases.count > 1 ? 's' : ''} • ${report.purchases.total_usdt.toFixed(2)} USDT`
-              : <span className="text-gray-400">No purchases</span>
-            }
+          <p className="font-semibold text-gray-900">
+            {report.purchases.count} • {report.purchases.total_usdt.toFixed(2)} USDT
           </p>
         </div>
         <div>
           <p className="text-gray-600">Transfers</p>
-          <p className="font-semibold">
-            {report.transfers.count > 0
-              ? `${report.transfers.count} transfer${report.transfers.count > 1 ? 's' : ''} • ${report.transfers.total_usdt.toFixed(2)} USDT`
-              : <span className="text-gray-400">No transfers</span>
-            }
+          <p className="font-semibold text-gray-900">
+            {report.transfers.count} • {report.transfers.total_usdt.toFixed(2)} USDT
           </p>
         </div>
         <div>
           <p className="text-gray-600">Conversions</p>
-          <p className="font-semibold">
-            {report.conversions.count > 0
-              ? `${report.conversions.count} conversion${report.conversions.count > 1 ? 's' : ''} • ${report.conversions.total_usdt.toFixed(2)} USDT → ${Number(report.conversions.total_ves).toLocaleString()} VES`
-              : <span className="text-gray-400">No conversions</span>
-            }
+          <p className="font-semibold text-gray-900">
+            {report.conversions.count} • {report.conversions.total_usdt.toFixed(2)} USDT → {Number(report.conversions.total_ves).toLocaleString()} VES
           </p>
         </div>
       </div>
