@@ -4,7 +4,7 @@ import { Balances, ProfitData } from '../types';
 export class BalanceService {
   /**
    * Calculate Brian's USDT balance
-   * Formula: totalPurchased - transferredToDai - soldCOP
+   * Formula: totalPurchased - transferredToDai - soldCOP + adjustments
    */
   static async getBrianBalance(): Promise<number> {
     const client = await pool.connect();
@@ -29,7 +29,15 @@ export class BalanceService {
       );
       const totalCOPSold = parseFloat(copSoldResult.rows[0].total);
 
-      return totalPurchased - totalTransferred - totalCOPSold;
+      // Balance adjustments for Brian's USDT
+      const adjustmentsResult = await client.query(
+        `SELECT COALESCE(SUM(adjustment_amount), 0) as total
+         FROM balance_adjustments
+         WHERE account = 'brian' AND currency = 'USDT'`
+      );
+      const adjustments = parseFloat(adjustmentsResult.rows[0].total);
+
+      return totalPurchased - totalTransferred - totalCOPSold + adjustments;
     } finally {
       client.release();
     }
@@ -37,7 +45,7 @@ export class BalanceService {
 
   /**
    * Calculate Dairimar's USDT balance
-   * Formula: receivedFromBrian - convertedToVES
+   * Formula: receivedFromBrian - convertedToVES + adjustments
    */
   static async getDaiUSDTBalance(): Promise<number> {
     const client = await pool.connect();
@@ -54,7 +62,15 @@ export class BalanceService {
       );
       const totalConverted = parseFloat(conversionsResult.rows[0].total);
 
-      return totalReceived - totalConverted;
+      // Balance adjustments for Dairimar's USDT
+      const adjustmentsResult = await client.query(
+        `SELECT COALESCE(SUM(adjustment_amount), 0) as total
+         FROM balance_adjustments
+         WHERE account = 'dairimar' AND currency = 'USDT'`
+      );
+      const adjustments = parseFloat(adjustmentsResult.rows[0].total);
+
+      return totalReceived - totalConverted + adjustments;
     } finally {
       client.release();
     }
@@ -62,7 +78,7 @@ export class BalanceService {
 
   /**
    * Calculate Dairimar's VES balance
-   * Formula: totalVESConverted - totalVESSold
+   * Formula: totalVESConverted - totalVESSold + adjustments
    */
   static async getDaiVESBalance(): Promise<number> {
     const client = await pool.connect();
@@ -83,7 +99,16 @@ export class BalanceService {
       // Use parseInt for VES amounts since they're BIGINT (no decimals)
       const totalSold = parseInt(vesSoldResult.rows[0].total, 10);
 
-      return totalConverted - totalSold;
+      // Balance adjustments for Dairimar's VES
+      const adjustmentsResult = await client.query(
+        `SELECT COALESCE(SUM(adjustment_amount), 0) as total
+         FROM balance_adjustments
+         WHERE account = 'dairimar' AND currency = 'VES'`
+      );
+      // Use parseInt for VES adjustments since they're also integers
+      const adjustments = parseInt(adjustmentsResult.rows[0].total, 10);
+
+      return totalConverted - totalSold + adjustments;
     } finally {
       client.release();
     }

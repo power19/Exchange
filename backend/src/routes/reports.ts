@@ -75,15 +75,18 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         -- Brian's USDT starting balance
         (SELECT COALESCE(SUM(amount_usdt), 0) FROM purchases WHERE DATE(date) < $1) -
         (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as brian_usdt_start,
+        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) +
+        (SELECT COALESCE(SUM(adjustment_amount), 0) FROM balance_adjustments WHERE account = 'brian' AND currency = 'USDT' AND DATE(date) < $1) as brian_usdt_start,
 
         -- Dairimar's USDT starting balance
         (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date) < $1) as dai_usdt_start,
+        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date) < $1) +
+        (SELECT COALESCE(SUM(adjustment_amount), 0) FROM balance_adjustments WHERE account = 'dairimar' AND currency = 'USDT' AND DATE(date) < $1) as dai_usdt_start,
 
         -- Dairimar's VES starting balance
         (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as dai_ves_start`,
+        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) +
+        (SELECT COALESCE(SUM(adjustment_amount), 0) FROM balance_adjustments WHERE account = 'dairimar' AND currency = 'VES' AND DATE(date) < $1) as dai_ves_start`,
       [targetDate]
     );
 
