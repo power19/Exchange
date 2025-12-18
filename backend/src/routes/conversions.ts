@@ -63,7 +63,8 @@ router.post('/', requireDairimarOrBrian(), writeLimiter, async (req, res, next) 
       });
     }
 
-    const ves_received = usdtValidation.value! * rateValidation.value!;
+    // Calculate VES received and round to integer (since VES is BIGINT, no decimals)
+    const ves_received = Math.round(usdtValidation.value! * rateValidation.value!);
 
     const result = await client.query(
       `INSERT INTO conversions (date, usdt_amount, ves_received, exchange_rate)

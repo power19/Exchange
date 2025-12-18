@@ -71,7 +71,8 @@ export class BalanceService {
       const conversionsResult = await client.query(
         'SELECT COALESCE(SUM(ves_received), 0) as total FROM conversions'
       );
-      const totalConverted = parseFloat(conversionsResult.rows[0].total);
+      // Use parseInt for VES amounts since they're BIGINT (no decimals)
+      const totalConverted = parseInt(conversionsResult.rows[0].total, 10);
 
       // Total VES sold in completed orders
       const vesSoldResult = await client.query(
@@ -79,7 +80,8 @@ export class BalanceService {
          FROM ves_orders
          WHERE status = 'COMPLETED'`
       );
-      const totalSold = parseFloat(vesSoldResult.rows[0].total);
+      // Use parseInt for VES amounts since they're BIGINT (no decimals)
+      const totalSold = parseInt(vesSoldResult.rows[0].total, 10);
 
       return totalConverted - totalSold;
     } finally {
@@ -173,7 +175,8 @@ export class BalanceService {
          FROM ves_orders
          WHERE status = 'PENDING'`
       );
-      return parseFloat(result.rows[0].total);
+      // Use parseInt for VES amounts since they're BIGINT (no decimals)
+      return parseInt(result.rows[0].total, 10);
     } finally {
       client.release();
     }
