@@ -116,6 +116,11 @@ export interface CurrentRates {
 
 export interface DailyReport {
   date: string;
+  starting_balances: {
+    brian_usdt: number;
+    dai_usdt: number;
+    dai_ves: number;
+  };
   ves_orders: {
     count: number;
     total_ves: number;

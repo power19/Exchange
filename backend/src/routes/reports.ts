@@ -68,8 +68,34 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
       [targetDate]
     );
 
+    // Calculate starting balances (balance at start of target date)
+    // This is the balance BEFORE any transactions on target date
+    const startingBalancesResult = await pool.query(
+      `SELECT
+        -- Brian's USDT starting balance
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM purchases WHERE DATE(date) < $1) -
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
+        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as brian_usdt_start,
+
+        -- Dairimar's USDT starting balance
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
+        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date) < $1) as dai_usdt_start,
+
+        -- Dairimar's VES starting balance
+        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date) < $1) -
+        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as dai_ves_start`,
+      [targetDate]
+    );
+
+    const startingBalances = startingBalancesResult.rows[0];
+
     const report = {
       date: targetDate,
+      starting_balances: {
+        brian_usdt: parseFloat(startingBalances.brian_usdt_start) || 0,
+        dai_usdt: parseFloat(startingBalances.dai_usdt_start) || 0,
+        dai_ves: parseInt(startingBalances.dai_ves_start, 10) || 0
+      },
       ves_orders: {
         count: parseInt(vesOrdersResult.rows[0].count),
         total_ves: parseInt(vesOrdersResult.rows[0].total_ves) || 0,

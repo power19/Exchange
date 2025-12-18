@@ -62,6 +62,33 @@ export default function DailyReportCard() {
         />
       </div>
 
+      {/* Starting Balances Section */}
+      <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+        <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <span className="text-blue-600">📊</span> Starting Balances (Beginning of Day)
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="bg-white p-3 rounded-md shadow-sm">
+            <p className="text-xs text-gray-600 mb-1">Brian's USDT</p>
+            <p className="text-lg font-bold text-blue-700">
+              {report.starting_balances.brian_usdt.toFixed(2)} USDT
+            </p>
+          </div>
+          <div className="bg-white p-3 rounded-md shadow-sm">
+            <p className="text-xs text-gray-600 mb-1">Dairimar's USDT</p>
+            <p className="text-lg font-bold text-indigo-700">
+              {report.starting_balances.dai_usdt.toFixed(2)} USDT
+            </p>
+          </div>
+          <div className="bg-white p-3 rounded-md shadow-sm">
+            <p className="text-xs text-gray-600 mb-1">Dairimar's VES</p>
+            <p className="text-lg font-bold text-purple-700">
+              {report.starting_balances.dai_ves.toLocaleString()} VES
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* VES Orders Summary */}
         <div className="border-l-4 border-purple-500 pl-4 py-2 bg-purple-50">
@@ -104,19 +131,19 @@ export default function DailyReportCard() {
       <div className="mt-4 pt-4 border-t grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
         <div>
           <p className="text-gray-600">Purchases</p>
-          <p className="font-semibold">
+          <p className="font-semibold text-gray-900">
             {report.purchases.count} • {report.purchases.total_usdt.toFixed(2)} USDT
           </p>
         </div>
         <div>
           <p className="text-gray-600">Transfers</p>
-          <p className="font-semibold">
+          <p className="font-semibold text-gray-900">
             {report.transfers.count} • {report.transfers.total_usdt.toFixed(2)} USDT
           </p>
         </div>
         <div>
           <p className="text-gray-600">Conversions</p>
-          <p className="font-semibold">
+          <p className="font-semibold text-gray-900">
             {report.conversions.count} • {report.conversions.total_usdt.toFixed(2)} USDT → {Number(report.conversions.total_ves).toLocaleString()} VES
           </p>
         </div>
