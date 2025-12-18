@@ -154,13 +154,13 @@ export class ValidationService {
       case 'conversions':
         // Removing conversion: Dai gains USDT back, loses VES
         impacts.daiUSDT = daiUSDT + parseFloat(record.usdt_amount);
-        impacts.daiVES = daiVES - parseFloat(record.ves_received);
+        impacts.daiVES = daiVES - parseInt(record.ves_received, 10);
         break;
 
       case 'ves_orders':
         if (record.status === 'COMPLETED') {
           // Removing completed order: Dai gains VES back, profit decreases
-          impacts.daiVES = daiVES + parseFloat(record.amount_ves);
+          impacts.daiVES = daiVES + parseInt(record.amount_ves, 10);
           impacts.profit = profitData.available_profit - (parseFloat(record.usdt_sold || 0) * 0.10);
         }
         break;
@@ -210,7 +210,7 @@ export class ValidationService {
           delta.daiUSDT = -diff;
         }
         if (updates.ves_received !== undefined) {
-          const diff = parseFloat(updates.ves_received) - parseFloat(current.ves_received);
+          const diff = parseInt(updates.ves_received, 10) - parseInt(current.ves_received, 10);
           delta.daiVES = diff;
         }
         break;
@@ -219,7 +219,7 @@ export class ValidationService {
         if (current.status === 'COMPLETED') {
           // Changing amounts on completed order
           if (updates.amount_ves !== undefined) {
-            const diff = parseFloat(updates.amount_ves) - parseFloat(current.amount_ves);
+            const diff = parseInt(updates.amount_ves, 10) - parseInt(current.amount_ves, 10);
             delta.daiVES = -diff;
           }
           if (updates.usdt_sold !== undefined) {
@@ -229,7 +229,7 @@ export class ValidationService {
         }
         // Status change from COMPLETED to PENDING
         if (updates.status === 'PENDING' && current.status === 'COMPLETED') {
-          delta.daiVES = parseFloat(current.amount_ves);
+          delta.daiVES = parseInt(current.amount_ves, 10);
           delta.profit = -(parseFloat(current.usdt_sold || 0) * 0.10);
         }
         break;
