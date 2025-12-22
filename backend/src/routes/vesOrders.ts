@@ -174,8 +174,8 @@ router.post('/:id/fulfill', requireDairimarOrBrian(), writeLimiter, async (req, 
       return res.status(400).json({ error: rateValidation.error });
     }
 
-    // Check Dairimar's VES balance
-    const daiVESBalance = await BalanceService.getDaiVESBalance();
+    // Check Dairimar's VES balance (WITHIN transaction to prevent race conditions)
+    const daiVESBalance = await BalanceService.getDaiVESBalance(client);
     if (order.amount_ves > daiVESBalance) {
       await client.query('ROLLBACK');
       return res.status(400).json({

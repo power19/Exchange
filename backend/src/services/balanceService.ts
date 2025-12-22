@@ -5,24 +5,28 @@ export class BalanceService {
   /**
    * Calculate Brian's USDT balance
    * Formula: totalPurchased - transferredToDai - soldCOP
+   *
+   * @param client Optional database client for transaction-safe balance checking
    */
-  static async getBrianBalance(): Promise<number> {
-    const client = await pool.connect();
+  static async getBrianBalance(client?: any): Promise<number> {
+    const useClient = client || await pool.connect();
+    const shouldRelease = !client;
+
     try {
       // Total USDT purchased
-      const purchasesResult = await client.query(
+      const purchasesResult = await useClient.query(
         'SELECT COALESCE(SUM(amount_usdt), 0) as total FROM purchases'
       );
       const totalPurchased = parseFloat(purchasesResult.rows[0].total);
 
       // Total transferred to Dairimar
-      const transfersResult = await client.query(
+      const transfersResult = await useClient.query(
         'SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transfers'
       );
       const totalTransferred = parseFloat(transfersResult.rows[0].total);
 
       // Total USDT sold in COP orders (completed only)
-      const copSoldResult = await client.query(
+      const copSoldResult = await useClient.query(
         `SELECT COALESCE(SUM(usdt_sold), 0) as total
          FROM cop_orders
          WHERE status = 'COMPLETED'`
@@ -31,44 +35,56 @@ export class BalanceService {
 
       return totalPurchased - totalTransferred - totalCOPSold;
     } finally {
-      client.release();
+      if (shouldRelease) {
+        useClient.release();
+      }
     }
   }
 
   /**
    * Calculate Dairimar's USDT balance
    * Formula: receivedFromBrian - convertedToVES
+   *
+   * @param client Optional database client for transaction-safe balance checking
    */
-  static async getDaiUSDTBalance(): Promise<number> {
-    const client = await pool.connect();
+  static async getDaiUSDTBalance(client?: any): Promise<number> {
+    const useClient = client || await pool.connect();
+    const shouldRelease = !client;
+
     try {
       // Total received from Brian
-      const transfersResult = await client.query(
+      const transfersResult = await useClient.query(
         'SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transfers'
       );
       const totalReceived = parseFloat(transfersResult.rows[0].total);
 
       // Total converted to VES
-      const conversionsResult = await client.query(
+      const conversionsResult = await useClient.query(
         'SELECT COALESCE(SUM(usdt_amount), 0) as total FROM conversions'
       );
       const totalConverted = parseFloat(conversionsResult.rows[0].total);
 
       return totalReceived - totalConverted;
     } finally {
-      client.release();
+      if (shouldRelease) {
+        useClient.release();
+      }
     }
   }
 
   /**
    * Calculate Dairimar's VES balance
    * Formula: totalVESConverted - totalVESSold
+   *
+   * @param client Optional database client for transaction-safe balance checking
    */
-  static async getDaiVESBalance(): Promise<number> {
-    const client = await pool.connect();
+  static async getDaiVESBalance(client?: any): Promise<number> {
+    const useClient = client || await pool.connect();
+    const shouldRelease = !client; // Only release if we created the connection
+
     try {
       // Total VES converted from USDT
-      const conversionsResult = await client.query(
+      const conversionsResult = await useClient.query(
         'SELECT COALESCE(SUM(ves_received), 0) as total FROM conversions'
       );
       // PostgreSQL SUM() on BIGINT returns NUMERIC, which may be returned as string
@@ -79,7 +95,7 @@ export class BalanceService {
         : Number(totalConvertedRaw);
 
       // Total VES sold in completed orders
-      const vesSoldResult = await client.query(
+      const vesSoldResult = await useClient.query(
         `SELECT COALESCE(SUM(amount_ves), 0) as total
          FROM ves_orders
          WHERE status = 'COMPLETED'`
@@ -97,7 +113,9 @@ export class BalanceService {
 
       return totalConverted - totalSold;
     } finally {
-      client.release();
+      if (shouldRelease) {
+        useClient.release();
+      }
     }
   }
 

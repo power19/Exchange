@@ -166,8 +166,8 @@ router.post('/:id/approve', requireBrian(), criticalLimiter, async (req, res, ne
       sanitizedNotes = notesValidation.sanitized;
     }
 
-    // Check Brian's USDT balance
-    const brianBalance = await BalanceService.getBrianBalance();
+    // Check Brian's USDT balance (WITHIN transaction to prevent race conditions)
+    const brianBalance = await BalanceService.getBrianBalance(client);
     if (request.amount_usdt > brianBalance) {
       await client.query('ROLLBACK');
       return res.status(400).json({

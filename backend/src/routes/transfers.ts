@@ -41,8 +41,8 @@ router.post('/', requireBrian(), writeLimiter, async (req, res, next) => {
       return res.status(400).json({ error: amountValidation.error });
     }
 
-    // Check Brian's balance
-    const brianBalance = await BalanceService.getBrianBalance();
+    // Check Brian's balance (WITHIN transaction to prevent race conditions)
+    const brianBalance = await BalanceService.getBrianBalance(client);
     if (amountValidation.value! > brianBalance) {
       await client.query('ROLLBACK');
       return res.status(400).json({
