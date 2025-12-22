@@ -52,8 +52,8 @@ router.post('/', requireDairimarOrBrian(), writeLimiter, async (req, res, next) 
       return res.status(400).json({ error: rateValidation.error });
     }
 
-    // Check Dairimar's USDT balance
-    const daiBalance = await BalanceService.getDaiUSDTBalance();
+    // Check Dairimar's USDT balance (WITHIN transaction to prevent race conditions)
+    const daiBalance = await BalanceService.getDaiUSDTBalance(client);
     if (usdtValidation.value! > daiBalance) {
       await client.query('ROLLBACK');
       return res.status(400).json({

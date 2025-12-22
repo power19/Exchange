@@ -176,8 +176,8 @@ router.post('/:id/fulfill', requireBrian(), writeLimiter, async (req, res, next)
     // Calculate USDT sold
     const usdt_sold = order.amount_cop / rateValidation.value!;
 
-    // Check Brian's USDT balance
-    const brianBalance = await BalanceService.getBrianBalance();
+    // Check Brian's USDT balance (WITHIN transaction to prevent race conditions)
+    const brianBalance = await BalanceService.getBrianBalance(client);
     if (usdt_sold > brianBalance) {
       await client.query('ROLLBACK');
       return res.status(400).json({
