@@ -71,8 +71,12 @@ export class BalanceService {
       const conversionsResult = await client.query(
         'SELECT COALESCE(SUM(ves_received), 0) as total FROM conversions'
       );
-      // Use parseInt for VES amounts since they're BIGINT (no decimals)
-      const totalConverted = parseInt(conversionsResult.rows[0].total, 10);
+      // PostgreSQL SUM() on BIGINT returns NUMERIC, which may be returned as string
+      // Convert to number safely, handling both string and number returns
+      const totalConvertedRaw = conversionsResult.rows[0].total;
+      const totalConverted = typeof totalConvertedRaw === 'string'
+        ? parseInt(totalConvertedRaw, 10)
+        : Number(totalConvertedRaw);
 
       // Total VES sold in completed orders
       const vesSoldResult = await client.query(
@@ -80,8 +84,16 @@ export class BalanceService {
          FROM ves_orders
          WHERE status = 'COMPLETED'`
       );
-      // Use parseInt for VES amounts since they're BIGINT (no decimals)
-      const totalSold = parseInt(vesSoldResult.rows[0].total, 10);
+      // Convert to number safely, handling both string and number returns
+      const totalSoldRaw = vesSoldResult.rows[0].total;
+      const totalSold = typeof totalSoldRaw === 'string'
+        ? parseInt(totalSoldRaw, 10)
+        : Number(totalSoldRaw);
+
+      // Verify we don't have NaN values
+      if (isNaN(totalConverted) || isNaN(totalSold)) {
+        throw new Error(`Invalid VES balance calculation: converted=${totalConvertedRaw}, sold=${totalSoldRaw}`);
+      }
 
       return totalConverted - totalSold;
     } finally {
@@ -175,8 +187,18 @@ export class BalanceService {
          FROM ves_orders
          WHERE status = 'PENDING'`
       );
-      // Use parseInt for VES amounts since they're BIGINT (no decimals)
-      return parseInt(result.rows[0].total, 10);
+      // PostgreSQL SUM() on BIGINT returns NUMERIC, which may be returned as string
+      // Convert to number safely, handling both string and number returns
+      const totalRaw = result.rows[0].total;
+      const total = typeof totalRaw === 'string'
+        ? parseInt(totalRaw, 10)
+        : Number(totalRaw);
+
+      if (isNaN(total)) {
+        throw new Error(`Invalid pending VES total calculation: ${totalRaw}`);
+      }
+
+      return total;
     } finally {
       client.release();
     }
