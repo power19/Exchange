@@ -203,20 +203,23 @@ router.get('/daily/dairimar', async (req, res, next) => {
   try {
     const { date } = req.query;
 
-    // Use provided date or default to today
-    const targetDate = date || new Date().toISOString().split('T')[0];
+    // Use Suriname timezone (America/Paramaribo, UTC-3)
+    const TIMEZONE = 'America/Paramaribo';
+
+    // Use provided date or default to today in Suriname timezone
+    const targetDate = date || new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE });
 
     // Calculate Dairimar's starting balances (balance at start of target date)
     const startingBalancesResult = await pool.query(
       `SELECT
         -- Dairimar's USDT starting balance
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date) < $1) as dai_usdt_start,
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) -
+        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) as dai_usdt_start,
 
         -- Dairimar's VES starting balance
-        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as dai_ves_start`,
-      [targetDate]
+        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) -
+        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) as dai_ves_start`,
+      [targetDate, TIMEZONE]
     );
 
     const startingBalances = startingBalancesResult.rows[0];
@@ -228,19 +231,19 @@ router.get('/daily/dairimar', async (req, res, next) => {
               COALESCE(usdt_sold, 0) as usdt_sold,
               date_submitted, date_completed, bank, phone_number, customer_id, account_number
        FROM ves_orders
-       WHERE DATE(date_completed) = $1
+       WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1
        AND status = 'COMPLETED'
        ORDER BY date_completed DESC`,
-      [targetDate]
+      [targetDate, TIMEZONE]
     );
 
     // Get conversions made on the target date
     const conversionsResult = await pool.query(
       `SELECT id, usdt_amount, ves_received, exchange_rate, date
        FROM conversions
-       WHERE DATE(date) = $1
+       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1
        ORDER BY date DESC`,
-      [targetDate]
+      [targetDate, TIMEZONE]
     );
 
     // Calculate summary stats
