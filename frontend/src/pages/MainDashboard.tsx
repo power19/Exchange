@@ -129,8 +129,8 @@ export default function MainDashboard() {
     const password = formData.get('password') as string;
 
     try {
-      const response = await api.login(username, password);
-      localStorage.setItem('authToken', response.data.token);
+      await api.login(username, password);
+      // Auth token is now stored in HttpOnly cookie by the server
       setIsAuthenticated(true);
       setShowLogin(false);
       loadProfitData();
@@ -140,8 +140,12 @@ export default function MainDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
     setIsAuthenticated(false);
     setProfitData(null);
     setWithdrawals([]);

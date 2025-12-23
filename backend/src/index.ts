@@ -1,28 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import { subdomainMiddleware } from './middleware/subdomain';
 import { errorHandler } from './middleware/errorHandler';
+import { csrfMiddleware } from './middleware/auth';
 import { apiRoutes } from './routes/index';
 import pool from './database/connection';
 import { globalLimiter } from './middleware/rateLimiter';
 import { sanitizeInput } from './middleware/sanitize';
+import { jwtConfig } from './config/security';
 
 // Load environment variables
 dotenv.config();
 
-// Validate required environment variables
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET || JWT_SECRET === 'your-secret-key-change-this-in-production') {
-  console.error('⚠️  WARNING: JWT_SECRET is not set or using default value!');
-  console.error('⚠️  This is a SECURITY RISK in production!');
-  if (process.env.NODE_ENV === 'production') {
-    console.error('❌ FATAL: Cannot start in production without proper JWT_SECRET');
-    process.exit(1);
-  }
-}
+// JWT_SECRET validation is handled in config/security.ts
+// It will exit the process in production if not set
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
@@ -64,8 +59,11 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
 }));
+
+// Cookie parser middleware (must come before routes that need cookies)
+app.use(cookieParser());
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
@@ -86,6 +84,9 @@ app.use(sanitizeInput);
 
 // Subdomain detection middleware
 app.use(subdomainMiddleware);
+
+// CSRF protection for authenticated state-changing requests
+app.use('/api', csrfMiddleware);
 
 // Health check endpoint (before API routes)
 app.get('/health', async (req, res) => {

@@ -1,21 +1,23 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pool from '../database/connection';
 import rateLimit from 'express-rate-limit';
+import { jwtConfig, generateCSRFToken, csrfConfig } from '../config/security';
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Rate limiting for login endpoint
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // 5 attempts
-  message: 'Too many login attempts, please try again later'
+  message: { error: 'Too many login attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
-// Login endpoint
-router.post('/login', loginLimiter, async (req, res, next) => {
+// Login endpoint - sets HttpOnly cookie
+router.post('/login', loginLimiter, async (req: Request, res: Response, next) => {
   try {
     const { username, password } = req.body;
 
@@ -39,37 +41,95 @@ router.post('/login', loginLimiter, async (req, res, next) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    // Create JWT token
     const token = jwt.sign(
       { username: user.username, role: user.role },
-      JWT_SECRET,
+      jwtConfig.secret,
       { expiresIn: '24h' }
     );
 
+    // Generate CSRF token for state-changing requests
+    const csrfToken = generateCSRFToken();
+
+    // Set HttpOnly cookie for JWT (not accessible via JavaScript)
+    res.cookie(jwtConfig.cookieName, token, jwtConfig.cookieOptions);
+
+    // Set CSRF token in a readable cookie (frontend needs to read this)
+    res.cookie(csrfConfig.cookieName, csrfToken, {
+      httpOnly: false, // Frontend needs to read this
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: jwtConfig.cookieOptions.maxAge,
+      path: '/'
+    });
+
+    // Return user info (no token in response body for security)
     res.json({
-      token,
+      success: true,
       user: {
         username: user.username,
         role: user.role
-      }
+      },
+      csrfToken // Send CSRF token in response for SPA convenience
     });
   } catch (error) {
     next(error);
   }
 });
 
-// Verify token endpoint
-router.get('/verify', async (req, res) => {
+// Logout endpoint - clears cookies
+router.post('/logout', (req: Request, res: Response) => {
+  res.clearCookie(jwtConfig.cookieName, { path: '/' });
+  res.clearCookie(csrfConfig.cookieName, { path: '/' });
+  res.json({ success: true, message: 'Logged out successfully' });
+});
+
+// Verify token endpoint - reads from cookie
+router.get('/verify', async (req: Request, res: Response) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // Try to get token from cookie first, then from header (backward compatibility)
+    const cookieToken = req.cookies?.[jwtConfig.cookieName];
+    const headerToken = req.headers.authorization?.split(' ')[1];
+    const token = cookieToken || headerToken;
 
     if (!token) {
-      return res.status(401).json({ valid: false });
+      return res.status(401).json({ valid: false, error: 'No authentication token' });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, jwtConfig.secret) as { username: string; role: string };
     res.json({ valid: true, user: decoded });
   } catch (error) {
-    res.status(401).json({ valid: false });
+    res.clearCookie(jwtConfig.cookieName, { path: '/' });
+    res.status(401).json({ valid: false, error: 'Invalid or expired token' });
+  }
+});
+
+// Refresh CSRF token (for long-lived sessions)
+router.post('/refresh-csrf', (req: Request, res: Response) => {
+  try {
+    const token = req.cookies?.[jwtConfig.cookieName];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
+    // Verify JWT is still valid
+    jwt.verify(token, jwtConfig.secret);
+
+    // Generate new CSRF token
+    const csrfToken = generateCSRFToken();
+
+    res.cookie(csrfConfig.cookieName, csrfToken, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: jwtConfig.cookieOptions.maxAge,
+      path: '/'
+    });
+
+    res.json({ csrfToken });
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid or expired session' });
   }
 });
 

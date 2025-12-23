@@ -9,65 +9,66 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 // Check if running on native platform (bypasses CORS)
 const isNative = Capacitor.isNativePlatform();
 
-console.log('🌐 API Configuration:', {
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  API_BASE_URL,
-  mode: import.meta.env.MODE,
-  isNative,
-  platform: Capacitor.getPlatform()
-});
+// CSRF token storage (in memory, not localStorage for security)
+let csrfToken: string | null = null;
+
+// Get CSRF token from cookie
+function getCSRFTokenFromCookie(): string | null {
+  const match = document.cookie.match(/csrf_token=([^;]+)/);
+  return match ? match[1] : null;
+}
+
+// Set CSRF token (called after login)
+export function setCSRFToken(token: string | null) {
+  csrfToken = token;
+}
+
+// Get current CSRF token (from memory or cookie)
+export function getCSRFToken(): string | null {
+  return csrfToken || getCSRFTokenFromCookie();
+}
+
+// Configure axios defaults for cookie-based auth
+axios.defaults.withCredentials = true;
 
 // Unified API client that uses Capacitor HTTP on mobile and axios on web
 const api = {
   get: async <T = any>(url: string, config?: any): Promise<{ data: T; status: number; headers: any }> => {
     try {
       const fullUrl = `${API_BASE_URL}${url}`;
-      console.log(`📡 GET ${fullUrl}`);
 
       if (isNative) {
         // Use Capacitor HTTP for native platforms (bypasses CORS)
         const response = await CapacitorHttp.get({
           url: fullUrl,
           headers: {
-            'Content-Type': 'application/json',
-            ...(localStorage.getItem('authToken') && {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            })
+            'Content-Type': 'application/json'
+          },
+          webFetchExtra: {
+            credentials: 'include'
           },
           params: config?.params
         });
-        console.log(`✅ GET ${fullUrl} - Success (Native)`, {
-          status: response.status,
-          dataType: typeof response.data,
-          dataLength: Array.isArray(response.data) ? response.data.length : 'N/A'
-        });
         return { data: response.data as T, status: response.status, headers: response.headers };
       } else {
-        // Use axios for web
+        // Use axios for web (credentials included by default)
         const response = await axios.get(fullUrl, {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('authToken') ? `Bearer ${localStorage.getItem('authToken')}` : undefined
+            'Content-Type': 'application/json'
           },
           ...config
         });
-        console.log(`✅ GET ${fullUrl} - Success (Web)`);
         return response;
       }
     } catch (error: any) {
-      console.error(`❌ GET ${API_BASE_URL}${url} - Error:`, {
-        message: error.message,
-        code: error.code,
-        response: error.response?.data,
-        status: error.response?.status || error.status
-      });
+      console.error(`API GET ${url} error:`, error.response?.status || error.message);
       throw error;
     }
   },
   post: async <T = any>(url: string, data: any, config?: any): Promise<{ data: T; status: number; headers: any }> => {
     try {
       const fullUrl = `${API_BASE_URL}${url}`;
-      console.log(`📡 POST ${fullUrl}`);
+      const csrf = getCSRFToken();
 
       if (isNative) {
         // Use Capacitor HTTP for native platforms
@@ -75,16 +76,12 @@ const api = {
           url: fullUrl,
           headers: {
             'Content-Type': 'application/json',
-            ...(localStorage.getItem('authToken') && {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            })
+            ...(csrf && { 'X-CSRF-Token': csrf })
+          },
+          webFetchExtra: {
+            credentials: 'include'
           },
           data
-        });
-        console.log(`✅ POST ${fullUrl} - Success (Native)`, {
-          status: response.status,
-          dataType: typeof response.data,
-          data: response.data
         });
         return { data: response.data as T, status: response.status, headers: response.headers };
       } else {
@@ -92,21 +89,21 @@ const api = {
         const response = await axios.post(fullUrl, data, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('authToken') ? `Bearer ${localStorage.getItem('authToken')}` : undefined
+            ...(csrf && { 'X-CSRF-Token': csrf })
           },
           ...config
         });
-        console.log(`✅ POST ${fullUrl} - Success (Web)`);
         return response;
       }
     } catch (error: any) {
-      console.error(`❌ POST ${API_BASE_URL}${url} - Error:`, error);
+      console.error(`API POST ${url} error:`, error.response?.status || error.message);
       throw error;
     }
   },
   put: async <T = any>(url: string, data: any, config?: any): Promise<{ data: T; status: number; headers: any }> => {
     try {
       const fullUrl = `${API_BASE_URL}${url}`;
+      const csrf = getCSRFToken();
 
       if (isNative) {
         // Use Capacitor HTTP for native platforms
@@ -114,9 +111,10 @@ const api = {
           url: fullUrl,
           headers: {
             'Content-Type': 'application/json',
-            ...(localStorage.getItem('authToken') && {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            })
+            ...(csrf && { 'X-CSRF-Token': csrf })
+          },
+          webFetchExtra: {
+            credentials: 'include'
           },
           data
         });
@@ -126,19 +124,20 @@ const api = {
         return axios.put(fullUrl, data, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('authToken') ? `Bearer ${localStorage.getItem('authToken')}` : undefined
+            ...(csrf && { 'X-CSRF-Token': csrf })
           },
           ...config
         });
       }
     } catch (error: any) {
-      console.error(`❌ PUT ${API_BASE_URL}${url} - Error:`, error);
+      console.error(`API PUT ${url} error:`, error.response?.status || error.message);
       throw error;
     }
   },
   delete: async <T = any>(url: string, config?: any): Promise<{ data: T; status: number; headers: any }> => {
     try {
       const fullUrl = `${API_BASE_URL}${url}`;
+      const csrf = getCSRFToken();
 
       if (isNative) {
         // Use Capacitor HTTP for native platforms
@@ -146,9 +145,10 @@ const api = {
           url: fullUrl,
           headers: {
             'Content-Type': 'application/json',
-            ...(localStorage.getItem('authToken') && {
-              Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            })
+            ...(csrf && { 'X-CSRF-Token': csrf })
+          },
+          webFetchExtra: {
+            credentials: 'include'
           }
         });
         return { data: response.data as T, status: response.status, headers: response.headers };
@@ -157,13 +157,13 @@ const api = {
         return axios.delete(fullUrl, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('authToken') ? `Bearer ${localStorage.getItem('authToken')}` : undefined
+            ...(csrf && { 'X-CSRF-Token': csrf })
           },
           ...config
         });
       }
     } catch (error: any) {
-      console.error(`❌ DELETE ${API_BASE_URL}${url} - Error:`, error);
+      console.error(`API DELETE ${url} error:`, error.response?.status || error.message);
       throw error;
     }
   }
@@ -226,9 +226,22 @@ export const updateExpense = (id: number, data: { amount_usd: number; descriptio
   api.put<Expense>(`/expenses/${id}`, data);
 export const deleteExpense = (id: number) => api.delete(`/expenses/${id}`);
 
-// Auth
-export const login = (username: string, password: string) =>
-  api.post<{ token: string; user: { username: string; role: string } }>('/auth/login', { username, password });
+// Auth - now uses HttpOnly cookies
+export const login = async (username: string, password: string) => {
+  const response = await api.post<{ success: boolean; user: { username: string; role: string }; csrfToken: string }>('/auth/login', { username, password });
+  // Store CSRF token in memory for subsequent requests
+  if (response.data.csrfToken) {
+    setCSRFToken(response.data.csrfToken);
+  }
+  return response;
+};
+
+export const logout = async () => {
+  const response = await api.post('/auth/logout', {});
+  setCSRFToken(null);
+  return response;
+};
+
 export const verifyToken = () => api.get('/auth/verify');
 
 // Exchange Rates
