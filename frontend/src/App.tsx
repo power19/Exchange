@@ -5,6 +5,7 @@ import PattyDashboard from './pages/PattyDashboard'
 import DairimarDashboard from './pages/DairimarDashboard'
 import ModernDashboardExample from './pages/ModernDashboardExample'
 import { PushNotificationService } from './services/pushNotificationService'
+import { ToastProvider } from './components/Toast'
 
 function App() {
   const [currentDashboard, setCurrentDashboard] = useState<'main' | 'patty' | 'dairimar'>('main');
@@ -63,28 +64,30 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* For development: allow accessing different dashboards via routes */}
-        <Route path="/patty" element={<PattyDashboard />} />
-        <Route path="/dairimar" element={<DairimarDashboard />} />
-        <Route path="/main" element={<MainDashboard />} />
-        <Route path="/modern" element={<ModernDashboardExample />} />
+    <ToastProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* For development: allow accessing different dashboards via routes */}
+          <Route path="/patty" element={<PattyDashboard />} />
+          <Route path="/dairimar" element={<DairimarDashboard />} />
+          <Route path="/main" element={<MainDashboard />} />
+          <Route path="/modern" element={<ModernDashboardExample />} />
 
-        {/* Default route based on subdomain */}
-        <Route
-          path="/"
-          element={
-            currentDashboard === 'patty' ? <PattyDashboard /> :
-            currentDashboard === 'dairimar' ? <DairimarDashboard /> :
-            <MainDashboard />
-          }
-        />
+          {/* Default route based on subdomain */}
+          <Route
+            path="/"
+            element={
+              currentDashboard === 'patty' ? <PattyDashboard /> :
+              currentDashboard === 'dairimar' ? <DairimarDashboard /> :
+              <MainDashboard />
+            }
+          />
 
-        {/* Catch all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   )
 }
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
 import { Card, StatCard, Button } from '../components/modern';
+import { useToast } from '../components/Toast';
 import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
 
@@ -44,6 +45,7 @@ const BANKS = [
 ].sort();
 
 export default function PattyDashboard() {
+  const toast = useToast();
   const [balances, setBalances] = useState<Balances | null>(null);
   const [myOrders, setMyOrders] = useState<{ves: VESOrder[], cop: COPOrder[]}>({ves: [], cop: []});
   const [orderType, setOrderType] = useState<'VES' | 'COP'>('VES');
@@ -120,7 +122,7 @@ export default function PattyDashboard() {
       console.log('✅ Data loaded successfully');
     } catch (error) {
       console.error('❌ Error loading data:', error);
-      alert(`Failed to load data: ${error}`);
+      toast.error('Failed to load data. Please refresh the page.');
     } finally {
       setLoading(false);
     }
@@ -146,9 +148,9 @@ export default function PattyDashboard() {
         phone_number: phoneNumber
       });
 
-      alert(`✅ Auto-filled!\nBank: ${bankName || 'Unknown code: ' + bankCode}\nID: ${idNumber}\nPhone: ${phoneNumber}`);
+      toast.success(`Auto-filled!\nBank: ${bankName || 'Unknown code: ' + bankCode}\nID: ${idNumber}\nPhone: ${phoneNumber}`);
     } else if (cleaned.length > 0) {
-      alert(`❌ Invalid format. Expected 23 digits.\nReceived: ${cleaned.length} characters\n\nFormat: [4-digit bank code][8-digit ID][11-digit phone]`);
+      toast.warning(`Invalid format. Expected 23 digits.\nReceived: ${cleaned.length} characters`);
     }
   };
 
@@ -198,11 +200,11 @@ export default function PattyDashboard() {
       // Reload data to show new order
       await loadData();
 
-      alert('✅ Order submitted successfully!');
+      toast.success('Order submitted successfully!');
     } catch (error: any) {
       console.error('Order submission error:', error);
       const errorMsg = error.response?.data?.error || error.message || 'Failed to submit order';
-      alert(`❌ Error: ${errorMsg}\n\nDetails: ${JSON.stringify(error.response?.data || error, null, 2)}`);
+      toast.error(errorMsg);
     }
   };
 
@@ -217,11 +219,10 @@ export default function PattyDashboard() {
         await api.cancelCOPOrder(orderId);
       }
 
-      alert('✅ Order cancelled successfully!');
+      toast.success('Order cancelled successfully!');
       await loadData();
     } catch (error: any) {
-      console.error('Cancel error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to cancel order'}`);
+      toast.error(error.response?.data?.error || 'Failed to cancel order');
     }
   };
 
@@ -251,12 +252,11 @@ export default function PattyDashboard() {
         await api.updateCOPOrder(orderId, updateData);
       }
 
-      alert('✅ Order updated successfully!');
+      toast.success('Order updated successfully!');
       setShowEditForm(null);
       await loadData();
     } catch (error: any) {
-      console.error('Edit error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to update order'}`);
+      toast.error(error.response?.data?.error || 'Failed to update order');
     }
   };
 

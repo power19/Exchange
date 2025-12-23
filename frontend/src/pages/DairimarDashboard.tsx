@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
+import { useToast } from '../components/Toast';
 import DaiDailyReportCard from '../components/DaiDailyReportCard';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
 import { Card, StatCard, Button } from '../components/modern';
+import { SkeletonStatCard, SkeletonOrderItem } from '../components/Skeleton';
 import type { Balances, VESOrder, VESShortfall, Conversion, ExchangeRate, USDTRequest } from '../types';
 
 export default function DairimarDashboard() {
+  const toast = useToast();
   const [balances, setBalances] = useState<Balances | null>(null);
   const [shortfall, setShortfall] = useState<VESShortfall | null>(null);
   const [pendingOrders, setPendingOrders] = useState<VESOrder[]>([]);
@@ -96,15 +99,14 @@ export default function DairimarDashboard() {
     try {
       if (Capacitor.isNativePlatform()) {
         await Clipboard.write({ string: text });
-        alert(`✓ ${label} copied!`);
       } else {
         await navigator.clipboard.writeText(text);
-        alert(`✓ ${label} copied!`);
       }
+      toast.success(`${label} copied!`);
     } catch (error) {
-      alert('Failed to copy to clipboard');
+      toast.error('Failed to copy to clipboard');
     }
-  }, []);
+  }, [toast]);
 
   const handleConvert = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,13 +116,13 @@ export default function DairimarDashboard() {
 
     try {
       await api.createConversion({ usdt_amount, exchange_rate });
-      alert('✅ Conversion successful!');
+      toast.success('Conversion successful!');
       setShowConvertForm(false);
       loadData();
     } catch (error: any) {
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to convert'}`);
+      toast.error(error.response?.data?.error || 'Failed to convert');
     }
-  }, [loadData]);
+  }, [loadData, toast]);
 
   const handleUSDTRequest = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,26 +132,26 @@ export default function DairimarDashboard() {
     const reason = (formData.get('reason') as string).trim();
 
     if (!reason || reason.length < 5) {
-      alert('❌ Reason must be at least 5 characters long');
+      toast.warning('Reason must be at least 5 characters long');
       return;
     }
 
     if (!amount_usdt || amount_usdt <= 0) {
-      alert('❌ Amount must be greater than 0');
+      toast.warning('Amount must be greater than 0');
       return;
     }
 
     try {
       await api.createUSDTRequest({ amount_usdt, reason });
-      alert(`✅ USDT Request submitted successfully!\n\nAmount: ${amount_usdt.toFixed(2)} USDT\nReason: ${reason}`);
+      toast.success(`USDT Request submitted!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
       setShowUSDTRequestForm(false);
       form.reset();
       loadData();
     } catch (error: any) {
       const errorMessage = error.response?.data?.error || error.message || 'Failed to submit request';
-      alert(`❌ Error: ${errorMessage}`);
+      toast.error(errorMessage);
     }
-  }, [loadData]);
+  }, [loadData, toast]);
 
   const handleFulfillOrder = useCallback(async (orderId: number, e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -161,21 +163,21 @@ export default function DairimarDashboard() {
       exchange_rate = parseFloat(formData.get('exchange_rate') as string);
 
       if (!exchange_rate || exchange_rate <= 0) {
-        alert('Please enter a valid exchange rate');
+        toast.warning('Please enter a valid exchange rate');
         return;
       }
     }
 
     try {
       await api.fulfillVESOrder(orderId, { exchange_rate });
-      alert('✅ Order fulfilled successfully!');
+      toast.success('Order fulfilled successfully!');
       setShowFulfillForm(null);
       setUseCustomRate(false);
       await loadData();
     } catch (error: any) {
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to fulfill order'}`);
+      toast.error(error.response?.data?.error || 'Failed to fulfill order');
     }
-  }, [useCustomRate, loadData]);
+  }, [useCustomRate, loadData, toast]);
 
   const getSuggestedConversion = () => {
     if (!shortfall || shortfall.shortfall <= 0) return 0;
@@ -192,10 +194,30 @@ export default function DairimarDashboard() {
     return styles[status as keyof typeof styles] || styles.PENDING;
   };
 
-  if (loading) {
+  if (loading && !balances) {
     return (
-      <div className="min-h-screen bg-[#0A0E27] flex items-center justify-center">
-        <div className="text-xl text-white">Loading...</div>
+      <div className="min-h-screen bg-[#0A0E27] text-white">
+        <header className="bg-gradient-to-r from-purple-600 to-purple-700 shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-bold text-white">Good Morning, Dairimar! 👋</h1>
+                <p className="text-purple-100 mt-1">Manage VES operations and orders</p>
+              </div>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <SkeletonStatCard />
+            <SkeletonStatCard />
+          </div>
+          <div className="space-y-4">
+            <SkeletonOrderItem />
+            <SkeletonOrderItem />
+            <SkeletonOrderItem />
+          </div>
+        </main>
       </div>
     );
   }
