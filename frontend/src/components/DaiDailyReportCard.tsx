@@ -4,10 +4,15 @@ import type { DaiDailyReport, DaiDailyReportOrder } from '../types';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
 
+// Get today's date in Suriname timezone (America/Paramaribo)
+const getSurinameDate = () => {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Paramaribo' });
+};
+
 export default function DaiDailyReportCard() {
   const [report, setReport] = useState<DaiDailyReport | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(getSurinameDate());
   const [activeTab, setActiveTab] = useState<'orders' | 'conversions'>('orders');
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
