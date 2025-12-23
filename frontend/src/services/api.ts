@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CapacitorHttp } from '@capacitor/core';
 import { Capacitor } from '@capacitor/core';
-import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, Expense, ExchangeRate, CurrentRates, DailyReport, USDTRequest, USDTRequestStatus } from '../types';
+import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, Expense, ExchangeRate, CurrentRates, DailyReport, DaiDailyReport, USDTRequest, USDTRequestStatus } from '../types';
 
 // Simple API base URL - use environment variable or default to /api for web
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
@@ -247,6 +247,8 @@ export const getDailyReport = (date?: string) =>
   api.get<DailyReport>('/reports/daily', { params: { date } });
 export const getOrdersReport = (start_date: string, end_date: string, type?: 'VES' | 'COP') =>
   api.get('/reports/orders', { params: { start_date, end_date, type } });
+export const getDaiDailyReport = (date?: string) =>
+  api.get<DaiDailyReport>('/reports/daily/dairimar', { params: { date } });
 
 // USDT Requests (Dairimar → Brian)
 export const getUSDTRequests = (status?: USDTRequestStatus) =>
