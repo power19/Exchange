@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface TransactionItemProps {
   icon?: React.ReactNode;
@@ -16,8 +16,9 @@ interface TransactionItemProps {
 /**
  * Transaction Item Component
  * Modern transaction/activity list item
+ * Memoized to prevent unnecessary re-renders in lists
  */
-export const TransactionItem: React.FC<TransactionItemProps> = ({
+export const TransactionItem = memo<TransactionItemProps>(function TransactionItem({
   icon,
   iconBg = 'bg-cyan-500/20',
   title,
@@ -28,7 +29,7 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({
   category,
   categoryColor = '#4DD0E1',
   onClick,
-}) => {
+}) {
   const amountColorClasses = {
     positive: 'text-green-400',
     negative: 'text-red-400',
@@ -79,4 +80,4 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({
       </div>
     </div>
   );
-};
+});

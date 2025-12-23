@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
@@ -25,35 +26,8 @@ export default function MainDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses'>('dashboard');
 
-  useEffect(() => {
-    loadData();
-    loadUSDTRequests();
-    checkAuth();
-
-    // Initialize push notifications (mobile only)
-    PushNotificationService.initialize('brian');
-
-    // Refresh USDT requests and orders every 30 seconds
-    const refreshInterval = setInterval(() => {
-      loadUSDTRequests();
-      loadData(); // Also refresh pending orders
-    }, 30000);
-
-    // Cleanup on unmount
-    return () => {
-      PushNotificationService.unregister();
-      clearInterval(refreshInterval);
-    };
-  }, []);
-
-  // Load expenses when switching to expenses tab
-  useEffect(() => {
-    if (activeTab === 'expenses' && isAuthenticated) {
-      loadExpenses();
-    }
-  }, [activeTab, isAuthenticated]);
-
-  const loadData = async () => {
+  // Memoized data loading functions
+  const loadData = useCallback(async () => {
     try {
       const [balancesRes, vesOrdersRes, copOrdersRes] = await Promise.all([
         api.getBalances(),
@@ -65,13 +39,49 @@ export default function MainDashboard() {
       setPendingVESOrders(vesOrdersRes.data);
       setPendingCOPOrders(copOrdersRes.data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      // Error handled silently
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const checkAuth = async () => {
+  const loadUSDTRequests = useCallback(async () => {
+    try {
+      const requestsRes = await api.getUSDTRequests();
+      setUsdtRequests(requestsRes.data);
+    } catch (error) {
+      // Error handled silently
+    }
+  }, []);
+
+  const loadProfitData = useCallback(async () => {
+    try {
+      const profitRes = await api.getProfitData();
+      setProfitData(profitRes.data);
+    } catch (error) {
+      // Error handled silently
+    }
+  }, []);
+
+  const loadWithdrawals = useCallback(async () => {
+    try {
+      const withdrawalsRes = await api.getWithdrawals();
+      setWithdrawals(withdrawalsRes.data);
+    } catch (error) {
+      // Error handled silently
+    }
+  }, []);
+
+  const loadExpenses = useCallback(async () => {
+    try {
+      const expensesRes = await api.getExpenses();
+      setExpenses(Array.isArray(expensesRes.data) ? expensesRes.data : []);
+    } catch (error) {
+      setExpenses([]);
+    }
+  }, []);
+
+  const checkAuth = useCallback(async () => {
     try {
       await api.verifyToken();
       setIsAuthenticated(true);
@@ -81,46 +91,40 @@ export default function MainDashboard() {
     } catch (error) {
       setIsAuthenticated(false);
     }
-  };
+  }, [loadProfitData, loadWithdrawals, loadExpenses]);
 
-  const loadProfitData = async () => {
-    try {
-      const profitRes = await api.getProfitData();
-      setProfitData(profitRes.data);
-    } catch (error) {
-      console.error('Error loading profit data:', error);
-    }
-  };
+  // Combined refresh function for smart refresh
+  const refreshAll = useCallback(async () => {
+    await Promise.all([loadData(), loadUSDTRequests()]);
+  }, [loadData, loadUSDTRequests]);
 
-  const loadWithdrawals = async () => {
-    try {
-      const withdrawalsRes = await api.getWithdrawals();
-      setWithdrawals(withdrawalsRes.data);
-    } catch (error) {
-      console.error('Error loading withdrawals:', error);
-    }
-  };
+  // Smart refresh: only refresh when tab is visible and focused
+  useSmartRefresh({
+    onRefresh: refreshAll,
+    interval: 30000,
+    enabled: true
+  });
 
-  const loadExpenses = async () => {
-    try {
-      console.log('📊 Loading expenses...');
-      const expensesRes = await api.getExpenses();
-      console.log('✅ Expenses loaded:', expensesRes.data?.length || 0, 'items');
-      setExpenses(Array.isArray(expensesRes.data) ? expensesRes.data : []);
-    } catch (error: any) {
-      console.error('❌ Error loading expenses:', error?.response?.status, error?.response?.data || error?.message);
-      setExpenses([]); // Ensure expenses is always an array
-    }
-  };
+  useEffect(() => {
+    loadData();
+    loadUSDTRequests();
+    checkAuth();
 
-  const loadUSDTRequests = async () => {
-    try {
-      const requestsRes = await api.getUSDTRequests();
-      setUsdtRequests(requestsRes.data);
-    } catch (error) {
-      console.error('Error loading USDT requests:', error);
+    // Initialize push notifications (mobile only)
+    PushNotificationService.initialize('brian');
+
+    // Cleanup on unmount
+    return () => {
+      PushNotificationService.unregister();
+    };
+  }, [loadData, loadUSDTRequests, checkAuth]);
+
+  // Load expenses when switching to expenses tab
+  useEffect(() => {
+    if (activeTab === 'expenses' && isAuthenticated) {
+      loadExpenses();
     }
-  };
+  }, [activeTab, isAuthenticated, loadExpenses]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

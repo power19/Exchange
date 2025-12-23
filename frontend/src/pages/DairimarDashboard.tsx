@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import DaiDailyReportCard from '../components/DaiDailyReportCard';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
@@ -24,31 +25,8 @@ export default function DairimarDashboard() {
   const [completedDate, setCompletedDate] = useState(new Date().toISOString().split('T')[0]);
   const [mainTab, setMainTab] = useState<'dashboard' | 'reports' | 'requests'>('dashboard');
 
-  useEffect(() => {
-    loadData();
-
-    // Initialize push notifications (mobile only)
-    PushNotificationService.initialize('dairimar');
-
-    // Refresh pending orders and balances every 30 seconds
-    const refreshInterval = setInterval(() => {
-      loadData();
-    }, 30000);
-
-    // Cleanup on unmount
-    return () => {
-      PushNotificationService.unregister();
-      clearInterval(refreshInterval);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (activeTab === 'completed') {
-      loadCompletedOrders();
-    }
-  }, [activeTab, completedDate]);
-
-  const loadData = async () => {
+  // Memoized data loading function
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [balancesRes, shortfallRes, ordersRes, conversionsRes, rateRes, requestsRes] = await Promise.all([
@@ -60,11 +38,6 @@ export default function DairimarDashboard() {
         api.getUSDTRequests()
       ]);
 
-      console.log('📊 API Response - Balances:', balancesRes.data);
-      console.log('📊 Pending Orders:', ordersRes.data);
-      console.log('📊 Current VES Rate:', rateRes.data);
-      console.log('📊 USDT Requests:', requestsRes.data);
-
       setBalances(balancesRes.data);
       setShortfall(shortfallRes.data);
       setPendingOrders(ordersRes.data);
@@ -72,13 +45,32 @@ export default function DairimarDashboard() {
       setCurrentRate(rateRes.data);
       setUsdtRequests(requestsRes.data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      // Error handled silently - data will be refreshed on next interval
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadCompletedOrders = async () => {
+  // Smart refresh: only refresh when tab is visible and focused
+  useSmartRefresh({
+    onRefresh: loadData,
+    interval: 30000,
+    enabled: true
+  });
+
+  useEffect(() => {
+    loadData();
+
+    // Initialize push notifications (mobile only)
+    PushNotificationService.initialize('dairimar');
+
+    // Cleanup on unmount
+    return () => {
+      PushNotificationService.unregister();
+    };
+  }, [loadData]);
+
+  const loadCompletedOrders = useCallback(async () => {
     try {
       const response = await api.getVESOrders('COMPLETED');
       // Filter by selected date
@@ -89,11 +81,18 @@ export default function DairimarDashboard() {
       });
       setCompletedOrders(filtered);
     } catch (error) {
-      console.error('Error loading completed orders:', error);
+      // Error handled silently
     }
-  };
+  }, [completedDate]);
 
-  const copyToClipboard = async (text: string, label: string) => {
+  // Load completed orders when tab changes or date changes
+  useEffect(() => {
+    if (activeTab === 'completed') {
+      loadCompletedOrders();
+    }
+  }, [activeTab, loadCompletedOrders]);
+
+  const copyToClipboard = useCallback(async (text: string, label: string) => {
     try {
       if (Capacitor.isNativePlatform()) {
         await Clipboard.write({ string: text });
@@ -103,12 +102,11 @@ export default function DairimarDashboard() {
         alert(`✓ ${label} copied!`);
       }
     } catch (error) {
-      console.error('Failed to copy:', error);
       alert('Failed to copy to clipboard');
     }
-  };
+  }, []);
 
-  const handleConvert = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleConvert = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const usdt_amount = parseFloat(formData.get('usdt_amount') as string);
@@ -122,16 +120,15 @@ export default function DairimarDashboard() {
     } catch (error: any) {
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to convert'}`);
     }
-  };
+  }, [loadData]);
 
-  const handleUSDTRequest = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUSDTRequest = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget; // Save reference before async operations
+    const form = e.currentTarget;
     const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const reason = (formData.get('reason') as string).trim();
 
-    // Frontend validation
     if (!reason || reason.length < 5) {
       alert('❌ Reason must be at least 5 characters long');
       return;
@@ -144,19 +141,17 @@ export default function DairimarDashboard() {
 
     try {
       await api.createUSDTRequest({ amount_usdt, reason });
-
       alert(`✅ USDT Request submitted successfully!\n\nAmount: ${amount_usdt.toFixed(2)} USDT\nReason: ${reason}`);
       setShowUSDTRequestForm(false);
-      form.reset(); // Use saved reference
+      form.reset();
       loadData();
     } catch (error: any) {
-      console.error('USDT Request Error:', error.response?.data);
       const errorMessage = error.response?.data?.error || error.message || 'Failed to submit request';
       alert(`❌ Error: ${errorMessage}`);
     }
-  };
+  }, [loadData]);
 
-  const handleFulfillOrder = async (orderId: number, e?: React.FormEvent<HTMLFormElement>) => {
+  const handleFulfillOrder = useCallback(async (orderId: number, e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
 
     let exchange_rate: number | undefined = undefined;
@@ -172,19 +167,15 @@ export default function DairimarDashboard() {
     }
 
     try {
-      const response = await api.fulfillVESOrder(orderId, { exchange_rate });
-      console.log('✅ Order fulfilled:', response.data);
-
+      await api.fulfillVESOrder(orderId, { exchange_rate });
       alert('✅ Order fulfilled successfully!');
       setShowFulfillForm(null);
       setUseCustomRate(false);
       await loadData();
-      console.log('📊 Data reloaded after fulfillment');
     } catch (error: any) {
-      console.error('❌ Error fulfilling order:', error);
       alert(`❌ Error: ${error.response?.data?.error || 'Failed to fulfill order'}`);
     }
-  };
+  }, [useCustomRate, loadData]);
 
   const getSuggestedConversion = () => {
     if (!shortfall || shortfall.shortfall <= 0) return 0;
