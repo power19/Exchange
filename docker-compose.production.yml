@@ -20,6 +20,8 @@ services:
       POSTGRES_DB: usdt_exchange
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SuperStrongPass123!
+      TZ: America/Paramaribo
+      PGTZ: America/Paramaribo
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -33,6 +35,7 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
+      TZ: America/Paramaribo
       DATABASE_URL: postgres://postgres:SuperStrongPass123!@db:5432/usdt_exchange
       JWT_SECRET: ChangeMeToSomethingVeryLongAndRandom123!
       CORS_ORIGINS: https://main.powermental.fit,https://dai.powermental.fit,https://patty.powermental.fit,https://api.powermental.fit

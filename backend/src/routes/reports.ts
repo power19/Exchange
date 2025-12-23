@@ -4,13 +4,16 @@ import { requireBrian } from '../middleware/rbac';
 
 const router = Router();
 
+// Suriname timezone (America/Paramaribo, UTC-3)
+const TIMEZONE = 'America/Paramaribo';
+
 // Get daily report (PRIVATE - Brian only, contains profit data)
 router.get('/daily', requireBrian(), async (req, res, next) => {
   try {
     const { date } = req.query;
 
-    // Use provided date or default to today
-    const targetDate = date || new Date().toISOString().split('T')[0];
+    // Use provided date or default to today in Suriname timezone
+    const targetDate = date || new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE });
 
     // Get VES orders for the day
     const vesOrdersResult = await pool.query(
@@ -19,9 +22,9 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(amount_ves), 0) as total_ves,
         COALESCE(SUM(usdt_sold), 0) as total_usdt
        FROM ves_orders
-       WHERE DATE(date_completed) = $1
+       WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1
        AND status = 'COMPLETED'`,
-      [targetDate]
+      [targetDate, TIMEZONE]
     );
 
     // Get COP orders for the day
@@ -31,9 +34,9 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(amount_cop), 0) as total_cop,
         COALESCE(SUM(usdt_sold), 0) as total_usdt
        FROM cop_orders
-       WHERE DATE(date_completed) = $1
+       WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1
        AND status = 'COMPLETED'`,
-      [targetDate]
+      [targetDate, TIMEZONE]
     );
 
     // Get purchases for the day
@@ -43,8 +46,8 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(amount_usdt), 0) as total_usdt,
         COALESCE(SUM(total_cost_usd), 0) as total_cost
        FROM purchases
-       WHERE DATE(date) = $1`,
-      [targetDate]
+       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1`,
+      [targetDate, TIMEZONE]
     );
 
     // Get transfers for the day
@@ -53,8 +56,8 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COUNT(*) as count,
         COALESCE(SUM(amount_usdt), 0) as total_usdt
        FROM transfers
-       WHERE DATE(date) = $1`,
-      [targetDate]
+       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1`,
+      [targetDate, TIMEZONE]
     );
 
     // Get conversions for the day
@@ -64,8 +67,8 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(usdt_amount), 0) as total_usdt,
         COALESCE(SUM(ves_received), 0) as total_ves
        FROM conversions
-       WHERE DATE(date) = $1`,
-      [targetDate]
+       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) = $1`,
+      [targetDate, TIMEZONE]
     );
 
     // Calculate starting balances (balance at start of target date)
@@ -73,18 +76,18 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
     const startingBalancesResult = await pool.query(
       `SELECT
         -- Brian's USDT starting balance
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM purchases WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as brian_usdt_start,
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM purchases WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) -
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) -
+        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) as brian_usdt_start,
 
         -- Dairimar's USDT starting balance
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date) < $1) as dai_usdt_start,
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) -
+        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) as dai_usdt_start,
 
         -- Dairimar's VES starting balance
-        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date) < $1) -
-        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed) < $1) as dai_ves_start`,
-      [targetDate]
+        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) -
+        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE $2) < $1) as dai_ves_start`,
+      [targetDate, TIMEZONE]
     );
 
     const startingBalances = startingBalancesResult.rows[0];
@@ -202,9 +205,6 @@ router.get('/orders', requireBrian(), async (req, res, next) => {
 router.get('/daily/dairimar', async (req, res, next) => {
   try {
     const { date } = req.query;
-
-    // Use Suriname timezone (America/Paramaribo, UTC-3)
-    const TIMEZONE = 'America/Paramaribo';
 
     // Use provided date or default to today in Suriname timezone
     const targetDate = date || new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE });
