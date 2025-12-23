@@ -236,9 +236,7 @@ router.get('/daily/dairimar', async (req, res, next) => {
 
     // Get conversions made on the target date
     const conversionsResult = await pool.query(
-      `SELECT id, usdt_amount, ves_received, exchange_rate, date,
-              COALESCE(dai_usdt_after, 0) as dai_usdt_after,
-              COALESCE(dai_ves_after, 0) as dai_ves_after
+      `SELECT id, usdt_amount, ves_received, exchange_rate, date
        FROM conversions
        WHERE DATE(date) = $1
        ORDER BY date DESC`,
@@ -284,9 +282,7 @@ router.get('/daily/dairimar', async (req, res, next) => {
           usdt_amount: parseFloat(c.usdt_amount),
           ves_received: parseInt(c.ves_received),
           exchange_rate: parseFloat(c.exchange_rate),
-          date: c.date,
-          dai_usdt_after: parseFloat(c.dai_usdt_after),
-          dai_ves_after: parseInt(c.dai_ves_after)
+          date: c.date
         }))
       }
     };

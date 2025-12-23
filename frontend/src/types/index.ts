@@ -171,8 +171,6 @@ export interface DaiDailyReportConversion {
   ves_received: number;
   exchange_rate: number;
   date: string;
-  dai_usdt_after: number;
-  dai_ves_after: number;
 }
 
 export interface DaiDailyReport {
