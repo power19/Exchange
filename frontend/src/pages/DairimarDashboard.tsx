@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
-import DailyReportCard from '../components/DailyReportCard';
+import DaiDailyReportCard from '../components/DaiDailyReportCard';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
 import { Card, StatCard, Button } from '../components/modern';
@@ -276,7 +276,7 @@ export default function DairimarDashboard() {
           <>
             {/* Daily Report */}
             <div className="mb-8">
-              <DailyReportCard />
+              <DaiDailyReportCard />
             </div>
           </>
         )}

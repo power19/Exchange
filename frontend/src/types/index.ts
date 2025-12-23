@@ -150,3 +150,47 @@ export interface DailyReport {
     gross: number;
   };
 }
+
+export interface DaiDailyReportOrder {
+  id: number;
+  customer_name: string;
+  amount_ves: number;
+  exchange_rate: number;
+  usdt_sold: number;
+  date_submitted: string;
+  date_completed: string;
+  bank?: string;
+  phone_number?: string;
+  customer_id?: string;
+  account_number?: string;
+}
+
+export interface DaiDailyReportConversion {
+  id: number;
+  usdt_amount: number;
+  ves_received: number;
+  exchange_rate: number;
+  date: string;
+  dai_usdt_after: number;
+  dai_ves_after: number;
+}
+
+export interface DaiDailyReport {
+  date: string;
+  starting_balances: {
+    dai_usdt: number;
+    dai_ves: number;
+  };
+  ves_orders: {
+    count: number;
+    total_ves: number;
+    total_usdt: number;
+    orders: DaiDailyReportOrder[];
+  };
+  conversions: {
+    count: number;
+    total_usdt: number;
+    total_ves: number;
+    items: DaiDailyReportConversion[];
+  };
+}
