@@ -30,6 +30,11 @@ const BANK_CODES: Record<string, string> = {
   '0601': 'Instituto Municipal de Crédito Popular',
 };
 
+// Get today's date in Suriname timezone (America/Paramaribo)
+const getSurinameDate = () => {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Paramaribo' });
+};
+
 // Bank list for Venezuela and Colombia
 const BANKS = [
   // Venezuelan Banks
@@ -83,7 +88,7 @@ export default function PattyDashboard() {
   const loadData = async () => {
     try {
       console.log('📥 Loading data...');
-      const today = new Date().toISOString().split('T')[0];
+      const today = getSurinameDate();
 
       // Load critical data first
       const [balancesRes, vesOrdersRes, copOrdersRes] = await Promise.all([

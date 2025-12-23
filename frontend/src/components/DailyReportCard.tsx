@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import type { DailyReport } from '../types';
 
+// Get today's date in Suriname timezone (America/Paramaribo)
+const getSurinameDate = () => {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Paramaribo' });
+};
+
 export default function DailyReportCard() {
   const [report, setReport] = useState<DailyReport | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(getSurinameDate());
   const [completedOrders, setCompletedOrders] = useState<any[]>([]);
 
   useEffect(() => {

@@ -7,6 +7,11 @@ import { Capacitor } from '@capacitor/core';
 import { Card, StatCard, Button } from '../components/modern';
 import type { Balances, VESOrder, VESShortfall, Conversion, ExchangeRate, USDTRequest } from '../types';
 
+// Get today's date in Suriname timezone (America/Paramaribo)
+const getSurinameDate = () => {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Paramaribo' });
+};
+
 export default function DairimarDashboard() {
   const [balances, setBalances] = useState<Balances | null>(null);
   const [shortfall, setShortfall] = useState<VESShortfall | null>(null);
@@ -21,7 +26,7 @@ export default function DairimarDashboard() {
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
   const [useCustomRate, setUseCustomRate] = useState(false);
   const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
-  const [completedDate, setCompletedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [completedDate, setCompletedDate] = useState(getSurinameDate());
   const [mainTab, setMainTab] = useState<'dashboard' | 'reports' | 'requests'>('dashboard');
 
   useEffect(() => {
@@ -81,10 +86,10 @@ export default function DairimarDashboard() {
   const loadCompletedOrders = async () => {
     try {
       const response = await api.getVESOrders('COMPLETED');
-      // Filter by selected date
+      // Filter by selected date (using Suriname timezone)
       const filtered = response.data.filter(order => {
         if (!order.date_completed) return false;
-        const orderDate = new Date(order.date_completed).toISOString().split('T')[0];
+        const orderDate = new Date(order.date_completed).toLocaleDateString('en-CA', { timeZone: 'America/Paramaribo' });
         return orderDate === completedDate;
       });
       setCompletedOrders(filtered);

@@ -15,12 +15,17 @@ interface PeriodSummary {
   total_orders: number;
 }
 
+// Get today's date in Suriname timezone (America/Paramaribo)
+const getSurinameDate = () => {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Paramaribo' });
+};
+
 export default function OrdersReportCard() {
   const [period, setPeriod] = useState<Period>('daily');
   const [orders, setOrders] = useState<any[]>([]);
   const [summary, setSummary] = useState<PeriodSummary | null>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(getSurinameDate());
 
   useEffect(() => {
     loadOrders();
