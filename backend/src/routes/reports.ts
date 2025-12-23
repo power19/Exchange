@@ -223,7 +223,9 @@ router.get('/daily/dairimar', async (req, res, next) => {
 
     // Get VES orders completed on the target date with all details
     const vesOrdersResult = await pool.query(
-      `SELECT id, customer_name, amount_ves, exchange_rate, usdt_sold,
+      `SELECT id, customer_name, amount_ves,
+              COALESCE(exchange_rate, 0) as exchange_rate,
+              COALESCE(usdt_sold, 0) as usdt_sold,
               date_submitted, date_completed, bank, phone_number, customer_id, account_number
        FROM ves_orders
        WHERE DATE(date_completed) = $1
@@ -235,7 +237,8 @@ router.get('/daily/dairimar', async (req, res, next) => {
     // Get conversions made on the target date
     const conversionsResult = await pool.query(
       `SELECT id, usdt_amount, ves_received, exchange_rate, date,
-              dai_usdt_after, dai_ves_after
+              COALESCE(dai_usdt_after, 0) as dai_usdt_after,
+              COALESCE(dai_ves_after, 0) as dai_ves_after
        FROM conversions
        WHERE DATE(date) = $1
        ORDER BY date DESC`,
