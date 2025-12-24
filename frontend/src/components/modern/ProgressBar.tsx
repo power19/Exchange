@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 interface ProgressBarProps {
   label: string;
@@ -12,15 +12,16 @@ interface ProgressBarProps {
 /**
  * Progress Bar Component
  * Displays progress towards a goal
+ * Memoized to prevent unnecessary re-renders
  */
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar = memo<ProgressBarProps>(function ProgressBar({
   label,
   current,
   target,
   color = '#4DD0E1',
   showPercentage = true,
   showValues = true,
-}) => {
+}) {
   const percentage = Math.min((current / target) * 100, 100);
 
   return (
@@ -57,4 +58,4 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       )}
     </div>
   );
-};
+});

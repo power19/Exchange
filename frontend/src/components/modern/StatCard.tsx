@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Card } from './Card';
 
 interface StatCardProps {
@@ -17,8 +17,9 @@ interface StatCardProps {
 /**
  * Stat Card Component
  * Displays financial metrics with optional trend indicators
+ * Memoized to prevent unnecessary re-renders
  */
-export const StatCard: React.FC<StatCardProps> = ({
+export const StatCard = memo<StatCardProps>(function StatCard({
   title,
   value,
   subtitle,
@@ -26,7 +27,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   trend,
   color = 'primary',
   className = '',
-}) => {
+}) {
   const colorClasses = {
     primary: 'text-cyan-400',
     success: 'text-green-400',
@@ -62,4 +63,4 @@ export const StatCard: React.FC<StatCardProps> = ({
       </div>
     </Card>
   );
-};
+});

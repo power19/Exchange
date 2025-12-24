@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as api from '../services/api';
 import { PushNotificationService } from '../services/pushNotificationService';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
+import { useToast } from '../components/Toast';
 import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
@@ -8,6 +10,7 @@ import OrdersReportCard from '../components/OrdersReportCard';
 import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest } from '../types';
 
 export default function MainDashboard() {
+  const toast = useToast();
   const [balances, setBalances] = useState<Balances | null>(null);
   const [profitData, setProfitData] = useState<ProfitData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,35 +28,8 @@ export default function MainDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses'>('dashboard');
 
-  useEffect(() => {
-    loadData();
-    loadUSDTRequests();
-    checkAuth();
-
-    // Initialize push notifications (mobile only)
-    PushNotificationService.initialize('brian');
-
-    // Refresh USDT requests and orders every 30 seconds
-    const refreshInterval = setInterval(() => {
-      loadUSDTRequests();
-      loadData(); // Also refresh pending orders
-    }, 30000);
-
-    // Cleanup on unmount
-    return () => {
-      PushNotificationService.unregister();
-      clearInterval(refreshInterval);
-    };
-  }, []);
-
-  // Load expenses when switching to expenses tab
-  useEffect(() => {
-    if (activeTab === 'expenses' && isAuthenticated) {
-      loadExpenses();
-    }
-  }, [activeTab, isAuthenticated]);
-
-  const loadData = async () => {
+  // Memoized data loading functions
+  const loadData = useCallback(async () => {
     try {
       const [balancesRes, vesOrdersRes, copOrdersRes] = await Promise.all([
         api.getBalances(),
@@ -65,13 +41,49 @@ export default function MainDashboard() {
       setPendingVESOrders(vesOrdersRes.data);
       setPendingCOPOrders(copOrdersRes.data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      // Error handled silently
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const checkAuth = async () => {
+  const loadUSDTRequests = useCallback(async () => {
+    try {
+      const requestsRes = await api.getUSDTRequests();
+      setUsdtRequests(requestsRes.data);
+    } catch (error) {
+      // Error handled silently
+    }
+  }, []);
+
+  const loadProfitData = useCallback(async () => {
+    try {
+      const profitRes = await api.getProfitData();
+      setProfitData(profitRes.data);
+    } catch (error) {
+      // Error handled silently
+    }
+  }, []);
+
+  const loadWithdrawals = useCallback(async () => {
+    try {
+      const withdrawalsRes = await api.getWithdrawals();
+      setWithdrawals(withdrawalsRes.data);
+    } catch (error) {
+      // Error handled silently
+    }
+  }, []);
+
+  const loadExpenses = useCallback(async () => {
+    try {
+      const expensesRes = await api.getExpenses();
+      setExpenses(Array.isArray(expensesRes.data) ? expensesRes.data : []);
+    } catch (error) {
+      setExpenses([]);
+    }
+  }, []);
+
+  const checkAuth = useCallback(async () => {
     try {
       await api.verifyToken();
       setIsAuthenticated(true);
@@ -81,46 +93,40 @@ export default function MainDashboard() {
     } catch (error) {
       setIsAuthenticated(false);
     }
-  };
+  }, [loadProfitData, loadWithdrawals, loadExpenses]);
 
-  const loadProfitData = async () => {
-    try {
-      const profitRes = await api.getProfitData();
-      setProfitData(profitRes.data);
-    } catch (error) {
-      console.error('Error loading profit data:', error);
-    }
-  };
+  // Combined refresh function for smart refresh
+  const refreshAll = useCallback(async () => {
+    await Promise.all([loadData(), loadUSDTRequests()]);
+  }, [loadData, loadUSDTRequests]);
 
-  const loadWithdrawals = async () => {
-    try {
-      const withdrawalsRes = await api.getWithdrawals();
-      setWithdrawals(withdrawalsRes.data);
-    } catch (error) {
-      console.error('Error loading withdrawals:', error);
-    }
-  };
+  // Smart refresh: only refresh when tab is visible and focused
+  useSmartRefresh({
+    onRefresh: refreshAll,
+    interval: 30000,
+    enabled: true
+  });
 
-  const loadExpenses = async () => {
-    try {
-      console.log('📊 Loading expenses...');
-      const expensesRes = await api.getExpenses();
-      console.log('✅ Expenses loaded:', expensesRes.data?.length || 0, 'items');
-      setExpenses(Array.isArray(expensesRes.data) ? expensesRes.data : []);
-    } catch (error: any) {
-      console.error('❌ Error loading expenses:', error?.response?.status, error?.response?.data || error?.message);
-      setExpenses([]); // Ensure expenses is always an array
-    }
-  };
+  useEffect(() => {
+    loadData();
+    loadUSDTRequests();
+    checkAuth();
 
-  const loadUSDTRequests = async () => {
-    try {
-      const requestsRes = await api.getUSDTRequests();
-      setUsdtRequests(requestsRes.data);
-    } catch (error) {
-      console.error('Error loading USDT requests:', error);
+    // Initialize push notifications (mobile only)
+    PushNotificationService.initialize('brian');
+
+    // Cleanup on unmount
+    return () => {
+      PushNotificationService.unregister();
+    };
+  }, [loadData, loadUSDTRequests, checkAuth]);
+
+  // Load expenses when switching to expenses tab
+  useEffect(() => {
+    if (activeTab === 'expenses' && isAuthenticated) {
+      loadExpenses();
     }
-  };
+  }, [activeTab, isAuthenticated, loadExpenses]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -129,19 +135,23 @@ export default function MainDashboard() {
     const password = formData.get('password') as string;
 
     try {
-      const response = await api.login(username, password);
-      localStorage.setItem('authToken', response.data.token);
+      await api.login(username, password);
       setIsAuthenticated(true);
       setShowLogin(false);
       loadProfitData();
       loadWithdrawals();
+      toast.success('Login successful!');
     } catch (error) {
-      alert('Login failed. Please check your credentials.');
+      toast.error('Login failed. Please check your credentials.');
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
     setIsAuthenticated(false);
     setProfitData(null);
     setWithdrawals([]);
@@ -149,31 +159,26 @@ export default function MainDashboard() {
 
   const handleBuyUSDT = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget; // Save reference before async operations
+    const form = e.currentTarget;
     const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const total_cost_usd = parseFloat(formData.get('total_cost_usd') as string);
 
-    // Calculate fee percentage: (total_cost - amount) / amount * 100
     const fee_percentage = ((total_cost_usd - amount_usdt) / amount_usdt);
 
     try {
       await api.createPurchase({ amount_usdt, fee_percentage, total_cost_usd });
-      // Purchase succeeded!
-      form.reset(); // Use saved reference
+      form.reset();
 
-      // Try to reload data - if it fails, don't break the success flow
       try {
         await loadData();
       } catch (reloadError) {
-        console.error('Failed to reload data after purchase:', reloadError);
-        // Purchase succeeded but data reload failed - user can refresh manually
+        // Silent reload failure
       }
 
-      alert(`✅ USDT purchase recorded successfully!\nAmount: ${amount_usdt} USDT\nTotal Cost: $${total_cost_usd}\nFee: ${(fee_percentage * 100).toFixed(2)}%`);
+      toast.success(`USDT purchase recorded!\nAmount: ${amount_usdt} USDT | Fee: ${(fee_percentage * 100).toFixed(2)}%`);
     } catch (error: any) {
-      console.error('Purchase error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to record purchase'}`);
+      toast.error(error.response?.data?.error || 'Failed to record purchase');
     }
   };
 
@@ -185,20 +190,17 @@ export default function MainDashboard() {
 
     try {
       await api.createTransfer({ amount_usdt });
-      // Transfer succeeded!
-      form.reset(); // Use saved reference
+      form.reset();
 
-      // Try to reload data - if it fails, don't break the success flow
       try {
         await loadData();
       } catch (reloadError) {
-        console.error('Failed to reload data after transfer:', reloadError);
+        // Silent reload failure
       }
 
-      alert(`✅ USDT transferred to Dairimar successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
+      toast.success(`USDT transferred to Dairimar successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
     } catch (error: any) {
-      console.error('Transfer error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to transfer USDT'}`);
+      toast.error(error.response?.data?.error || 'Failed to transfer USDT');
     }
   };
 
@@ -209,47 +211,40 @@ export default function MainDashboard() {
 
     try {
       await api.fulfillCOPOrder(orderId, { exchange_rate });
-
-      // Order fulfilled!
       setShowFulfillForm(null);
 
-      // Try to reload data - if it fails, don't break the success flow
       try {
         await loadData();
       } catch (reloadError) {
-        console.error('Failed to reload data after fulfillment:', reloadError);
+        // Silent reload failure
       }
 
-      alert('✅ COP order fulfilled successfully!');
+      toast.success('COP order fulfilled successfully!');
     } catch (error: any) {
-      console.error('Fulfill error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to fulfill order'}`);
+      toast.error(error.response?.data?.error || 'Failed to fulfill order');
     }
   };
 
   const handleWithdrawProfit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget; // Save reference before async operations
+    const form = e.currentTarget;
     const formData = new FormData(form);
     const amount_usdt = parseFloat(formData.get('amount_usdt') as string);
     const notes = formData.get('notes') as string;
 
     try {
       await api.createWithdrawal({ amount_usdt, notes });
-      // Withdrawal succeeded!
-      form.reset(); // Use saved reference
+      form.reset();
 
-      // Try to reload data - if it fails, don't break the success flow
       try {
         await Promise.all([loadProfitData(), loadWithdrawals()]);
       } catch (reloadError) {
-        console.error('Failed to reload data after withdrawal:', reloadError);
+        // Silent reload failure
       }
 
-      alert(`✅ Profit withdrawn successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
+      toast.success(`Profit withdrawn successfully!\nAmount: ${amount_usdt.toFixed(2)} USDT`);
     } catch (error: any) {
-      console.error('Withdrawal error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to withdraw profit'}`);
+      toast.error(error.response?.data?.error || 'Failed to withdraw profit');
     }
   };
 
@@ -265,11 +260,10 @@ export default function MainDashboard() {
       await api.createExpense({ amount_usd, description, date });
       form.reset();
       await loadExpenses();
-      alert(`✅ Expense recorded successfully!\nAmount: $${amount_usd.toFixed(2)}`);
+      toast.success(`Expense recorded successfully!\nAmount: $${amount_usd.toFixed(2)}`);
     } catch (error: any) {
-      console.error('Expense error:', error);
       const errorMsg = error.response?.data?.error || error.message || 'Failed to record expense';
-      alert(`❌ Error: ${errorMsg}\n\nPlease make sure you're logged in.`);
+      toast.error(`${errorMsg}\n\nPlease make sure you're logged in.`);
     }
   };
 
@@ -287,10 +281,9 @@ export default function MainDashboard() {
       await api.updateExpense(editingExpense.id, { amount_usd, description, date });
       setEditingExpense(null);
       await loadExpenses();
-      alert(`✅ Expense updated successfully!\nAmount: $${amount_usd.toFixed(2)}`);
+      toast.success(`Expense updated successfully!\nAmount: $${amount_usd.toFixed(2)}`);
     } catch (error: any) {
-      console.error('Update expense error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to update expense'}`);
+      toast.error(error.response?.data?.error || 'Failed to update expense');
     }
   };
 
@@ -301,9 +294,9 @@ export default function MainDashboard() {
     try {
       await api.deleteExpense(id);
       await loadExpenses();
-      alert('✅ Expense deleted successfully!');
+      toast.success('Expense deleted successfully!');
     } catch (error: any) {
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to delete expense'}`);
+      toast.error(error.response?.data?.error || 'Failed to delete expense');
     }
   };
 
@@ -311,21 +304,19 @@ export default function MainDashboard() {
     try {
       const response = await api.approveUSDTRequest(requestId, notes);
 
-      alert(`✅ USDT Request approved!\n\nAmount: ${response.data.amount_usdt} USDT transferred to Dairimar`);
+      toast.success(`USDT Request approved!\n\nAmount: ${response.data.amount_usdt} USDT transferred to Dairimar`);
 
-      // Try to reload data
       try {
         await Promise.all([loadData(), loadUSDTRequests()]);
       } catch (reloadError) {
-        console.error('Failed to reload data after approval:', reloadError);
+        // Silent reload failure
       }
     } catch (error: any) {
-      console.error('Approval error:', error);
       const errorMsg = error.response?.data?.error || 'Failed to approve request';
       const details = error.response?.data?.shortfall
-        ? `\n\nShortfall: ${error.response.data.shortfall} USDT\nCurrent Balance: ${error.response.data.current_balance} USDT`
+        ? `\nShortfall: ${error.response.data.shortfall} USDT\nCurrent Balance: ${error.response.data.current_balance} USDT`
         : '';
-      alert(`❌ Error: ${errorMsg}${details}`);
+      toast.error(`${errorMsg}${details}`);
     }
   };
 
@@ -335,25 +326,22 @@ export default function MainDashboard() {
     const notes = (formData.get('notes') as string).trim();
 
     if (!notes || notes.length < 5) {
-      alert('❌ Rejection reason must be at least 5 characters long');
+      toast.warning('Rejection reason must be at least 5 characters long');
       return;
     }
 
     try {
       await api.rejectUSDTRequest(requestId, notes);
-
-      alert('✅ USDT Request rejected');
+      toast.success('USDT Request rejected');
       setShowRejectForm(null);
 
-      // Try to reload data
       try {
         await loadUSDTRequests();
       } catch (reloadError) {
-        console.error('Failed to reload requests after rejection:', reloadError);
+        // Silent reload failure
       }
     } catch (error: any) {
-      console.error('Rejection error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to reject request'}`);
+      toast.error(error.response?.data?.error || 'Failed to reject request');
     }
   };
 
@@ -368,17 +356,15 @@ export default function MainDashboard() {
         await api.cancelCOPOrder(orderId);
       }
 
-      alert('✅ Order cancelled successfully!');
+      toast.success('Order cancelled successfully!');
 
-      // Try to reload data
       try {
         await loadData();
       } catch (reloadError) {
-        console.error('Failed to reload data after cancel:', reloadError);
+        // Silent reload failure
       }
     } catch (error: any) {
-      console.error('Cancel error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to cancel order'}`);
+      toast.error(error.response?.data?.error || 'Failed to cancel order');
     }
   };
 
@@ -408,18 +394,16 @@ export default function MainDashboard() {
         await api.updateCOPOrder(orderId, updateData);
       }
 
-      alert('✅ Order updated successfully!');
+      toast.success('Order updated successfully!');
       setShowEditForm(null);
 
-      // Try to reload data
       try {
         await loadData();
       } catch (reloadError) {
-        console.error('Failed to reload data after edit:', reloadError);
+        // Silent reload failure
       }
     } catch (error: any) {
-      console.error('Edit error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to update order'}`);
+      toast.error(error.response?.data?.error || 'Failed to update order');
     }
   };
 
@@ -445,7 +429,7 @@ export default function MainDashboard() {
           account_number
         });
 
-        alert(`✅ Private VES order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_ves.toLocaleString()} VES`);
+        toast.success(`Private VES order created!\n\nCustomer: ${customer_name}\nAmount: ${amount_ves.toLocaleString()} VES`);
       } else {
         const amount_cop = parseFloat(formData.get('amount_cop') as string);
         await api.createCOPOrder({
@@ -457,20 +441,18 @@ export default function MainDashboard() {
           account_number
         });
 
-        alert(`✅ Private COP order created successfully!\n\nCustomer: ${customer_name}\nAmount: ${amount_cop.toLocaleString()} COP`);
+        toast.success(`Private COP order created!\n\nCustomer: ${customer_name}\nAmount: ${amount_cop.toLocaleString()} COP`);
       }
 
       form.reset();
 
-      // Try to reload data
       try {
         await loadData();
       } catch (reloadError) {
-        console.error('Failed to reload data after creating private order:', reloadError);
+        // Silent reload failure
       }
     } catch (error: any) {
-      console.error('Create private order error:', error);
-      alert(`❌ Error: ${error.response?.data?.error || 'Failed to create order'}`);
+      toast.error(error.response?.data?.error || 'Failed to create order');
     }
   };
 

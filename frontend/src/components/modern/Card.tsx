@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface CardProps {
   children: React.ReactNode;
@@ -11,14 +11,15 @@ interface CardProps {
 /**
  * Modern Card Component
  * Styled card with dark theme and subtle animations
+ * Memoized to prevent unnecessary re-renders
  */
-export const Card: React.FC<CardProps> = ({
+export const Card = memo<CardProps>(function Card({
   children,
   className = '',
   hover = false,
   onClick,
   padding = 'md',
-}) => {
+}) {
   const paddingClasses = {
     none: 'p-0',
     sm: 'p-4',
@@ -43,4 +44,4 @@ export const Card: React.FC<CardProps> = ({
       {children}
     </div>
   );
-};
+});
