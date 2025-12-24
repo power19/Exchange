@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:web": "tsc && vite build --mode production",
     "build:dairimar": "tsc && vite build --mode dairimar",
     "build:patty": "tsc && vite build --mode patty",
     "build:brian": "tsc && vite build --mode brian",
@@ -15,7 +16,8 @@
     "sync:brian": "npm run build:brian && copy capacitor.config.brian.ts capacitor.config.ts && npx cap sync android",
     "android:dairimar": "npm run sync:dairimar && cd android && gradlew.bat assembleDairimarDebug",
     "android:patty": "npm run sync:patty && cd android && gradlew.bat assemblePattyDebug",
-    "android:brian": "npm run sync:brian && cd android && gradlew.bat assembleBrianDebug"
+    "android:brian": "npm run sync:brian && cd android && gradlew.bat assembleBrianDebug",
+    "restore:web": "npm run build:web && echo Web build restored - deploy to VPS"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.4",
