@@ -25,6 +25,8 @@
     "@capacitor/local-notifications": "^7.0.3",
     "@capacitor/push-notifications": "^7.0.3",
     "axios": "^1.13.2",
+    "capacitor-native-biometric": "^4.2.2",
+    "firebase": "^12.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.10.1"

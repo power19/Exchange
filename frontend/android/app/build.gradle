@@ -64,9 +64,13 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
 
-    // Firebase Cloud Messaging
+    // Firebase
     implementation platform('com.google.firebase:firebase-bom:33.7.0')
     implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-auth'
+
+    // Biometric authentication
+    implementation 'androidx.biometric:biometric:1.1.0'
 }
 
 // Apply google-services plugin (must be after dependencies)
