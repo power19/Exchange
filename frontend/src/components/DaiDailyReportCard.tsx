@@ -3,11 +3,12 @@ import * as api from '../services/api';
 import type { DaiDailyReport, DaiDailyReportOrder } from '../types';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
+import { formatDate, formatTime, formatFullDate, getTodayDateString } from '../utils/dateUtils';
 
 export default function DaiDailyReportCard() {
   const [report, setReport] = useState<DaiDailyReport | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(getTodayDateString());
   const [activeTab, setActiveTab] = useState<'orders' | 'conversions'>('orders');
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
@@ -69,12 +70,7 @@ export default function DaiDailyReportCard() {
           <div>
             <h3 className="text-xl font-bold text-white">Daily Report</h3>
             <p className="text-base font-semibold text-gray-300 mt-1">
-              {new Date(selectedDate).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              {formatFullDate(selectedDate)}
             </p>
           </div>
           <input
@@ -181,7 +177,7 @@ export default function DaiDailyReportCard() {
                             {order.usdt_sold.toFixed(2)} USDT
                           </span>
                           <span className="text-xs text-gray-500">
-                            {new Date(order.date_completed).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {formatTime(order.date_completed)}
                           </span>
                           <span className={`text-gray-400 transition-transform ${expandedOrderId === order.id ? 'rotate-180' : ''}`}>
                             {hasPaymentInfo(order) ? '...' : ''}
@@ -200,7 +196,7 @@ export default function DaiDailyReportCard() {
                           </div>
                           <div>
                             <p className="text-gray-500">Submitted</p>
-                            <p className="text-white font-medium">{new Date(order.date_submitted).toLocaleDateString()}</p>
+                            <p className="text-white font-medium">{formatDate(order.date_submitted)}</p>
                           </div>
                         </div>
 
@@ -306,7 +302,7 @@ export default function DaiDailyReportCard() {
                           @ {conversion.exchange_rate.toLocaleString()}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {new Date(conversion.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {formatTime(conversion.date)}
                         </p>
                       </div>
                     </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import { Card, Button } from './modern';
+import { formatDateTime, getTodayDateString, TIMEZONE } from '../utils/dateUtils';
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
@@ -20,7 +21,7 @@ export default function OrdersReportCard() {
   const [orders, setOrders] = useState<any[]>([]);
   const [summary, setSummary] = useState<PeriodSummary | null>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(getTodayDateString());
 
   useEffect(() => {
     loadOrders();
@@ -101,6 +102,7 @@ export default function OrdersReportCard() {
     switch (period) {
       case 'daily':
         return startDate.toLocaleDateString('en-US', {
+          timeZone: TIMEZONE,
           weekday: 'long',
           year: 'numeric',
           month: 'long',
@@ -108,10 +110,10 @@ export default function OrdersReportCard() {
         });
 
       case 'weekly':
-        return `Week of ${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+        return `Week of ${startDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'short', day: 'numeric', year: 'numeric' })}`;
 
       case 'monthly':
-        return startDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        return startDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long', year: 'numeric' });
 
       case 'yearly':
         return startDate.getFullYear().toString();
@@ -246,7 +248,7 @@ export default function OrdersReportCard() {
                       : `${parseFloat(order.amount).toLocaleString()} COP`}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {new Date(order.date_completed).toLocaleString()}
+                    {formatDateTime(order.date_completed)}
                   </p>
                 </div>
                 <div className="text-right ml-4">

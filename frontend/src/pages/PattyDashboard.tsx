@@ -4,6 +4,7 @@ import { PushNotificationService } from '../services/pushNotificationService';
 import { Card, StatCard, Button } from '../components/modern';
 import { useToast } from '../components/Toast';
 import OrdersReportCard from '../components/OrdersReportCard';
+import { getTodayDateString } from '../utils/dateUtils';
 import type { Balances, VESOrder, COPOrder, DailyReport } from '../types';
 
 // Venezuelan bank codes mapping
@@ -85,7 +86,7 @@ export default function PattyDashboard() {
   const loadData = async () => {
     try {
       console.log('📥 Loading data...');
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayDateString();
 
       // Load critical data first
       const [balancesRes, vesOrdersRes, copOrdersRes] = await Promise.all([

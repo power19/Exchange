@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import { Card, Button } from './modern';
+import { formatDateTime, formatTime } from '../utils/dateUtils';
 import type { ExchangeRate, CurrentRates } from '../types';
 
 export default function ExchangeRateManager() {
@@ -75,7 +76,7 @@ export default function ExchangeRateManager() {
               <p className="text-xs text-gray-600 mt-1">VES/USDT</p>
               {rates?.VES && (
                 <p className="text-xs text-gray-500 mt-2">
-                  Updated: {new Date(rates.VES.created_at).toLocaleString()}
+                  Updated: {formatDateTime(rates.VES.created_at)}
                 </p>
               )}
             </div>
@@ -132,7 +133,7 @@ export default function ExchangeRateManager() {
               <p className="text-xs text-gray-600 mt-1">COP/USDT</p>
               {rates?.COP && (
                 <p className="text-xs text-gray-500 mt-2">
-                  Updated: {new Date(rates.COP.created_at).toLocaleString()}
+                  Updated: {formatDateTime(rates.COP.created_at)}
                 </p>
               )}
             </div>
@@ -187,7 +188,7 @@ export default function ExchangeRateManager() {
             {vesHistory.map((rate) => (
               <div key={rate.id} className="flex justify-between items-center text-sm bg-[#151932] p-3 rounded-lg border border-gray-700">
                 <span className="text-gray-400">
-                  {new Date(rate.created_at).toLocaleTimeString()}
+                  {formatTime(rate.created_at)}
                 </span>
                 <span className="font-semibold text-purple-400">{Number(rate.rate).toLocaleString()} VES/USDT</span>
                 {rate.orders_count !== undefined && rate.orders_count > 0 && (
