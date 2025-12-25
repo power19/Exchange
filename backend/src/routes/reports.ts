@@ -14,13 +14,14 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
     const targetDate = date || getTodayDateString();
 
     // Get VES orders for the day (using Suriname timezone for date comparison)
+    // For TIMESTAMPTZ columns, use single AT TIME ZONE to convert to local time
     const vesOrdersResult = await pool.query(
       `SELECT
         COUNT(*) as count,
         COALESCE(SUM(amount_ves), 0) as total_ves,
         COALESCE(SUM(usdt_sold), 0) as total_usdt
        FROM ves_orders
-       WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1
+       WHERE DATE(date_completed AT TIME ZONE '${TIMEZONE}') = $1
        AND status = 'COMPLETED'`,
       [targetDate]
     );
@@ -32,7 +33,7 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(amount_cop), 0) as total_cop,
         COALESCE(SUM(usdt_sold), 0) as total_usdt
        FROM cop_orders
-       WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1
+       WHERE DATE(date_completed AT TIME ZONE '${TIMEZONE}') = $1
        AND status = 'COMPLETED'`,
       [targetDate]
     );
@@ -44,7 +45,7 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(amount_usdt), 0) as total_usdt,
         COALESCE(SUM(total_cost_usd), 0) as total_cost
        FROM purchases
-       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1`,
+       WHERE DATE(date AT TIME ZONE '${TIMEZONE}') = $1`,
       [targetDate]
     );
 
@@ -54,7 +55,7 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COUNT(*) as count,
         COALESCE(SUM(amount_usdt), 0) as total_usdt
        FROM transfers
-       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1`,
+       WHERE DATE(date AT TIME ZONE '${TIMEZONE}') = $1`,
       [targetDate]
     );
 
@@ -65,7 +66,7 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
         COALESCE(SUM(usdt_amount), 0) as total_usdt,
         COALESCE(SUM(ves_received), 0) as total_ves
        FROM conversions
-       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1`,
+       WHERE DATE(date AT TIME ZONE '${TIMEZONE}') = $1`,
       [targetDate]
     );
 
@@ -74,17 +75,17 @@ router.get('/daily', requireBrian(), async (req, res, next) => {
     const startingBalancesResult = await pool.query(
       `SELECT
         -- Brian's USDT starting balance
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM purchases WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) -
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) -
-        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) as brian_usdt_start,
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM purchases WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) -
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) -
+        (SELECT COALESCE(SUM(usdt_sold), 0) FROM cop_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE '${TIMEZONE}') < $1) as brian_usdt_start,
 
         -- Dairimar's USDT starting balance
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) -
-        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) as dai_usdt_start,
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) -
+        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) as dai_usdt_start,
 
         -- Dairimar's VES starting balance
-        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) -
-        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) as dai_ves_start`,
+        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) -
+        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE '${TIMEZONE}') < $1) as dai_ves_start`,
       [targetDate]
     );
 
@@ -151,7 +152,7 @@ router.get('/orders', requireBrian(), async (req, res, next) => {
         `SELECT 'VES' as order_type, id, customer_name, amount_ves as amount,
                 exchange_rate, usdt_sold, date_submitted, date_completed, status
          FROM ves_orders
-         WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') BETWEEN $1 AND $2
+         WHERE DATE(date_completed AT TIME ZONE '${TIMEZONE}') BETWEEN $1 AND $2
          AND status = 'COMPLETED'
          ORDER BY date_completed DESC`,
         params
@@ -166,7 +167,7 @@ router.get('/orders', requireBrian(), async (req, res, next) => {
           `SELECT 'COP' as order_type, id, customer_name, amount_cop as amount,
                   exchange_rate, usdt_sold, date_submitted, date_completed, status
            FROM cop_orders
-           WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') BETWEEN $1 AND $2
+           WHERE DATE(date_completed AT TIME ZONE '${TIMEZONE}') BETWEEN $1 AND $2
            AND status = 'COMPLETED'
            ORDER BY date_completed DESC`,
           params
@@ -184,7 +185,7 @@ router.get('/orders', requireBrian(), async (req, res, next) => {
         `SELECT 'COP' as order_type, id, customer_name, amount_cop as amount,
                 exchange_rate, usdt_sold, date_submitted, date_completed, status
          FROM cop_orders
-         WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') BETWEEN $1 AND $2
+         WHERE DATE(date_completed AT TIME ZONE '${TIMEZONE}') BETWEEN $1 AND $2
          AND status = 'COMPLETED'
          ORDER BY date_completed DESC`,
         params
@@ -211,12 +212,12 @@ router.get('/daily/dairimar', async (req, res, next) => {
     const startingBalancesResult = await pool.query(
       `SELECT
         -- Dairimar's USDT starting balance
-        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) -
-        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) as dai_usdt_start,
+        (SELECT COALESCE(SUM(amount_usdt), 0) FROM transfers WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) -
+        (SELECT COALESCE(SUM(usdt_amount), 0) FROM conversions WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) as dai_usdt_start,
 
         -- Dairimar's VES starting balance
-        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) -
-        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') < $1) as dai_ves_start`,
+        (SELECT COALESCE(SUM(ves_received), 0) FROM conversions WHERE DATE(date AT TIME ZONE '${TIMEZONE}') < $1) -
+        (SELECT COALESCE(SUM(amount_ves), 0) FROM ves_orders WHERE status = 'COMPLETED' AND DATE(date_completed AT TIME ZONE '${TIMEZONE}') < $1) as dai_ves_start`,
       [targetDate]
     );
 
@@ -229,7 +230,7 @@ router.get('/daily/dairimar', async (req, res, next) => {
               COALESCE(usdt_sold, 0) as usdt_sold,
               date_submitted, date_completed, bank, phone_number, customer_id, account_number
        FROM ves_orders
-       WHERE DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1
+       WHERE DATE(date_completed AT TIME ZONE '${TIMEZONE}') = $1
        AND status = 'COMPLETED'
        ORDER BY date_completed DESC`,
       [targetDate]
@@ -239,7 +240,7 @@ router.get('/daily/dairimar', async (req, res, next) => {
     const conversionsResult = await pool.query(
       `SELECT id, usdt_amount, ves_received, exchange_rate, date
        FROM conversions
-       WHERE DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $1
+       WHERE DATE(date AT TIME ZONE '${TIMEZONE}') = $1
        ORDER BY date DESC`,
       [targetDate]
     );

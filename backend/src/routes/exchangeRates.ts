@@ -106,10 +106,10 @@ router.get('/history/today/:currency', requireBrianOrDairimar(), async (req, res
       `SELECT r.*,
               (SELECT COUNT(*) FROM ves_orders
                WHERE exchange_rate = r.rate
-               AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $2) as orders_count
+               AND DATE(date_completed AT TIME ZONE '${TIMEZONE}') = $2) as orders_count
        FROM exchange_rates r
        WHERE currency = $1
-       AND DATE(created_at AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $2
+       AND DATE(created_at AT TIME ZONE '${TIMEZONE}') = $2
        ORDER BY created_at DESC`,
       [currency.toUpperCase(), today]
     );
