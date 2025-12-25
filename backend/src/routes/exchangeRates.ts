@@ -3,6 +3,7 @@ import pool from '../database/connection';
 import { requireBrianOrDairimar, requireAnyRole } from '../middleware/rbac';
 import { writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
+import { getTodayDateString, TIMEZONE } from '../utils/dateUtils';
 
 const router = Router();
 
@@ -99,16 +100,18 @@ router.get('/history/today/:currency', requireBrianOrDairimar(), async (req, res
       return res.status(400).json({ error: 'Invalid currency. Must be VES or COP' });
     }
 
+    const today = getTodayDateString();
+
     const result = await pool.query(
       `SELECT r.*,
               (SELECT COUNT(*) FROM ves_orders
                WHERE exchange_rate = r.rate
-               AND DATE(date_completed) = CURRENT_DATE) as orders_count
+               AND DATE(date_completed AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $2) as orders_count
        FROM exchange_rates r
        WHERE currency = $1
-       AND DATE(created_at) = CURRENT_DATE
+       AND DATE(created_at AT TIME ZONE 'UTC' AT TIME ZONE '${TIMEZONE}') = $2
        ORDER BY created_at DESC`,
-      [currency.toUpperCase()]
+      [currency.toUpperCase(), today]
     );
 
     res.json(result.rows);
