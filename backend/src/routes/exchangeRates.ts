@@ -3,7 +3,7 @@ import pool from '../database/connection';
 import { requireBrianOrDairimar, requireAnyRole } from '../middleware/rbac';
 import { writeLimiter } from '../middleware/rateLimiter';
 import { validators } from '../middleware/sanitize';
-import { getTodayDateString, TIMEZONE } from '../utils/dateUtils';
+import { getTodayDateString, toSurinameDate } from '../utils/dateUtils';
 
 const router = Router();
 
@@ -106,10 +106,10 @@ router.get('/history/today/:currency', requireBrianOrDairimar(), async (req, res
       `SELECT r.*,
               (SELECT COUNT(*) FROM ves_orders
                WHERE exchange_rate = r.rate
-               AND DATE(date_completed AT TIME ZONE '${TIMEZONE}') = $2) as orders_count
+               AND ${toSurinameDate('date_completed')} = $2) as orders_count
        FROM exchange_rates r
        WHERE currency = $1
-       AND DATE(created_at AT TIME ZONE '${TIMEZONE}') = $2
+       AND ${toSurinameDate('created_at')} = $2
        ORDER BY created_at DESC`,
       [currency.toUpperCase(), today]
     );
