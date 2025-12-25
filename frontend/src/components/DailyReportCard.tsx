@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import * as api from '../services/api';
 import type { DailyReport } from '../types';
+import { formatFullDate, formatTime, getTodayDateString } from '../utils/dateUtils';
 
 export default function DailyReportCard() {
   const [report, setReport] = useState<DailyReport | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(getTodayDateString());
   const [completedOrders, setCompletedOrders] = useState<any[]>([]);
 
   useEffect(() => {
@@ -46,12 +47,7 @@ export default function DailyReportCard() {
         <div>
           <h3 className="text-xl font-bold text-gray-800">Daily Report</h3>
           <p className="text-base font-semibold text-gray-900 mt-1">
-            {new Date(selectedDate).toLocaleDateString('en-US', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
+            {formatFullDate(selectedDate)}
           </p>
         </div>
         <input
@@ -179,7 +175,7 @@ export default function DailyReportCard() {
                         : `${parseFloat(order.amount).toLocaleString()} COP`}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      Completed: {new Date(order.date_completed).toLocaleTimeString()}
+                      Completed: {formatTime(order.date_completed)}
                     </p>
                   </div>
                   <div className="text-right ml-4">

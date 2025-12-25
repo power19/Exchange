@@ -8,6 +8,7 @@ import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
 import { Card, StatCard, Button } from '../components/modern';
 import { SkeletonStatCard, SkeletonOrderItem } from '../components/Skeleton';
+import { formatDate, formatTime, getTodayDateString, toLocalDateInput } from '../utils/dateUtils';
 import type { Balances, VESOrder, VESShortfall, Conversion, ExchangeRate, USDTRequest } from '../types';
 
 export default function DairimarDashboard() {
@@ -25,7 +26,7 @@ export default function DairimarDashboard() {
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
   const [useCustomRate, setUseCustomRate] = useState(false);
   const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
-  const [completedDate, setCompletedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [completedDate, setCompletedDate] = useState(getTodayDateString());
   const [mainTab, setMainTab] = useState<'dashboard' | 'reports' | 'requests'>('dashboard');
 
   // Memoized data loading function
@@ -79,7 +80,7 @@ export default function DairimarDashboard() {
       // Filter by selected date
       const filtered = response.data.filter(order => {
         if (!order.date_completed) return false;
-        const orderDate = new Date(order.date_completed).toISOString().split('T')[0];
+        const orderDate = toLocalDateInput(order.date_completed);
         return orderDate === completedDate;
       });
       setCompletedOrders(filtered);
@@ -335,11 +336,11 @@ export default function DairimarDashboard() {
                           </div>
                           <p className="text-gray-300 mb-2">{request.reason}</p>
                           <p className="text-gray-500 text-sm">
-                            Requested: {new Date(request.date_requested).toLocaleDateString()} at {new Date(request.date_requested).toLocaleTimeString()}
+                            Requested: {formatDate(request.date_requested)} at {formatTime(request.date_requested)}
                           </p>
                           {request.date_resolved && (
                             <p className="text-gray-500 text-sm">
-                              Resolved: {new Date(request.date_resolved).toLocaleDateString()} at {new Date(request.date_resolved).toLocaleTimeString()}
+                              Resolved: {formatDate(request.date_resolved)} at {formatTime(request.date_resolved)}
                             </p>
                           )}
                           {request.notes && (
@@ -371,7 +372,7 @@ export default function DairimarDashboard() {
                   {Number(currentRate.rate).toLocaleString()} <span className="text-xl">VES/USDT</span>
                 </p>
                 <p className="text-xs text-purple-200 mt-2">
-                  Set by {currentRate.set_by} at {new Date(currentRate.created_at).toLocaleTimeString()}
+                  Set by {currentRate.set_by} at {formatTime(currentRate.created_at)}
                 </p>
               </div>
               <div className="text-right">
@@ -630,7 +631,7 @@ export default function DairimarDashboard() {
                                 </p>
                               )}
                               <p className="text-sm text-gray-500 mt-1">
-                                Submitted: {new Date(order.date_submitted).toLocaleDateString()}
+                                Submitted: {formatDate(order.date_submitted)}
                               </p>
                               {(order.bank || order.phone_number || order.customer_id || order.account_number) && (
                                 <div className="mt-3 pt-3 border-t border-gray-700 space-y-2">
@@ -841,8 +842,8 @@ export default function DairimarDashboard() {
                             )}
                           </div>
                           <div className="text-right text-sm text-gray-400 ml-4">
-                            <p>{new Date(order.date_completed!).toLocaleTimeString()}</p>
-                            <p className="text-xs">{new Date(order.date_completed!).toLocaleDateString()}</p>
+                            <p>{formatTime(order.date_completed!)}</p>
+                            <p className="text-xs">{formatDate(order.date_completed!)}</p>
                           </div>
                         </div>
                       </div>
@@ -867,7 +868,7 @@ export default function DairimarDashboard() {
                     {Number(conv.usdt_amount || 0).toFixed(2)} USDT → {Number(conv.ves_received || 0).toLocaleString()} VES
                   </p>
                   <p className="text-xs text-gray-400 mt-1">
-                    Rate: {Number(conv.exchange_rate || 0).toLocaleString()} VES/USDT | {new Date(conv.date).toLocaleDateString()}
+                    Rate: {Number(conv.exchange_rate || 0).toLocaleString()} VES/USDT | {formatDate(conv.date)}
                   </p>
                 </div>
               ))

@@ -7,6 +7,7 @@ import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
 import OrdersReportCard from '../components/OrdersReportCard';
+import { formatDate, formatDateTime, getTodayDateString, toLocalDateInput } from '../utils/dateUtils';
 import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest } from '../types';
 
 export default function MainDashboard() {
@@ -586,7 +587,7 @@ export default function MainDashboard() {
                     <input
                       type="date"
                       name="date"
-                      defaultValue={editingExpense ? new Date(editingExpense.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+                      defaultValue={editingExpense ? toLocalDateInput(editingExpense.date) : getTodayDateString()}
                       className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                       required
                     />
@@ -647,7 +648,7 @@ export default function MainDashboard() {
                             ${parseFloat(expense.amount_usd as any).toFixed(2)}
                           </p>
                           <p className="text-sm text-gray-400 mt-1">
-                            {new Date(expense.date).toLocaleDateString()}
+                            {formatDate(expense.date)}
                           </p>
                           <p className="text-sm text-white mt-2">{expense.description}</p>
                         </div>
@@ -818,7 +819,7 @@ export default function MainDashboard() {
                         {withdrawals.map((withdrawal) => (
                           <tr key={withdrawal.id}>
                             <td className="px-4 py-3 text-sm text-gray-300">
-                              {new Date(withdrawal.date).toLocaleDateString()}
+                              {formatDate(withdrawal.date)}
                             </td>
                             <td className="px-4 py-3 text-sm font-medium text-green-400">
                               ${parseFloat(withdrawal.amount_usdt as any).toFixed(2)}
@@ -1056,7 +1057,7 @@ export default function MainDashboard() {
                           ${parseFloat(request.amount_usdt as any).toFixed(2)} USDT
                         </p>
                         <p className="text-sm text-gray-400 mt-1">
-                          Requested: {new Date(request.date_requested).toLocaleString()}
+                          Requested: {formatDateTime(request.date_requested)}
                         </p>
                         <div className="mt-3 p-3 bg-gray-800/50 rounded border border-gray-700">
                           <p className="text-xs text-gray-400 mb-1">Reason:</p>
@@ -1155,7 +1156,7 @@ export default function MainDashboard() {
                       {parseFloat(order.amount_ves as any).toLocaleString()} VES
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      {new Date(order.date_submitted).toLocaleDateString()}
+                      {formatDate(order.date_submitted)}
                     </p>
                     {(order.bank || order.phone_number || order.customer_id || order.account_number) && (
                       <div className="mt-2 pt-2 border-t border-gray-700 text-xs text-gray-400 space-y-1">
@@ -1295,7 +1296,7 @@ export default function MainDashboard() {
                           {parseFloat(order.amount_cop as any).toLocaleString()} COP
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {new Date(order.date_submitted).toLocaleDateString()}
+                          {formatDate(order.date_submitted)}
                         </p>
                         {(order.bank || order.phone_number || order.customer_id || order.account_number) && (
                           <div className="mt-2 pt-2 border-t border-gray-700 text-xs text-gray-400 space-y-1">
@@ -1496,7 +1497,7 @@ export default function MainDashboard() {
                   {usdtRequests.map((request) => (
                     <tr key={request.id}>
                       <td className="px-4 py-3 text-sm text-gray-300">
-                        {new Date(request.date_requested).toLocaleDateString()}
+                        {formatDate(request.date_requested)}
                       </td>
                       <td className="px-4 py-3 text-sm font-medium text-yellow-400">
                         ${parseFloat(request.amount_usdt as any).toFixed(2)}
@@ -1519,7 +1520,7 @@ export default function MainDashboard() {
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-400">
                         {request.date_resolved
-                          ? new Date(request.date_resolved).toLocaleDateString()
+                          ? formatDate(request.date_resolved)
                           : '-'}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-400 max-w-xs truncate">
