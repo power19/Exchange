@@ -6,8 +6,11 @@ import DairimarDashboard from './pages/DairimarDashboard'
 import ModernDashboardExample from './pages/ModernDashboardExample'
 import { PushNotificationService } from './services/pushNotificationService'
 import { ToastProvider } from './components/Toast'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import LoginScreen from './components/LoginScreen'
 
-function App() {
+function AppContent() {
+  const { user, loading } = useAuth();
   const [currentDashboard, setCurrentDashboard] = useState<'main' | 'patty' | 'dairimar'>('main');
 
   useEffect(() => {
@@ -63,30 +66,58 @@ function App() {
     }
   }, []);
 
+  // Show loading spinner while checking auth state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <svg className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          <p className="text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!user) {
+    return <LoginScreen />;
+  }
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* For development: allow accessing different dashboards via routes */}
+        <Route path="/patty" element={<PattyDashboard />} />
+        <Route path="/dairimar" element={<DairimarDashboard />} />
+        <Route path="/main" element={<MainDashboard />} />
+        <Route path="/modern" element={<ModernDashboardExample />} />
+
+        {/* Default route based on subdomain */}
+        <Route
+          path="/"
+          element={
+            currentDashboard === 'patty' ? <PattyDashboard /> :
+            currentDashboard === 'dairimar' ? <DairimarDashboard /> :
+            <MainDashboard />
+          }
+        />
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+function App() {
   return (
     <ToastProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* For development: allow accessing different dashboards via routes */}
-          <Route path="/patty" element={<PattyDashboard />} />
-          <Route path="/dairimar" element={<DairimarDashboard />} />
-          <Route path="/main" element={<MainDashboard />} />
-          <Route path="/modern" element={<ModernDashboardExample />} />
-
-          {/* Default route based on subdomain */}
-          <Route
-            path="/"
-            element={
-              currentDashboard === 'patty' ? <PattyDashboard /> :
-              currentDashboard === 'dairimar' ? <DairimarDashboard /> :
-              <MainDashboard />
-            }
-          />
-
-          {/* Catch all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </ToastProvider>
   )
 }
