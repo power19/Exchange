@@ -46,7 +46,7 @@ export default function DailyReportCard() {
         <div>
           <h3 className="text-xl font-bold text-gray-800">Daily Report</h3>
           <p className="text-base font-semibold text-gray-900 mt-1">
-            {new Date(selectedDate).toLocaleDateString('en-US', {
+            {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',
