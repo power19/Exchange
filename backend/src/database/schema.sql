@@ -129,6 +129,17 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     notes TEXT
 );
 
+-- Balance adjustments table (for reconciliation corrections)
+CREATE TABLE IF NOT EXISTS balance_adjustments (
+    id SERIAL PRIMARY KEY,
+    date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    account VARCHAR(20) NOT NULL CHECK (account IN ('brian_usdt', 'dai_usdt', 'dai_ves')),
+    amount DECIMAL(15, 2) NOT NULL,  -- Positive adds, negative subtracts
+    reason TEXT NOT NULL,
+    created_by VARCHAR(100) NOT NULL DEFAULT 'admin',
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Device tokens table for push notifications
 CREATE TABLE IF NOT EXISTS device_tokens (
     id SERIAL PRIMARY KEY,
