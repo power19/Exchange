@@ -26,7 +26,7 @@ export default function MainDashboard() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses' | 'usdt-history'>('dashboard');
 
   // Memoized data loading functions
   const loadData = useCallback(async () => {
@@ -553,6 +553,21 @@ export default function MainDashboard() {
                 💸 Expenses
               </button>
             )}
+            <button
+              onClick={() => setActiveTab('usdt-history')}
+              className={`px-6 py-3 font-medium transition-colors ${
+                activeTab === 'usdt-history'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              💰 USDT History
+              {usdtRequests.length > 0 && (
+                <span className="ml-2 bg-yellow-500/20 text-yellow-400 text-xs font-medium px-2 py-0.5 rounded-full">
+                  {usdtRequests.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
@@ -686,6 +701,129 @@ export default function MainDashboard() {
               )}
             </Card>
           </>
+        )}
+
+        {/* USDT History Tab Content */}
+        {activeTab === 'usdt-history' && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">💰 USDT Request History</h2>
+              <div className="flex gap-2">
+                <span className="bg-green-500/20 text-green-400 text-xs font-medium px-3 py-1 rounded-full">
+                  {usdtRequests.filter(r => r.status === 'FULFILLED').length} fulfilled
+                </span>
+                <span className="bg-yellow-500/20 text-yellow-400 text-xs font-medium px-3 py-1 rounded-full">
+                  {usdtRequests.filter(r => r.status === 'PENDING').length} pending
+                </span>
+                <span className="bg-red-500/20 text-red-400 text-xs font-medium px-3 py-1 rounded-full">
+                  {usdtRequests.filter(r => r.status === 'REJECTED').length} rejected
+                </span>
+              </div>
+            </div>
+
+            {usdtRequests.length === 0 ? (
+              <p className="text-gray-400 text-center py-8">No USDT requests yet</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead>
+                    <tr className="border-b border-gray-700">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                        Date Requested
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                        Amount
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                        Reason
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                        Date Resolved
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                        Notes
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-700">
+                    {usdtRequests.map((request) => (
+                      <tr key={request.id} className="hover:bg-gray-800/30">
+                        <td className="px-4 py-4 text-sm text-gray-300">
+                          {new Date(request.date_requested).toLocaleString()}
+                        </td>
+                        <td className="px-4 py-4 text-sm font-medium text-yellow-400">
+                          ${parseFloat(request.amount_usdt as any).toFixed(2)} USDT
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-300 max-w-xs">
+                          <div className="truncate" title={request.reason}>
+                            {request.reason}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-sm">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              request.status === 'PENDING'
+                                ? 'bg-yellow-500/20 text-yellow-400'
+                                : request.status === 'FULFILLED'
+                                ? 'bg-green-500/20 text-green-400'
+                                : 'bg-red-500/20 text-red-400'
+                            }`}
+                          >
+                            {request.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-400">
+                          {request.date_resolved
+                            ? new Date(request.date_resolved).toLocaleString()
+                            : '-'}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-400 max-w-xs">
+                          <div className="truncate" title={request.notes || ''}>
+                            {request.notes || '-'}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* Summary Stats */}
+            {usdtRequests.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-gray-700">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-[#151932] rounded-xl p-4">
+                    <p className="text-sm text-gray-400 mb-1">Total Requested</p>
+                    <p className="text-xl font-bold text-yellow-400">
+                      ${usdtRequests.reduce((sum, r) => sum + parseFloat(r.amount_usdt as any), 0).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="bg-[#151932] rounded-xl p-4">
+                    <p className="text-sm text-gray-400 mb-1">Total Fulfilled</p>
+                    <p className="text-xl font-bold text-green-400">
+                      ${usdtRequests
+                        .filter(r => r.status === 'FULFILLED')
+                        .reduce((sum, r) => sum + parseFloat(r.amount_usdt as any), 0)
+                        .toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="bg-[#151932] rounded-xl p-4">
+                    <p className="text-sm text-gray-400 mb-1">Total Rejected</p>
+                    <p className="text-xl font-bold text-red-400">
+                      ${usdtRequests
+                        .filter(r => r.status === 'REJECTED')
+                        .reduce((sum, r) => sum + parseFloat(r.amount_usdt as any), 0)
+                        .toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Card>
         )}
 
         {/* Dashboard Tab Content */}
@@ -1463,75 +1601,6 @@ export default function MainDashboard() {
             </div>
           </Card>
         </div>
-
-        {/* USDT Request History */}
-        {usdtRequests.length > 0 && (
-          <Card className="mb-8">
-            <h3 className="text-xl font-bold mb-4">📋 USDT Request History</h3>
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
-                <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
-                      Date
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
-                      Amount
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
-                      Reason
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
-                      Status
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
-                      Resolved
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">
-                      Notes
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-700">
-                  {usdtRequests.map((request) => (
-                    <tr key={request.id}>
-                      <td className="px-4 py-3 text-sm text-gray-300">
-                        {new Date(request.date_requested).toLocaleDateString()}
-                      </td>
-                      <td className="px-4 py-3 text-sm font-medium text-yellow-400">
-                        ${parseFloat(request.amount_usdt as any).toFixed(2)}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-400 max-w-xs truncate">
-                        {request.reason}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
-                            request.status === 'PENDING'
-                              ? 'bg-yellow-500/20 text-yellow-400'
-                              : request.status === 'FULFILLED'
-                              ? 'bg-green-500/20 text-green-400'
-                              : 'bg-red-500/20 text-red-400'
-                          }`}
-                        >
-                          {request.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-400">
-                        {request.date_resolved
-                          ? new Date(request.date_resolved).toLocaleDateString()
-                          : '-'}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-400 max-w-xs truncate">
-                        {request.notes || '-'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        )}
           </>
         )}
 
