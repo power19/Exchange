@@ -4,8 +4,8 @@ import { requireBrian } from '../middleware/rbac';
 
 const router = Router();
 
-// Timezone for date queries (Venezuela)
-const TZ = 'America/Caracas';
+// Timezone for date queries (US Eastern - Palm Beach/Miami area)
+const TZ = 'America/New_York';
 
 // Get daily report (PRIVATE - Brian only, contains profit data)
 router.get('/daily', requireBrian(), async (req, res, next) => {
