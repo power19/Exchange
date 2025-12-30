@@ -3,18 +3,19 @@ import { Balances, ProfitData } from '../types';
 
 export class BalanceService {
   /**
-   * Get balance adjustment for a specific account
-   * @param account Account name: 'brian_usdt', 'dai_usdt', or 'dai_ves'
+   * Get balance adjustment for a specific account and currency
+   * @param account Account name: 'brian' or 'dairimar'
+   * @param currency Currency: 'USDT' or 'VES'
    * @param client Optional database client for transaction-safe balance checking
    */
-  static async getAdjustment(account: string, client?: any): Promise<number> {
+  static async getAdjustment(account: string, currency: string, client?: any): Promise<number> {
     const useClient = client || await pool.connect();
     const shouldRelease = !client;
 
     try {
       const result = await useClient.query(
-        `SELECT COALESCE(SUM(amount), 0) as total FROM balance_adjustments WHERE account = $1`,
-        [account]
+        `SELECT COALESCE(SUM(adjustment_amount), 0) as total FROM balance_adjustments WHERE account = $1 AND currency = $2`,
+        [account, currency]
       );
       return parseFloat(result.rows[0].total);
     } finally {
@@ -56,7 +57,7 @@ export class BalanceService {
       const totalCOPSold = parseFloat(copSoldResult.rows[0].total);
 
       // Get any balance adjustments
-      const adjustment = await this.getAdjustment('brian_usdt', useClient);
+      const adjustment = await this.getAdjustment('brian', 'USDT', useClient);
 
       return totalPurchased - totalTransferred - totalCOPSold + adjustment;
     } finally {
@@ -90,7 +91,7 @@ export class BalanceService {
       const totalConverted = parseFloat(conversionsResult.rows[0].total);
 
       // Get any balance adjustments
-      const adjustment = await this.getAdjustment('dai_usdt', useClient);
+      const adjustment = await this.getAdjustment('dairimar', 'USDT', useClient);
 
       return totalReceived - totalConverted + adjustment;
     } finally {
@@ -140,7 +141,7 @@ export class BalanceService {
       }
 
       // Get any balance adjustments (VES adjustments are stored as integers)
-      const adjustment = await this.getAdjustment('dai_ves', useClient);
+      const adjustment = await this.getAdjustment('dairimar', 'VES', useClient);
       const adjustmentInt = Math.round(adjustment); // Ensure integer for VES
 
       return totalConverted - totalSold + adjustmentInt;

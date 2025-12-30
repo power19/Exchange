@@ -133,10 +133,10 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE TABLE IF NOT EXISTS balance_adjustments (
     id SERIAL PRIMARY KEY,
     date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    account VARCHAR(20) NOT NULL CHECK (account IN ('brian_usdt', 'dai_usdt', 'dai_ves')),
-    amount DECIMAL(15, 2) NOT NULL,  -- Positive adds, negative subtracts
+    account VARCHAR(20) NOT NULL CHECK (account IN ('brian', 'dairimar')),
+    currency VARCHAR(10) NOT NULL CHECK (currency IN ('USDT', 'VES')),
+    adjustment_amount DECIMAL(15, 2) NOT NULL,  -- Positive adds, negative subtracts
     reason TEXT NOT NULL,
-    created_by VARCHAR(100) NOT NULL DEFAULT 'admin',
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
