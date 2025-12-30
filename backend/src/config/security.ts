@@ -53,7 +53,9 @@ const DEFAULT_ALLOWED_HOSTS = [
   '127.0.0.1',
   'powermental.',
   'pato.',
-  'dai.'
+  'dai.',
+  'api.',
+  'main.'
 ];
 
 export const allowedHosts = [...DEFAULT_ALLOWED_HOSTS, ...ALLOWED_HOSTS];
