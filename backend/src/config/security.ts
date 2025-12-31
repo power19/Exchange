@@ -53,6 +53,7 @@ const DEFAULT_ALLOWED_HOSTS = [
   '127.0.0.1',
   'powermental.',
   'pato.',
+  'patty.',
   'dai.'
 ];
 
@@ -82,7 +83,7 @@ export function getRoleFromHost(host: string): 'brian' | 'patty' | 'dairimar' {
 
   const hostLower = host.toLowerCase();
 
-  if (hostLower.startsWith('pato.')) {
+  if (hostLower.startsWith('pato.') || hostLower.startsWith('patty.')) {
     return 'patty';
   }
   if (hostLower.startsWith('dai.')) {
