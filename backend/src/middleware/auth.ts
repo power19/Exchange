@@ -30,6 +30,12 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
   }
 }
 
+// Endpoints that require CSRF protection (authenticated state-changing operations)
+const CSRF_PROTECTED_PATHS = [
+  '/withdrawals',
+  '/auth/logout'
+];
+
 // Middleware to verify CSRF token for state-changing requests
 export function csrfMiddleware(req: Request, res: Response, next: NextFunction) {
   // Skip CSRF check for GET, HEAD, OPTIONS requests (safe methods)
@@ -39,6 +45,13 @@ export function csrfMiddleware(req: Request, res: Response, next: NextFunction) 
 
   // Skip CSRF for login (user doesn't have CSRF token yet)
   if (req.path === '/auth/login') {
+    return next();
+  }
+
+  // Only enforce CSRF for specific protected endpoints
+  // Order submission endpoints (ves-orders, cop-orders) use RBAC, not auth
+  const needsCsrf = CSRF_PROTECTED_PATHS.some(path => req.path.startsWith(path));
+  if (!needsCsrf) {
     return next();
   }
 
