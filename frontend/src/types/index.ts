@@ -192,3 +192,15 @@ export interface DaiDailyReport {
     items: DaiDailyReportConversion[];
   };
 }
+
+export interface MonthlyUSDTSold {
+  month: string;
+  year: number;
+  month_num: number;
+  ves_usdt_sold: number;
+  cop_usdt_sold: number;
+  total_usdt_sold: number;
+  ves_orders_count: number;
+  cop_orders_count: number;
+  total_orders_count: number;
+}

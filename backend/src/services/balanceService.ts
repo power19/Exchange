@@ -245,4 +245,114 @@ export class BalanceService {
       is_sufficient: shortfall <= 0
     };
   }
+
+  /**
+   * Get USDT sold per month (for Brian's dashboard)
+   * Aggregates completed VES and COP orders by month
+   */
+  static async getMonthlyUSDTSold(): Promise<{
+    month: string;
+    year: number;
+    month_num: number;
+    ves_usdt_sold: number;
+    cop_usdt_sold: number;
+    total_usdt_sold: number;
+    ves_orders_count: number;
+    cop_orders_count: number;
+    total_orders_count: number;
+  }[]> {
+    const client = await pool.connect();
+    try {
+      // Get monthly aggregated data from VES orders
+      const vesResult = await client.query(`
+        SELECT
+          TO_CHAR(date_completed, 'YYYY-MM') as month,
+          EXTRACT(YEAR FROM date_completed) as year,
+          EXTRACT(MONTH FROM date_completed) as month_num,
+          COALESCE(SUM(usdt_sold), 0) as usdt_sold,
+          COUNT(*) as orders_count
+        FROM ves_orders
+        WHERE status = 'COMPLETED' AND date_completed IS NOT NULL
+        GROUP BY TO_CHAR(date_completed, 'YYYY-MM'),
+                 EXTRACT(YEAR FROM date_completed),
+                 EXTRACT(MONTH FROM date_completed)
+        ORDER BY year DESC, month_num DESC
+      `);
+
+      // Get monthly aggregated data from COP orders
+      const copResult = await client.query(`
+        SELECT
+          TO_CHAR(date_completed, 'YYYY-MM') as month,
+          EXTRACT(YEAR FROM date_completed) as year,
+          EXTRACT(MONTH FROM date_completed) as month_num,
+          COALESCE(SUM(usdt_sold), 0) as usdt_sold,
+          COUNT(*) as orders_count
+        FROM cop_orders
+        WHERE status = 'COMPLETED' AND date_completed IS NOT NULL
+        GROUP BY TO_CHAR(date_completed, 'YYYY-MM'),
+                 EXTRACT(YEAR FROM date_completed),
+                 EXTRACT(MONTH FROM date_completed)
+        ORDER BY year DESC, month_num DESC
+      `);
+
+      // Merge VES and COP data by month
+      const monthlyMap = new Map<string, {
+        month: string;
+        year: number;
+        month_num: number;
+        ves_usdt_sold: number;
+        cop_usdt_sold: number;
+        ves_orders_count: number;
+        cop_orders_count: number;
+      }>();
+
+      // Add VES data
+      for (const row of vesResult.rows) {
+        monthlyMap.set(row.month, {
+          month: row.month,
+          year: parseInt(row.year),
+          month_num: parseInt(row.month_num),
+          ves_usdt_sold: parseFloat(row.usdt_sold),
+          cop_usdt_sold: 0,
+          ves_orders_count: parseInt(row.orders_count),
+          cop_orders_count: 0
+        });
+      }
+
+      // Add COP data
+      for (const row of copResult.rows) {
+        const existing = monthlyMap.get(row.month);
+        if (existing) {
+          existing.cop_usdt_sold = parseFloat(row.usdt_sold);
+          existing.cop_orders_count = parseInt(row.orders_count);
+        } else {
+          monthlyMap.set(row.month, {
+            month: row.month,
+            year: parseInt(row.year),
+            month_num: parseInt(row.month_num),
+            ves_usdt_sold: 0,
+            cop_usdt_sold: parseFloat(row.usdt_sold),
+            ves_orders_count: 0,
+            cop_orders_count: parseInt(row.orders_count)
+          });
+        }
+      }
+
+      // Convert to array and calculate totals
+      const result = Array.from(monthlyMap.values())
+        .map(item => ({
+          ...item,
+          total_usdt_sold: item.ves_usdt_sold + item.cop_usdt_sold,
+          total_orders_count: item.ves_orders_count + item.cop_orders_count
+        }))
+        .sort((a, b) => {
+          if (a.year !== b.year) return b.year - a.year;
+          return b.month_num - a.month_num;
+        });
+
+      return result;
+    } finally {
+      client.release();
+    }
+  }
 }

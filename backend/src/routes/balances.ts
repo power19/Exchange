@@ -34,4 +34,14 @@ router.get('/ves-shortfall', requireBrianOrDairimar(), async (req, res, next) =>
   }
 });
 
+// Get monthly USDT sold data (Brian only)
+router.get('/monthly-usdt', requireBrian(), async (req, res, next) => {
+  try {
+    const monthlyData = await BalanceService.getMonthlyUSDTSold();
+    res.json(monthlyData);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export { router as balanceRoutes };

@@ -7,7 +7,7 @@ import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
 import OrdersReportCard from '../components/OrdersReportCard';
-import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest } from '../types';
+import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest, MonthlyUSDTSold } from '../types';
 
 export default function MainDashboard() {
   const toast = useToast();
@@ -20,13 +20,14 @@ export default function MainDashboard() {
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [usdtRequests, setUsdtRequests] = useState<USDTRequest[]>([]);
+  const [monthlyUSDT, setMonthlyUSDT] = useState<MonthlyUSDTSold[]>([]);
   const [showFulfillForm, setShowFulfillForm] = useState<number | null>(null);
   const [showRejectForm, setShowRejectForm] = useState<number | null>(null);
   const [showEditForm, setShowEditForm] = useState<{ id: number; type: 'VES' | 'COP' } | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses' | 'usdt-history'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses' | 'usdt-history' | 'monthly-usdt'>('dashboard');
 
   // Memoized data loading functions
   const loadData = useCallback(async () => {
@@ -83,6 +84,15 @@ export default function MainDashboard() {
     }
   }, []);
 
+  const loadMonthlyUSDT = useCallback(async () => {
+    try {
+      const monthlyRes = await api.getMonthlyUSDTSold();
+      setMonthlyUSDT(Array.isArray(monthlyRes.data) ? monthlyRes.data : []);
+    } catch (error) {
+      setMonthlyUSDT([]);
+    }
+  }, []);
+
   const checkAuth = useCallback(async () => {
     try {
       await api.verifyToken();
@@ -90,10 +100,11 @@ export default function MainDashboard() {
       loadProfitData();
       loadWithdrawals();
       loadExpenses();
+      loadMonthlyUSDT();
     } catch (error) {
       setIsAuthenticated(false);
     }
-  }, [loadProfitData, loadWithdrawals, loadExpenses]);
+  }, [loadProfitData, loadWithdrawals, loadExpenses, loadMonthlyUSDT]);
 
   // Combined refresh function for smart refresh
   const refreshAll = useCallback(async () => {
@@ -140,6 +151,7 @@ export default function MainDashboard() {
       setShowLogin(false);
       loadProfitData();
       loadWithdrawals();
+      loadMonthlyUSDT();
       toast.success('Login successful!');
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
@@ -553,6 +565,18 @@ export default function MainDashboard() {
                 💸 Expenses
               </button>
             )}
+            {isAuthenticated && (
+              <button
+                onClick={() => setActiveTab('monthly-usdt')}
+                className={`px-6 py-3 font-medium transition-colors ${
+                  activeTab === 'monthly-usdt'
+                    ? 'text-cyan-400 border-b-2 border-cyan-400'
+                    : 'text-gray-400 hover:text-gray-300'
+                }`}
+              >
+                📅 Monthly USDT
+              </button>
+            )}
             <button
               onClick={() => setActiveTab('usdt-history')}
               className={`px-6 py-3 font-medium transition-colors ${
@@ -822,6 +846,133 @@ export default function MainDashboard() {
                   </div>
                 </div>
               </div>
+            )}
+          </Card>
+        )}
+
+        {/* Monthly USDT Tab Content */}
+        {activeTab === 'monthly-usdt' && isAuthenticated && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">📅 Monthly USDT Sold</h2>
+              <div className="text-sm text-gray-400">
+                Track your USDT sales performance by month
+              </div>
+            </div>
+
+            {monthlyUSDT.length === 0 ? (
+              <p className="text-gray-400 text-center py-8">No completed orders yet</p>
+            ) : (
+              <>
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-[#151932] rounded-xl p-4">
+                    <p className="text-sm text-gray-400 mb-1">Total USDT Sold (All Time)</p>
+                    <p className="text-2xl font-bold text-cyan-400">
+                      ${monthlyUSDT.reduce((sum, m) => sum + m.total_usdt_sold, 0).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="bg-[#151932] rounded-xl p-4">
+                    <p className="text-sm text-gray-400 mb-1">VES Orders Total</p>
+                    <p className="text-2xl font-bold text-purple-400">
+                      ${monthlyUSDT.reduce((sum, m) => sum + m.ves_usdt_sold, 0).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="bg-[#151932] rounded-xl p-4">
+                    <p className="text-sm text-gray-400 mb-1">COP Orders Total</p>
+                    <p className="text-2xl font-bold text-orange-400">
+                      ${monthlyUSDT.reduce((sum, m) => sum + m.cop_usdt_sold, 0).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Monthly Table */}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="border-b border-gray-700">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                          Month
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase">
+                          VES USDT
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase">
+                          VES Orders
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase">
+                          COP USDT
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase">
+                          COP Orders
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase">
+                          Total USDT
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase">
+                          Profit (10%)
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-700">
+                      {monthlyUSDT.map((month) => {
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        const monthLabel = `${monthNames[month.month_num - 1]} ${month.year}`;
+                        return (
+                          <tr key={month.month} className="hover:bg-gray-800/30">
+                            <td className="px-4 py-4 text-sm font-medium text-white">
+                              {monthLabel}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-right text-purple-400">
+                              ${month.ves_usdt_sold.toFixed(2)}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-right text-gray-400">
+                              {month.ves_orders_count}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-right text-orange-400">
+                              ${month.cop_usdt_sold.toFixed(2)}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-right text-gray-400">
+                              {month.cop_orders_count}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-right font-bold text-cyan-400">
+                              ${month.total_usdt_sold.toFixed(2)}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-right font-bold text-green-400">
+                              ${(month.total_usdt_sold * 0.10).toFixed(2)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <tfoot>
+                      <tr className="border-t-2 border-gray-600 bg-gray-800/30">
+                        <td className="px-4 py-4 text-sm font-bold text-white">
+                          TOTAL
+                        </td>
+                        <td className="px-4 py-4 text-sm text-right font-bold text-purple-400">
+                          ${monthlyUSDT.reduce((sum, m) => sum + m.ves_usdt_sold, 0).toFixed(2)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-right font-bold text-gray-300">
+                          {monthlyUSDT.reduce((sum, m) => sum + m.ves_orders_count, 0)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-right font-bold text-orange-400">
+                          ${monthlyUSDT.reduce((sum, m) => sum + m.cop_usdt_sold, 0).toFixed(2)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-right font-bold text-gray-300">
+                          {monthlyUSDT.reduce((sum, m) => sum + m.cop_orders_count, 0)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-right font-bold text-cyan-400">
+                          ${monthlyUSDT.reduce((sum, m) => sum + m.total_usdt_sold, 0).toFixed(2)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-right font-bold text-green-400">
+                          ${(monthlyUSDT.reduce((sum, m) => sum + m.total_usdt_sold, 0) * 0.10).toFixed(2)}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </>
             )}
           </Card>
         )}
