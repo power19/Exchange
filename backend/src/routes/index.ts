@@ -13,6 +13,7 @@ import { auditLogRoutes } from './auditLogs';
 import { usdtRequestRoutes } from './usdtRequests';
 import { expensesRoutes } from './expenses';
 import deviceTokenRoutes from './deviceTokens';
+import { balanceAdjustmentRoutes } from './balanceAdjustments';
 
 const router = Router();
 
@@ -30,5 +31,6 @@ router.use('/reports', reportsRoutes);
 router.use('/audit-logs', auditLogRoutes);
 router.use('/usdt-requests', usdtRequestRoutes);
 router.use('/device-tokens', deviceTokenRoutes);
+router.use('/balance-adjustments', balanceAdjustmentRoutes);
 
 export { router as apiRoutes };

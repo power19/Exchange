@@ -141,6 +141,17 @@ CREATE TABLE IF NOT EXISTS device_tokens (
     is_active BOOLEAN NOT NULL DEFAULT true
 );
 
+-- Balance adjustments table (admin manual corrections)
+CREATE TABLE IF NOT EXISTS balance_adjustments (
+    id SERIAL PRIMARY KEY,
+    date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    balance_type VARCHAR(20) NOT NULL CHECK (balance_type IN ('brian_usdt', 'dai_usdt', 'dai_ves')),
+    amount DECIMAL(15, 2) NOT NULL,  -- Can be positive (add) or negative (subtract)
+    reason TEXT NOT NULL,
+    adjusted_by VARCHAR(100) NOT NULL DEFAULT 'admin',
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_table_record ON audit_logs(table_name, record_id);
@@ -158,3 +169,5 @@ CREATE INDEX IF NOT EXISTS idx_conversions_date ON conversions(date);
 CREATE INDEX IF NOT EXISTS idx_exchange_rates_currency_active ON exchange_rates(currency, is_active) WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_exchange_rates_created_at ON exchange_rates(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_device_tokens_user_role ON device_tokens(user_role) WHERE is_active = true;
+CREATE INDEX IF NOT EXISTS idx_balance_adjustments_type ON balance_adjustments(balance_type);
+CREATE INDEX IF NOT EXISTS idx_balance_adjustments_date ON balance_adjustments(date DESC);

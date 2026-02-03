@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CapacitorHttp } from '@capacitor/core';
 import { Capacitor } from '@capacitor/core';
-import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, Expense, ExchangeRate, CurrentRates, DailyReport, DaiDailyReport, USDTRequest, USDTRequestStatus } from '../types';
+import type { Balances, ProfitData, VESShortfall, Purchase, Transfer, Conversion, VESOrder, COPOrder, Withdrawal, Expense, ExchangeRate, CurrentRates, DailyReport, DaiDailyReport, USDTRequest, USDTRequestStatus, BalanceAdjustment, BalanceType } from '../types';
 
 // Simple API base URL - use environment variable or default to /api for web
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
@@ -278,3 +278,11 @@ export const registerDeviceToken = (data: { user_role: string; device_token: str
   api.post('/device-tokens/register', data);
 export const unregisterDeviceToken = (data: { device_token: string }) =>
   api.post('/device-tokens/unregister', data);
+
+// Balance Adjustments (Admin)
+export const getBalanceAdjustments = (balance_type?: BalanceType) =>
+  api.get<BalanceAdjustment[]>('/balance-adjustments', { params: { balance_type } });
+export const createBalanceAdjustment = (data: { balance_type: BalanceType; amount: number; reason: string; date?: string }) =>
+  api.post<BalanceAdjustment>('/balance-adjustments', data);
+export const deleteBalanceAdjustment = (id: number) =>
+  api.delete(`/balance-adjustments/${id}`);

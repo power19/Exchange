@@ -7,7 +7,7 @@ import { Card, StatCard, Button } from '../components/modern';
 import ExchangeRateManager from '../components/ExchangeRateManager';
 import DailyReportCard from '../components/DailyReportCard';
 import OrdersReportCard from '../components/OrdersReportCard';
-import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest } from '../types';
+import type { Balances, ProfitData, VESOrder, COPOrder, Withdrawal, Expense, USDTRequest, BalanceAdjustment, BalanceType } from '../types';
 
 export default function MainDashboard() {
   const toast = useToast();
@@ -26,7 +26,8 @@ export default function MainDashboard() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [privateOrderType, setPrivateOrderType] = useState<'VES' | 'COP'>('VES');
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses' | 'usdt-history'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'expenses' | 'usdt-history' | 'adjustments'>('dashboard');
+  const [balanceAdjustments, setBalanceAdjustments] = useState<BalanceAdjustment[]>([]);
 
   // Memoized data loading functions
   const loadData = useCallback(async () => {
@@ -83,6 +84,15 @@ export default function MainDashboard() {
     }
   }, []);
 
+  const loadBalanceAdjustments = useCallback(async () => {
+    try {
+      const adjustmentsRes = await api.getBalanceAdjustments();
+      setBalanceAdjustments(Array.isArray(adjustmentsRes.data) ? adjustmentsRes.data : []);
+    } catch (error) {
+      setBalanceAdjustments([]);
+    }
+  }, []);
+
   const checkAuth = useCallback(async () => {
     try {
       await api.verifyToken();
@@ -90,10 +100,11 @@ export default function MainDashboard() {
       loadProfitData();
       loadWithdrawals();
       loadExpenses();
+      loadBalanceAdjustments();
     } catch (error) {
       setIsAuthenticated(false);
     }
-  }, [loadProfitData, loadWithdrawals, loadExpenses]);
+  }, [loadProfitData, loadWithdrawals, loadExpenses, loadBalanceAdjustments]);
 
   // Combined refresh function for smart refresh
   const refreshAll = useCallback(async () => {
@@ -127,6 +138,13 @@ export default function MainDashboard() {
       loadExpenses();
     }
   }, [activeTab, isAuthenticated, loadExpenses]);
+
+  // Load balance adjustments when switching to adjustments tab
+  useEffect(() => {
+    if (activeTab === 'adjustments' && isAuthenticated) {
+      loadBalanceAdjustments();
+    }
+  }, [activeTab, isAuthenticated, loadBalanceAdjustments]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -297,6 +315,43 @@ export default function MainDashboard() {
       toast.success('Expense deleted successfully!');
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to delete expense');
+    }
+  };
+
+  const handleCreateBalanceAdjustment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const balance_type = formData.get('balance_type') as BalanceType;
+    const amount = parseFloat(formData.get('amount') as string);
+    const reason = formData.get('reason') as string;
+
+    const balanceLabel = balance_type === 'brian_usdt' ? "Brian's USDT" :
+                         balance_type === 'dai_usdt' ? "Dai's USDT" : "Dai's VES";
+    const actionType = amount > 0 ? 'added to' : 'subtracted from';
+
+    try {
+      await api.createBalanceAdjustment({ balance_type, amount, reason });
+      form.reset();
+      await Promise.all([loadBalanceAdjustments(), loadData()]);
+      toast.success(`Balance adjustment recorded!\n\n${Math.abs(amount).toLocaleString()} ${actionType} ${balanceLabel}`);
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Failed to create adjustment');
+    }
+  };
+
+  const handleDeleteBalanceAdjustment = async (id: number, adjustment: BalanceAdjustment) => {
+    const balanceLabel = adjustment.balance_type === 'brian_usdt' ? "Brian's USDT" :
+                         adjustment.balance_type === 'dai_usdt' ? "Dai's USDT" : "Dai's VES";
+    const confirmed = confirm(`Are you sure you want to delete this balance adjustment?\n\n${adjustment.amount > 0 ? '+' : ''}${adjustment.amount.toLocaleString()} to ${balanceLabel}\nReason: ${adjustment.reason}`);
+    if (!confirmed) return;
+
+    try {
+      await api.deleteBalanceAdjustment(id);
+      await Promise.all([loadBalanceAdjustments(), loadData()]);
+      toast.success('Balance adjustment deleted successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Failed to delete adjustment');
     }
   };
 
@@ -542,16 +597,28 @@ export default function MainDashboard() {
               📈 Reports
             </button>
             {isAuthenticated && (
-              <button
-                onClick={() => setActiveTab('expenses')}
-                className={`px-6 py-3 font-medium transition-colors ${
-                  activeTab === 'expenses'
-                    ? 'text-cyan-400 border-b-2 border-cyan-400'
-                    : 'text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                💸 Expenses
-              </button>
+              <>
+                <button
+                  onClick={() => setActiveTab('expenses')}
+                  className={`px-6 py-3 font-medium transition-colors ${
+                    activeTab === 'expenses'
+                      ? 'text-cyan-400 border-b-2 border-cyan-400'
+                      : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                >
+                  💸 Expenses
+                </button>
+                <button
+                  onClick={() => setActiveTab('adjustments')}
+                  className={`px-6 py-3 font-medium transition-colors ${
+                    activeTab === 'adjustments'
+                      ? 'text-cyan-400 border-b-2 border-cyan-400'
+                      : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                >
+                  ⚖️ Adjustments
+                </button>
+              </>
             )}
             <button
               onClick={() => setActiveTab('usdt-history')}
@@ -696,6 +763,230 @@ export default function MainDashboard() {
                     <span className="text-2xl font-bold text-red-400">
                       ${expenses.reduce((sum, exp) => sum + parseFloat(exp.amount_usd as any), 0).toFixed(2)}
                     </span>
+                  </div>
+                </div>
+              )}
+            </Card>
+          </>
+        )}
+
+        {/* Balance Adjustments Tab Content */}
+        {activeTab === 'adjustments' && isAuthenticated && (
+          <>
+            {/* Create Adjustment Form */}
+            <Card className="mb-8">
+              <h2 className="text-2xl font-bold mb-6">⚖️ Adjust Balance</h2>
+              <p className="text-sm text-gray-400 mb-6">
+                Use this to manually correct balances without running database queries.
+                Positive amounts add to the balance, negative amounts subtract.
+              </p>
+              <form onSubmit={handleCreateBalanceAdjustment} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Balance Type</label>
+                    <select
+                      name="balance_type"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      required
+                    >
+                      <option value="brian_usdt">Brian's USDT</option>
+                      <option value="dai_usdt">Dai's USDT</option>
+                      <option value="dai_ves">Dai's VES</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Amount</label>
+                    <input
+                      type="number"
+                      name="amount"
+                      step="0.01"
+                      placeholder="e.g., 100 or -50"
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      required
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      Positive = add, Negative = subtract
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Reason</label>
+                    <input
+                      type="text"
+                      name="reason"
+                      placeholder="e.g., Correction for missing transaction"
+                      minLength={3}
+                      className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      required
+                    />
+                  </div>
+                </div>
+                <Button type="submit" variant="primary" fullWidth>
+                  💾 Save Adjustment
+                </Button>
+              </form>
+            </Card>
+
+            {/* Current Balances Reference */}
+            <Card className="mb-8 bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-500/20">
+              <h3 className="text-lg font-bold mb-4">📊 Current Balances (for reference)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-[#151932] rounded-xl p-4">
+                  <p className="text-sm text-gray-400 mb-1">Brian's USDT</p>
+                  <p className="text-xl font-bold text-cyan-400">
+                    ${balances?.brian_usdt.toFixed(2)}
+                  </p>
+                </div>
+                <div className="bg-[#151932] rounded-xl p-4">
+                  <p className="text-sm text-gray-400 mb-1">Dai's USDT</p>
+                  <p className="text-xl font-bold text-green-400">
+                    ${balances?.dai_usdt.toFixed(2)}
+                  </p>
+                </div>
+                <div className="bg-[#151932] rounded-xl p-4">
+                  <p className="text-sm text-gray-400 mb-1">Dai's VES</p>
+                  <p className="text-xl font-bold text-yellow-400">
+                    {balances?.dai_ves.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Adjustments History */}
+            <Card>
+              <h2 className="text-2xl font-bold mb-6">📜 Adjustment History</h2>
+              {!balanceAdjustments || balanceAdjustments.length === 0 ? (
+                <p className="text-gray-400 text-center py-8">No balance adjustments recorded yet</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="border-b border-gray-700">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                          Date
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                          Balance
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                          Amount
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                          Reason
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-700">
+                      {balanceAdjustments.map((adj) => {
+                        const balanceLabel = adj.balance_type === 'brian_usdt' ? "Brian's USDT" :
+                                             adj.balance_type === 'dai_usdt' ? "Dai's USDT" : "Dai's VES";
+                        const isPositive = parseFloat(adj.amount as any) > 0;
+                        const isVES = adj.balance_type === 'dai_ves';
+                        return (
+                          <tr key={adj.id} className="hover:bg-gray-800/30">
+                            <td className="px-4 py-4 text-sm text-gray-300">
+                              {new Date(adj.date).toLocaleString()}
+                            </td>
+                            <td className="px-4 py-4 text-sm">
+                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                adj.balance_type === 'brian_usdt'
+                                  ? 'bg-cyan-500/20 text-cyan-400'
+                                  : adj.balance_type === 'dai_usdt'
+                                  ? 'bg-green-500/20 text-green-400'
+                                  : 'bg-yellow-500/20 text-yellow-400'
+                              }`}>
+                                {balanceLabel}
+                              </span>
+                            </td>
+                            <td className={`px-4 py-4 text-sm font-medium ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+                              {isPositive ? '+' : ''}
+                              {isVES
+                                ? parseInt(adj.amount as any).toLocaleString()
+                                : parseFloat(adj.amount as any).toFixed(2)
+                              }
+                              {!isVES && ' USDT'}
+                              {isVES && ' VES'}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-gray-300 max-w-xs">
+                              <div className="truncate" title={adj.reason}>
+                                {adj.reason}
+                              </div>
+                            </td>
+                            <td className="px-4 py-4 text-sm">
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={() => handleDeleteBalanceAdjustment(adj.id, adj)}
+                              >
+                                🗑️ Delete
+                              </Button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Summary by Balance Type */}
+              {balanceAdjustments && balanceAdjustments.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-300 mb-4">Total Adjustments by Balance</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-[#151932] rounded-xl p-4">
+                      <p className="text-sm text-gray-400 mb-1">Brian's USDT</p>
+                      <p className={`text-xl font-bold ${
+                        balanceAdjustments
+                          .filter(a => a.balance_type === 'brian_usdt')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0) >= 0
+                          ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {balanceAdjustments
+                          .filter(a => a.balance_type === 'brian_usdt')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0) >= 0 ? '+' : ''}
+                        {balanceAdjustments
+                          .filter(a => a.balance_type === 'brian_usdt')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0)
+                          .toFixed(2)} USDT
+                      </p>
+                    </div>
+                    <div className="bg-[#151932] rounded-xl p-4">
+                      <p className="text-sm text-gray-400 mb-1">Dai's USDT</p>
+                      <p className={`text-xl font-bold ${
+                        balanceAdjustments
+                          .filter(a => a.balance_type === 'dai_usdt')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0) >= 0
+                          ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {balanceAdjustments
+                          .filter(a => a.balance_type === 'dai_usdt')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0) >= 0 ? '+' : ''}
+                        {balanceAdjustments
+                          .filter(a => a.balance_type === 'dai_usdt')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0)
+                          .toFixed(2)} USDT
+                      </p>
+                    </div>
+                    <div className="bg-[#151932] rounded-xl p-4">
+                      <p className="text-sm text-gray-400 mb-1">Dai's VES</p>
+                      <p className={`text-xl font-bold ${
+                        balanceAdjustments
+                          .filter(a => a.balance_type === 'dai_ves')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0) >= 0
+                          ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {balanceAdjustments
+                          .filter(a => a.balance_type === 'dai_ves')
+                          .reduce((sum, a) => sum + parseFloat(a.amount as any), 0) >= 0 ? '+' : ''}
+                        {balanceAdjustments
+                          .filter(a => a.balance_type === 'dai_ves')
+                          .reduce((sum, a) => sum + parseInt(a.amount as any), 0)
+                          .toLocaleString()} VES
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}

@@ -79,6 +79,17 @@ export interface USDTRequest {
   notes?: string;
 }
 
+export type BalanceType = 'brian_usdt' | 'dai_usdt' | 'dai_ves';
+
+export interface BalanceAdjustment {
+  id: number;
+  date: Date;
+  balance_type: BalanceType;
+  amount: number;  // Positive = add, Negative = subtract
+  reason: string;
+  adjusted_by: string;
+}
+
 export interface Balances {
   brian_usdt: number;
   dai_usdt: number;

@@ -1,10 +1,31 @@
 import pool from '../database/connection';
-import { Balances, ProfitData } from '../types';
+import { Balances, ProfitData, BalanceType } from '../types';
 
 export class BalanceService {
   /**
+   * Get total adjustments for a specific balance type
+   * @param balanceType The type of balance to get adjustments for
+   * @param client Optional database client for transaction-safe balance checking
+   */
+  static async getAdjustmentsTotal(balanceType: BalanceType, client?: any): Promise<number> {
+    const useClient = client || await pool.connect();
+    const shouldRelease = !client;
+
+    try {
+      const result = await useClient.query(
+        'SELECT COALESCE(SUM(amount), 0) as total FROM balance_adjustments WHERE balance_type = $1',
+        [balanceType]
+      );
+      return parseFloat(result.rows[0].total);
+    } finally {
+      if (shouldRelease) {
+        useClient.release();
+      }
+    }
+  }
+  /**
    * Calculate Brian's USDT balance
-   * Formula: totalPurchased - transferredToDai - soldCOP
+   * Formula: totalPurchased - transferredToDai - soldCOP + adjustments
    *
    * @param client Optional database client for transaction-safe balance checking
    */
@@ -33,7 +54,10 @@ export class BalanceService {
       );
       const totalCOPSold = parseFloat(copSoldResult.rows[0].total);
 
-      return totalPurchased - totalTransferred - totalCOPSold;
+      // Manual balance adjustments
+      const adjustments = await this.getAdjustmentsTotal('brian_usdt', useClient);
+
+      return totalPurchased - totalTransferred - totalCOPSold + adjustments;
     } finally {
       if (shouldRelease) {
         useClient.release();
@@ -43,7 +67,7 @@ export class BalanceService {
 
   /**
    * Calculate Dairimar's USDT balance
-   * Formula: receivedFromBrian - convertedToVES
+   * Formula: receivedFromBrian - convertedToVES + adjustments
    *
    * @param client Optional database client for transaction-safe balance checking
    */
@@ -64,7 +88,10 @@ export class BalanceService {
       );
       const totalConverted = parseFloat(conversionsResult.rows[0].total);
 
-      return totalReceived - totalConverted;
+      // Manual balance adjustments
+      const adjustments = await this.getAdjustmentsTotal('dai_usdt', useClient);
+
+      return totalReceived - totalConverted + adjustments;
     } finally {
       if (shouldRelease) {
         useClient.release();
@@ -74,7 +101,7 @@ export class BalanceService {
 
   /**
    * Calculate Dairimar's VES balance
-   * Formula: totalVESConverted - totalVESSold
+   * Formula: totalVESConverted - totalVESSold + adjustments
    *
    * @param client Optional database client for transaction-safe balance checking
    */
@@ -106,12 +133,22 @@ export class BalanceService {
         ? parseInt(totalSoldRaw, 10)
         : Number(totalSoldRaw);
 
+      // Manual balance adjustments (VES stored as integer in adjustments)
+      const adjustmentsResult = await useClient.query(
+        'SELECT COALESCE(SUM(amount), 0) as total FROM balance_adjustments WHERE balance_type = $1',
+        ['dai_ves']
+      );
+      const adjustmentsRaw = adjustmentsResult.rows[0].total;
+      const adjustments = typeof adjustmentsRaw === 'string'
+        ? parseInt(adjustmentsRaw, 10)
+        : Number(adjustmentsRaw);
+
       // Verify we don't have NaN values
-      if (isNaN(totalConverted) || isNaN(totalSold)) {
-        throw new Error(`Invalid VES balance calculation: converted=${totalConvertedRaw}, sold=${totalSoldRaw}`);
+      if (isNaN(totalConverted) || isNaN(totalSold) || isNaN(adjustments)) {
+        throw new Error(`Invalid VES balance calculation: converted=${totalConvertedRaw}, sold=${totalSoldRaw}, adjustments=${adjustmentsRaw}`);
       }
 
-      return totalConverted - totalSold;
+      return totalConverted - totalSold + adjustments;
     } finally {
       if (shouldRelease) {
         useClient.release();

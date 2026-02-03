@@ -192,3 +192,14 @@ export interface DaiDailyReport {
     items: DaiDailyReportConversion[];
   };
 }
+
+export type BalanceType = 'brian_usdt' | 'dai_usdt' | 'dai_ves';
+
+export interface BalanceAdjustment {
+  id: number;
+  date: string;
+  balance_type: BalanceType;
+  amount: number;
+  reason: string;
+  adjusted_by: string;
+}
