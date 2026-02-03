@@ -10,23 +10,57 @@ const router = Router();
 
 const VALID_BALANCE_TYPES: BalanceType[] = ['brian_usdt', 'dai_usdt', 'dai_ves'];
 
+// Helper to map balance_type to account + currency
+function mapBalanceType(balanceType: BalanceType): { account: string; currency: string } {
+  if (balanceType === 'brian_usdt') {
+    return { account: 'brian', currency: 'USDT' };
+  } else if (balanceType === 'dai_usdt') {
+    return { account: 'dairimar', currency: 'USDT' };
+  } else {
+    return { account: 'dairimar', currency: 'VES' };
+  }
+}
+
+// Helper to map account + currency back to balance_type
+function mapToBalanceType(account: string, currency: string): BalanceType {
+  if (account === 'brian' && currency === 'USDT') {
+    return 'brian_usdt';
+  } else if (account === 'dairimar' && currency === 'USDT') {
+    return 'dai_usdt';
+  } else {
+    return 'dai_ves';
+  }
+}
+
 // Get all balance adjustments (Brian only)
 router.get('/', requireBrian(), async (req, res, next) => {
   try {
     const { balance_type } = req.query;
 
-    let query = 'SELECT * FROM balance_adjustments';
+    let query = 'SELECT id, date, account, currency, adjustment_amount, reason, created_at FROM balance_adjustments';
     const params: any[] = [];
 
     if (balance_type && VALID_BALANCE_TYPES.includes(balance_type as BalanceType)) {
-      query += ' WHERE balance_type = $1';
-      params.push(balance_type);
+      const { account, currency } = mapBalanceType(balance_type as BalanceType);
+      query += ' WHERE account = $1 AND currency = $2';
+      params.push(account, currency);
     }
 
     query += ' ORDER BY date DESC';
 
     const result = await pool.query(query, params);
-    res.json(result.rows);
+
+    // Transform to frontend expected format
+    const adjustments = result.rows.map(row => ({
+      id: row.id,
+      date: row.date,
+      balance_type: mapToBalanceType(row.account, row.currency),
+      amount: parseFloat(row.adjustment_amount),
+      reason: row.reason,
+      adjusted_by: 'admin'
+    }));
+
+    res.json(adjustments);
   } catch (error) {
     next(error);
   }
@@ -76,14 +110,17 @@ router.post('/', requireBrian(), writeLimiter, async (req, res, next) => {
       return res.status(400).json({ error: 'Reason must be at least 3 characters' });
     }
 
+    // Map balance_type to account + currency for existing schema
+    const { account, currency } = mapBalanceType(balance_type);
+
     const result = await client.query(
-      `INSERT INTO balance_adjustments (date, balance_type, amount, reason, adjusted_by)
+      `INSERT INTO balance_adjustments (date, account, currency, adjustment_amount, reason)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [date || new Date(), balance_type, finalAmount, sanitizedReason, 'admin']
+      [date || new Date(), account, currency, finalAmount, sanitizedReason]
     );
 
-    const adjustment = result.rows[0];
+    const row = result.rows[0];
 
     await client.query('COMMIT');
 
@@ -93,13 +130,21 @@ router.post('/', requireBrian(), writeLimiter, async (req, res, next) => {
     const balanceLabel = balance_type === 'brian_usdt' ? "Brian's USDT" :
                          balance_type === 'dai_usdt' ? "Dai's USDT" : "Dai's VES";
 
-    await logCreate(req, 'balance_adjustments', adjustment.id, {
+    await logCreate(req, 'balance_adjustments', row.id, {
       balance_type,
       amount: finalAmount,
       reason: sanitizedReason
     }, `${absAmount} ${actionType} ${balanceLabel}: ${sanitizedReason}`);
 
-    res.status(201).json(adjustment);
+    // Return in frontend expected format
+    res.status(201).json({
+      id: row.id,
+      date: row.date,
+      balance_type,
+      amount: parseFloat(row.adjustment_amount),
+      reason: row.reason,
+      adjusted_by: 'admin'
+    });
   } catch (error) {
     await client.query('ROLLBACK');
     next(error);
@@ -137,7 +182,7 @@ router.delete('/:id', requireBrian(), writeLimiter, async (req, res, next) => {
     await logCreate(req, 'balance_adjustments', parseInt(id), {
       action: 'DELETE',
       deleted_adjustment: adjustment
-    }, `Deleted adjustment: ${adjustment.amount} for ${adjustment.balance_type}`);
+    }, `Deleted adjustment: ${adjustment.adjustment_amount} for ${adjustment.account} ${adjustment.currency}`);
 
     res.json({ message: 'Adjustment deleted successfully', deleted: adjustment });
   } catch (error) {

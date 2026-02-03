@@ -4,6 +4,7 @@ import { Balances, ProfitData, BalanceType } from '../types';
 export class BalanceService {
   /**
    * Get total adjustments for a specific balance type
+   * Uses existing table schema: account (brian/dairimar) + currency (USDT/VES)
    * @param balanceType The type of balance to get adjustments for
    * @param client Optional database client for transaction-safe balance checking
    */
@@ -12,9 +13,24 @@ export class BalanceService {
     const shouldRelease = !client;
 
     try {
+      // Map balance_type to account + currency
+      let account: string;
+      let currency: string;
+
+      if (balanceType === 'brian_usdt') {
+        account = 'brian';
+        currency = 'USDT';
+      } else if (balanceType === 'dai_usdt') {
+        account = 'dairimar';
+        currency = 'USDT';
+      } else {
+        account = 'dairimar';
+        currency = 'VES';
+      }
+
       const result = await useClient.query(
-        'SELECT COALESCE(SUM(amount), 0) as total FROM balance_adjustments WHERE balance_type = $1',
-        [balanceType]
+        'SELECT COALESCE(SUM(adjustment_amount), 0) as total FROM balance_adjustments WHERE account = $1 AND currency = $2',
+        [account, currency]
       );
       return parseFloat(result.rows[0].total);
     } finally {
@@ -133,10 +149,10 @@ export class BalanceService {
         ? parseInt(totalSoldRaw, 10)
         : Number(totalSoldRaw);
 
-      // Manual balance adjustments (VES stored as integer in adjustments)
+      // Manual balance adjustments (VES stored as decimal in adjustments)
       const adjustmentsResult = await useClient.query(
-        'SELECT COALESCE(SUM(amount), 0) as total FROM balance_adjustments WHERE balance_type = $1',
-        ['dai_ves']
+        'SELECT COALESCE(SUM(adjustment_amount), 0) as total FROM balance_adjustments WHERE account = $1 AND currency = $2',
+        ['dairimar', 'VES']
       );
       const adjustmentsRaw = adjustmentsResult.rows[0].total;
       const adjustments = typeof adjustmentsRaw === 'string'
