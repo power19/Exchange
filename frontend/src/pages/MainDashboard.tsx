@@ -492,12 +492,13 @@ export default function MainDashboard() {
         {showLogin && !isAuthenticated && (
           <Card className="mb-8">
             <h2 className="text-xl font-bold mb-4">🔐 Login to View Profit Data</h2>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Username</label>
                 <input
                   type="text"
                   name="username"
+                  autoComplete="off"
                   className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                   required
                 />
@@ -507,6 +508,7 @@ export default function MainDashboard() {
                 <input
                   type="password"
                   name="password"
+                  autoComplete="new-password"
                   className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                   required
                 />
